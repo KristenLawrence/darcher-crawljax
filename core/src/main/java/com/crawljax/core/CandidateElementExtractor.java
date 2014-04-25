@@ -225,12 +225,12 @@ public class CandidateElementExtractor {
 				evaluateElement(results, relatedFrame, crawl, sourceElement);
 			}
 		} catch (CrawljaxException e) {
-			LOG.warn("Catched exception during NodeList For Tag Element retrieval", e);
+			LOG.warn("Caught exception during NodeList For Tag Element retrieval", e);
 		}
 	}
 
 	/**
-	 * Returns a list of Elements form the DOM tree, matching the tag element.
+	 * Returns a list of Elements from the DOM tree, matching the tag element.
 	 */
 	private ImmutableList<Element> getNodeListForTagElement(Document dom,
 	        CrawlElement crawlElement,
@@ -328,7 +328,7 @@ public class CandidateElementExtractor {
 				URI uri = URI.create(href);
 				return !uri.getHost().equalsIgnoreCase(siteHostName);
 			} catch (IllegalArgumentException e) {
-				LOG.info("Unreadable externa link {}", href);
+				LOG.info("Unreadable external link {}", href);
 			}
 		}
 		return false;

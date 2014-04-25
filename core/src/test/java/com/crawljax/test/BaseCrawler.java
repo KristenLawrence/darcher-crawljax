@@ -50,7 +50,7 @@ public class BaseCrawler {
 	 * @param webfolder
 	 *            The folder the web site is stored in.
 	 * @param siteExtension
-	 *            The extention of the site. Leave blank or <code>null</code> for no extention.
+	 *            The extension of the site. Leave blank or <code>null</code> for no extension.
 	 */
 	public BaseCrawler(Resource webfolder, String siteExtension) {
 		this.siteExtension = Strings.nullToEmpty(siteExtension);

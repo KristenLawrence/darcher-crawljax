@@ -173,7 +173,7 @@ public final class WebDriverBackedEmbeddedBrowser implements EmbeddedBrowser {
 		} catch (Exception e) {
 			// TODO Stefan; refactor this catch, this will definitely result in
 			// NullPointers, why
-			// not throw RuntimeExcption direct?
+			// not throw RuntimeException direct?
 			LOGGER.error("Received unknown exception while creating the "
 			        + "HttpCommandExecutor, can not continue!", e);
 			return null;
@@ -457,8 +457,8 @@ public final class WebDriverBackedEmbeddedBrowser implements EmbeddedBrowser {
 
 					switchToFrame(eventable.getRelatedFrame());
 				} catch (NoSuchFrameException e) {
-					LOGGER.debug("Frame not found, possibily while back-tracking..", e);
-					// TODO Stefan, This exception is catched to prevent stopping
+					LOGGER.debug("Frame not found, possibly while back-tracking..", e);
+					// TODO Stefan, This exception is caught to prevent stopping
 					// from working
 					// This was the case on the Gmail case; find out if not switching
 					// (catching)
@@ -763,8 +763,8 @@ public final class WebDriverBackedEmbeddedBrowser implements EmbeddedBrowser {
 		try {
 			WebElement el = browser.findElement(identification.getWebDriverBy());
 			// TODO Stefan; I think el will never be null as a
-			// NoSuchElementExcpetion will be
-			// thrown, catched below.
+			// NoSuchElementException will be
+			// thrown, caught below.
 			return el != null;
 		} catch (WebDriverException e) {
 			throwIfConnectionException(e);
@@ -801,7 +801,7 @@ public final class WebDriverBackedEmbeddedBrowser implements EmbeddedBrowser {
 	}
 
 	/**
-	 * @return the period to waint after a reload.
+	 * @return the period to wait after a reload.
 	 */
 	protected long getCrawlWaitReload() {
 		return crawlWaitReload;

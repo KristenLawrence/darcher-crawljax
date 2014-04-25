@@ -30,7 +30,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 /**
- * The State-Flow Graph is a multi-edge directed graph with states (StateVetex) on the vertices and
+ * The State-Flow Graph is a multi-edge directed graph with states (StateVertex) on the vertices and
  * clickables (Eventable) on the edges.
  */
 @Singleton

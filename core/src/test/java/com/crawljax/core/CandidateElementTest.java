@@ -44,7 +44,7 @@ public class CandidateElementTest {
 	public void testEmptyElement() throws SAXException, IOException {
 		Assert.assertEquals("General String and Unique String are the same",
 		        c.getGeneralString(), c.getUniqueString());
-		Assert.assertEquals("Excpected result", "TEST:  xpath", c.getGeneralString().trim());
+		Assert.assertEquals("Expected result", "TEST:  xpath", c.getGeneralString().trim());
 	}
 
 	@Test
@@ -52,7 +52,7 @@ public class CandidateElementTest {
 		e.setAttribute("id", "abc");
 		Assert.assertEquals("General String and Unique String are the same",
 		        c.getGeneralString(), c.getUniqueString());
-		Assert.assertEquals("Excpected result", "TEST: id=abc xpath", c.getGeneralString().trim());
+		Assert.assertEquals("Expected result", "TEST: id=abc xpath", c.getGeneralString().trim());
 	}
 
 	@Test
@@ -61,7 +61,7 @@ public class CandidateElementTest {
 		e.setAttribute("class", "def");
 		Assert.assertEquals("General String and Unique String are the same",
 		        c.getGeneralString(), c.getUniqueString());
-		Assert.assertEquals("Excpected result", "TEST: class=def id=abc xpath", c
+		Assert.assertEquals("Expected result", "TEST: class=def id=abc xpath", c
 		        .getGeneralString().trim());
 	}
 
@@ -71,8 +71,8 @@ public class CandidateElementTest {
 		e.setAttribute("atusa", "ignore");
 		Assert.assertNotSame("General String and Unique String are not the same",
 		        c.getGeneralString(), c.getUniqueString());
-		Assert.assertEquals("Excpected result", "TEST: id=abc xpath", c.getGeneralString().trim());
-		Assert.assertEquals("Excpected result", "TEST: atusa=ignore id=abc xpath", c
+		Assert.assertEquals("Expected result", "TEST: id=abc xpath", c.getGeneralString().trim());
+		Assert.assertEquals("Expected result", "TEST: atusa=ignore id=abc xpath", c
 		        .getUniqueString().trim());
 	}
 
@@ -83,14 +83,14 @@ public class CandidateElementTest {
 		e.setAttribute("class", "def");
 		Assert.assertNotSame("General String and Unique String are not the same",
 		        c.getGeneralString(), c.getUniqueString());
-		Assert.assertEquals("Excpected result", "TEST: class=def id=abc xpath", c
+		Assert.assertEquals("Expected result", "TEST: class=def id=abc xpath", c
 		        .getGeneralString().trim());
-		Assert.assertEquals("Excpected result", "TEST: atusa=ignore class=def id=abc xpath", c
+		Assert.assertEquals("Expected result", "TEST: atusa=ignore class=def id=abc xpath", c
 		        .getUniqueString().trim());
 	}
 
 	@Test
-	public void testMultipleAttribureElementWithAtusaOrderedAlphabetical() throws SAXException,
+	public void testMultipleAttributeElementWithAtusaOrderedAlphabetical() throws SAXException,
 	        IOException {
 		e.setAttribute("id", "abc");
 		e.setAttribute("atusa", "ignore");
@@ -101,9 +101,9 @@ public class CandidateElementTest {
 
 		Assert.assertNotSame("General String and Unique String are not the same",
 		        c.getGeneralString(), c.getUniqueString());
-		Assert.assertEquals("Excpected result", "TEST: a=a class=def id=abc x=a z=z xpath", c
+		Assert.assertEquals("Expected result", "TEST: a=a class=def id=abc x=a z=z xpath", c
 		        .getGeneralString().trim());
-		Assert.assertEquals("Excpected result",
+		Assert.assertEquals("Expected result",
 		        "TEST: a=a atusa=ignore class=def id=abc x=a z=z xpath", c.getUniqueString()
 		                .trim());
 	}

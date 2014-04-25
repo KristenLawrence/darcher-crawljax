@@ -53,7 +53,7 @@ class OutPutModelCache {
 	}
 
 	/**
-	 * @return Makes the final calculations and retuns the {@link OutPutModel}.
+	 * @return Makes the final calculations and returns the {@link OutPutModel}.
 	 */
 	public OutPutModel close(CrawlSession session, ExitStatus exitStatus) {
 		ImmutableList<Edge> edgesCopy = asEdges(session.getStateFlowGraph()
@@ -86,8 +86,8 @@ class OutPutModelCache {
 		for (Edge e : edges) {
 			StateBuilder from = states.get(e.getFrom());
 			StateBuilder to = states.get(e.getTo());
-			checkNotNull(from, "From state %s is unkown", e.getFrom());
-			checkNotNull(to, "To state %s is unkown", e.getTo());
+			checkNotNull(from, "From state %s is unknown", e.getFrom());
+			checkNotNull(to, "To state %s is unknown", e.getTo());
 			from.incrementFanOut();
 			to.incrementFanIn();
 		}

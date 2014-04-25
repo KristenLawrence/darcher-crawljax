@@ -41,7 +41,7 @@ public class WaitCondition {
 	 * @param url
 	 *            Which url to use.
 	 * @param timeoutMilliseconds
-	 *            Time to wait in miliseconds.
+	 *            Time to wait in milliseconds.
 	 * @param expectedConditions
 	 *            Conditions expected.
 	 */
@@ -59,7 +59,7 @@ public class WaitCondition {
 	 * @param url
 	 *            Which url to use.
 	 * @param timeoutMilliseconds
-	 *            Time to wait in miliseconds.
+	 *            Time to wait in milliseconds.
 	 * @param expectedConditions
 	 *            Conditions expected.
 	 */
@@ -103,14 +103,14 @@ public class WaitCondition {
 				try {
 					Thread.sleep(repeatTime);
 				} catch (InterruptedException e) {
-					LOGGER.warn("Intterupted while waiting in condition");
+					LOGGER.warn("Interrupted while waiting in condition");
 					Thread.currentThread().interrupt();
 				}
 			}
 			currentTime = System.currentTimeMillis();
 		}
 		if (currentTime >= maxTime) {
-			LOGGER.info("TIMEOUT WaitCondition url " + getUrl() + "; Timout while waiting for "
+			LOGGER.info("TIMEOUT WaitCondition url " + getUrl() + "; Timeout while waiting for "
 			        + lastCheckCondition);
 			return 0;
 		} else {

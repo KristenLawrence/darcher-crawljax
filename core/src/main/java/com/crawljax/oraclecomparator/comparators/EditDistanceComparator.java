@@ -5,12 +5,12 @@ import org.apache.commons.lang3.StringUtils;
 import com.crawljax.oraclecomparator.AbstractComparator;
 
 /**
- * Oracle Comparator that uses the Levenshtein Edit Distance to determince wheter two states are
+ * Oracle Comparator that uses the Levenshtein Edit Distance to determine whether two states are
  * equivalent.
  */
 public class EditDistanceComparator extends AbstractComparator {
 
-	private double treshold = 1;
+	private double threshold = 1;
 
 	/**
 	 * Default constructor with edit distance treshold = 1.
@@ -20,11 +20,11 @@ public class EditDistanceComparator extends AbstractComparator {
 	}
 
 	/**
-	 * @param treshold
-	 *            the edit distance treshold. 1 is no difference, 0 is totally different
+	 * @param threshold
+	 *            the edit distance threshold. 1 is no difference, 0 is totally different
 	 */
-	public EditDistanceComparator(double treshold) {
-		this.treshold = treshold;
+	public EditDistanceComparator(double threshold) {
+		this.threshold = threshold;
 	}
 
 	/**
@@ -32,22 +32,22 @@ public class EditDistanceComparator extends AbstractComparator {
 	 */
 	@Override
 	public boolean isEquivalent(String oldDom, String newDom) {
-		return isClone(oldDom, newDom, getTreshold());
+		return isClone(oldDom, newDom, getThreshold());
 	}
 
 	/**
-	 * @return the treshold
+	 * @return the threshold
 	 */
-	public double getTreshold() {
-		return treshold;
+	public double getThreshold() {
+		return threshold;
 	}
 
 	/**
-	 * @param treshold
-	 *            the treshold to set
+	 * @param threshold
+	 *            the threshold to set
 	 */
-	public void setTreshold(double treshold) {
-		this.treshold = treshold;
+	public void setThreshold(double threshold) {
+		this.threshold = threshold;
 	}
 
 	/**

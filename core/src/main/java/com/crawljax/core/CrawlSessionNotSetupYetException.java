@@ -13,6 +13,6 @@ import com.crawljax.di.CrawlSessionProvider;
 public class CrawlSessionNotSetupYetException extends CrawljaxException {
 
 	public CrawlSessionNotSetupYetException() {
-		super("The crawlsession is not yet availeble. Wait until the index state is crawled.");
+		super("The crawlsession is not yet available. Wait until the index state is crawled.");
 	}
 }

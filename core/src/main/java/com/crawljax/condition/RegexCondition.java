@@ -11,7 +11,7 @@ import com.crawljax.browser.EmbeddedBrowser;
 import com.google.common.base.Objects;
 
 /**
- * Condition that returns true iff experssion occurs in the dom.
+ * Condition that returns true iff expression occurs in the dom.
  */
 @Immutable
 public class RegexCondition implements Condition {

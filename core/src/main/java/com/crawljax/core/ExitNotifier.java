@@ -33,7 +33,7 @@ public class ExitNotifier {
 		/**
 		 * The crawl is done.
 		 */
-		EXHAUSTED("Exausted"),
+		EXHAUSTED("Exhausted"),
 
 		/**
 		 * The crawler quite because of an error.

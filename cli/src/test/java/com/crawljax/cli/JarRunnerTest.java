@@ -32,13 +32,13 @@ public class JarRunnerTest {
 	public final TemporaryFolder tmpFolder = new TemporaryFolder();
 
 	@Test
-	public void whenNoArgsCommitedItPrintsHelp() {
+	public void whenNoArgsCommittedItPrintsHelp() {
 		new JarRunner(new String[0]);
 		assertHelpWasPrinted(true);
 	}
 
 	private void assertHelpWasPrinted(boolean missingArguments) {
-		String helpMessage = "usage: " + ParameterInterpeter.HELP_MESSAGE;
+		String helpMessage = "usage: " + ParameterInterpreter.HELP_MESSAGE;
 		if (missingArguments) {
 			helpMessage =
 			        JarRunner.MISSING_ARGUMENT_MESSAGE + System.lineSeparator() + helpMessage;
@@ -73,7 +73,7 @@ public class JarRunnerTest {
 	public void whenRemoteBrowserSpecifiedWithUrlItResumes() {
 		JarRunner runner =
 		        new JarRunner(defaultArgsPlus("-b " + BrowserType.REMOTE.name()
-		                + " -" + ParameterInterpeter.BROWSER_REMOTE_URL + " localhost:9000"));
+		                + " -" + ParameterInterpreter.BROWSER_REMOTE_URL + " localhost:9000"));
 		assertThat(streams.getErrorOutput(), isEmptyString());
 		BrowserConfiguration config = runner.getConfig().getBrowserConfig();
 		assertThat(config.getBrowsertype(), is(BrowserType.REMOTE));
@@ -162,7 +162,7 @@ public class JarRunnerTest {
 	@Test
 	public void testWaitAfterReload() {
 		CrawlRules crawlRules =
-		        configForArgs("-" + ParameterInterpeter.WAIT_AFTER_RELOAD + " 123")
+		        configForArgs("-" + ParameterInterpreter.WAIT_AFTER_RELOAD + " 123")
 		                .getCrawlRules();
 		assertThat(crawlRules.getWaitAfterReloadUrl(), is(123L));
 	}
@@ -170,7 +170,7 @@ public class JarRunnerTest {
 	@Test
 	public void testWaitAfterEvent() {
 		CrawlRules crawlRules =
-		        configForArgs("-" + ParameterInterpeter.WAIT_AFTER_EVENT + " 123")
+		        configForArgs("-" + ParameterInterpreter.WAIT_AFTER_EVENT + " 123")
 		                .getCrawlRules();
 		assertThat(crawlRules.getWaitAfterEvent(), is(123L));
 	}

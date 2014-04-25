@@ -65,7 +65,7 @@ public class CrawlActionsBuilder {
 	}
 
 	/**
-	 * Set of HTML elements Crawljax will click during crawling For exmple 1) <a.../> 2) <div/>
+	 * Set of HTML elements Crawljax will click during crawling For example 1) <a.../> 2) <div/>
 	 * click("a") will only include 1 if clickOnce is true (default). This set can be restricted by
 	 * {@link #dontClick(String)}.
 	 * 
@@ -82,7 +82,7 @@ public class CrawlActionsBuilder {
 	}
 
 	/**
-	 * Set of HTML elements Crawljax will click during crawling For exmple 1) <a.../> 2) <div/>
+	 * Set of HTML elements Crawljax will click during crawling For example 1) <a.../> 2) <div/>
 	 * click("a") will only include 1 This set can be restricted by {@link #dontClick(String)}. If
 	 * no clicks are specified, {@link #clickDefaultElements()} is enabled.
 	 * 
@@ -130,7 +130,7 @@ public class CrawlActionsBuilder {
 	}
 
 	/**
-	 * Click no childer of the specified parent element.
+	 * Click no children of the specified parent element.
 	 * 
 	 * @param tagname
 	 *            The tagname of which no children should be clicked.

@@ -5,7 +5,7 @@ import org.apache.commons.cli.CommandLine;
 import org.apache.commons.cli.ParseException;
 import org.apache.commons.cli.GnuParser;
 
-public class ParameterInterpeter {
+public class ParameterInterpreter {
 
 	static final String OUTPUT_DIR = "outputDir";
 	static final String PORT = "port";
@@ -13,7 +13,7 @@ public class ParameterInterpeter {
 	private final Options options;
 	private final CommandLine parameters;
 
-	ParameterInterpeter(String args[]) throws ParseException {
+	ParameterInterpreter(String args[]) throws ParseException {
 		this.options = getOptions();
 		this.parameters = new GnuParser().parse(options, args);
 	}

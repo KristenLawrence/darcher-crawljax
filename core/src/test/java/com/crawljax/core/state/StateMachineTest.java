@@ -221,7 +221,7 @@ public class StateMachineTest {
 		assertTrue(smLocal.swithToStateAndCheckIfClone(c, state2, context));
 
 		// New State so hit must be true;
-		assertTrue("Invariants are exeucted", hit);
+		assertTrue("Invariants are executed", hit);
 		hit = false;
 		assertFalse("Hit reseted", hit);
 
@@ -229,7 +229,7 @@ public class StateMachineTest {
 
 		assertFalse(smLocal.swithToStateAndCheckIfClone(c2, state3, context));
 		// CLONE State so hit must be true;
-		assertTrue("Invariants are exeucted", hit);
+		assertTrue("Invariants are executed", hit);
 	}
 
 	private InMemoryStateFlowGraph newStateFlowGraph() {
@@ -272,7 +272,7 @@ public class StateMachineTest {
 		assertFalse(sm.swithToStateAndCheckIfClone(c2, state3, context));
 
 		// CLONE State so no plugin execution
-		assertFalse("Plugins are NOT exeucted", hit);
+		assertFalse("Plugins are NOT executed", hit);
 	}
 
 	private void setStateMachineForConfig(CrawljaxConfiguration config) {
@@ -311,7 +311,7 @@ public class StateMachineTest {
 		assertTrue(sm.swithToStateAndCheckIfClone(c, state2, context));
 
 		// New State so hit must be true;
-		assertTrue("InvariantViolationPlugin are exeucted", hit);
+		assertTrue("InvariantViolationPlugin are executed", hit);
 		hit = false;
 		assertFalse("Hit reseted", hit);
 
@@ -320,6 +320,6 @@ public class StateMachineTest {
 		assertFalse(sm.swithToStateAndCheckIfClone(c2, state3, context));
 
 		// New State so plugin execution
-		assertTrue("InvariantViolationPlugin are exeucted", hit);
+		assertTrue("InvariantViolationPlugin are executed", hit);
 	}
 }

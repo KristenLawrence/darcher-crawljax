@@ -112,7 +112,7 @@ public class CrawljaxConfiguration {
 		}
 
 		/**
-		 * Add plugins to Crawljax. Note that without plugins, Crawljax won't give any ouput. For
+		 * Add plugins to Crawljax. Note that without plugins, Crawljax won't give any output. For
 		 * basic output at least enable the CrawlOverviewPlugin.
 		 * <p>
 		 * You can call this method several times to add multiple plugins

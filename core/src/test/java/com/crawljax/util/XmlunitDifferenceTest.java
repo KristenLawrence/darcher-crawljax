@@ -11,7 +11,7 @@ import org.junit.Test;
 import com.google.common.collect.Lists;
 
 /**
- * Test the useage of the Helper.getDifferences.
+ * Test the usage of the Helper.getDifferences.
  * 
  * @author slenselink@google.com (Stefan Lenselink)
  */
@@ -34,7 +34,7 @@ public class XmlunitDifferenceTest {
 	}
 
 	@Test
-	public void testSameDomsArrtibutesSame() {
+	public void testSameDomsAttributesSame() {
 		String left = "<abc><def value='bla'/></abc>";
 		String right = "<abc><def value='bla'/></abc>";
 		List<Difference> l = DomUtils.getDifferences(left, right);
@@ -42,7 +42,7 @@ public class XmlunitDifferenceTest {
 	}
 
 	@Test
-	public void testSameDomsArrtibutesFiltered() {
+	public void testSameDomsAttributesFiltered() {
 		String left = "<abc><def value='bla123'/></abc>";
 		String right = "<abc><def value='bla'/></abc>";
 		List<Difference> l = DomUtils.getDifferences(left, right, Lists.newArrayList("value"));

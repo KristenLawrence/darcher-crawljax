@@ -95,7 +95,7 @@ public final class CrawlElement {
 	/**
 	 * Restrict CrawlElement to include only HTML elements which are under HTML element X which
 	 * identified by the xpath expression xpathExpression When xpathExpression returns no HTML
-	 * elements this Crawltag is not considred under element X. Element X is included when it
+	 * elements this Crawltag is not considered under element X. Element X is included when it
 	 * matches the other restrictions of this CrawlElement For example: <HTML> <BODY> <DIV id="foo">
 	 * <SPAN id="bar"> <A...></A> </SPAN> </DIV> .. //DIV[@id='foo'] includes the div, span and a
 	 * elements //SPAN[@id='foo'] includes the span and a elements //DIV[@class='link'] will not

@@ -177,7 +177,7 @@ public class CrawlRules {
 		 *            The time unit.
 		 */
 		public CrawlRulesBuilder waitAfterReloadUrl(long time, TimeUnit unit) {
-			checkArgument(time > 0, "Wait after reload time should be larget than 0");
+			checkArgument(time > 0, "Wait after reload time should be larger than 0");
 			crawlRules.waitAfterReloadUrl = unit.toMillis(time);
 			return this;
 		}
@@ -189,7 +189,7 @@ public class CrawlRules {
 		 *            The time unit.
 		 */
 		public CrawlRulesBuilder waitAfterEvent(long time, TimeUnit unit) {
-			checkArgument(time > 0, "Wait after event time should be larget than 0");
+			checkArgument(time > 0, "Wait after event time should be larger than 0");
 			crawlRules.waitAfterEvent = unit.toMillis(time);
 			return this;
 		}
@@ -263,7 +263,7 @@ public class CrawlRules {
 		 * can check all URLs for <code>404</code> errors.
 		 * 
 		 * @param follow
-		 *            Set to true to follow exteranl urls. Default is <code>false</code>.
+		 *            Set to true to follow external urls. Default is <code>false</code>.
 		 */
 		public CrawlRulesBuilder followExternalLinks(boolean follow) {
 			crawlRules.followExternalLinks = follow;

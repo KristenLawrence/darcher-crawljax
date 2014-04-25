@@ -10,7 +10,7 @@ import com.crawljax.core.CandidateElement;
 import com.google.common.collect.ImmutableList;
 
 /**
- * A vertex in the {@link StateFlowGraph} representing a state in the web appliction.
+ * A vertex in the {@link StateFlowGraph} representing a state in the web application.
  */
 public interface StateVertex extends Serializable {
 

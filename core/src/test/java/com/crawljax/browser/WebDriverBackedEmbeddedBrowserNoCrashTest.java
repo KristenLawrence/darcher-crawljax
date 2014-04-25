@@ -204,7 +204,7 @@ public class WebDriverBackedEmbeddedBrowserNoCrashTest {
 	 */
 	@Test
 	public final void testElementExists() {
-		assertFalse("Wrong Xpath so element does not exsist",
+		assertFalse("Wrong Xpath so element does not exist",
 		        browser.elementExists(new Identification(How.xpath, "/RUBISH")));
 	}
 

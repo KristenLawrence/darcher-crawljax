@@ -24,7 +24,7 @@ public class JarRunner {
 	static final String MISSING_ARGUMENT_MESSAGE =
 	        "Missing required argument URL and/or output folder.";
 
-	private final ParameterInterpeter options;
+	private final ParameterInterpreter options;
 
 	private final CrawljaxConfiguration config;
 
@@ -50,7 +50,7 @@ public class JarRunner {
 	@VisibleForTesting
 	JarRunner(String args[]) {
 		try {
-			this.options = new ParameterInterpeter(args);
+			this.options = new ParameterInterpreter(args);
 		} catch (ParseException e) {
 			throw new IllegalArgumentException(e.getMessage(), e);
 		}

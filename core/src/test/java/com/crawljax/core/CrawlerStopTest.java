@@ -26,7 +26,7 @@ public class CrawlerStopTest {
 	public static final RunWithWebServer SERVER = new RunWithWebServer("/site");
 
 	@Test
-	public void maximumDepthIsOblidged() throws Exception {
+	public void maximumDepthIsObliged() throws Exception {
 		CrawljaxConfigurationBuilder builder = SERVER.newConfigBuilder("infinite.html");
 		int depth = 3;
 

@@ -230,7 +230,7 @@ public class Crawler {
 			        && "A".equals(eventToFire.getElement().getTag())) {
 				isFired = visitAnchorHrefIfPossible(eventToFire);
 			} else {
-				LOG.debug("Ignoring invisble element {}", eventToFire.getElement());
+				LOG.debug("Ignoring invisible element {}", eventToFire.getElement());
 			}
 		} catch (InterruptedException e) {
 			LOG.debug("Interrupted during fire event");
@@ -280,7 +280,7 @@ public class Crawler {
 		Element element = eventable.getElement();
 		String href = element.getAttributeOrNull("href");
 		if (href == null) {
-			LOG.info("Anchor {} has no href and is invisble so it will be ignored", element);
+			LOG.info("Anchor {} has no href and is invisible so it will be ignored", element);
 		} else {
 			LOG.info("Found an invisible link with href={}", href);
 			URI url = UrlUtils.extractNewUrl(browser.getCurrentUrl(), href);

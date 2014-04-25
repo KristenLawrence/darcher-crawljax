@@ -13,7 +13,7 @@ public class Main {
 
 	public static void main(String[] args) throws Exception {
 
-		final ParameterInterpeter options = new ParameterInterpeter(args);
+		final ParameterInterpreter options = new ParameterInterpreter(args);
 
 		String outFolder = options.specifiesOutputDir() ? options.getSpecifiedOutputDir() : "out";
 

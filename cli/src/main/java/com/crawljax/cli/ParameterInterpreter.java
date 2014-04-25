@@ -20,7 +20,7 @@ import com.crawljax.core.CrawljaxException;
 import com.crawljax.core.configuration.CrawlRules;
 import com.google.common.base.Joiner;
 
-class ParameterInterpeter {
+class ParameterInterpreter {
 
 	static final String HELP_MESSAGE =
 	        "java -jar crawljax-cli-version.jar theUrl theOutputDir";
@@ -48,7 +48,7 @@ class ParameterInterpeter {
 	private final Options options;
 	private final CommandLine parameters;
 
-	ParameterInterpeter(String args[]) throws ParseException {
+	ParameterInterpreter(String args[]) throws ParseException {
 		this.options = getOptions();
 		this.parameters = new GnuParser().parse(options, args);
 	}

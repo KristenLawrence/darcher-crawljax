@@ -18,7 +18,7 @@ public class BrowserConnectionException extends RuntimeException {
 	private static final long serialVersionUID = -5149214539340150056L;
 
 	/**
-	 * Create a new BrowserConnectionException based on a previous catched RuntimeException.
+	 * Create a new BrowserConnectionException based on a previous caught RuntimeException.
 	 * 
 	 * @param exception
 	 *            the original exception to wrap.

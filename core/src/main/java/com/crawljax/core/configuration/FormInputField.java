@@ -18,7 +18,7 @@ package com.crawljax.core.configuration;
 public class FormInputField extends InputField {
 
 	/**
-	 * Sets the valus of this input field with a text input. Applicable to all form elements except
+	 * Sets the values of this input field with a text input. Applicable to all form elements except
 	 * checkboxes and a radio buttons.
 	 * 
 	 * @param values

@@ -155,7 +155,7 @@ public class Plugins {
 	/**
 	 * load and run the OnNewStatePlugins. OnNewStatePlugins are plugins that are ran when a new
 	 * state was found. This also happens for the Index State. Warning the session is not a clone,
-	 * chaning the session can cause strange behaviour of Crawljax.
+	 * changing the session can cause strange behaviour of Crawljax.
 	 * <p>
 	 * This method can be called from multiple threads with different {@link CrawlerContext}
 	 * </p>
@@ -182,10 +182,10 @@ public class Plugins {
 	}
 
 	/**
-	 * Run the OnInvariantViolation plugins when an Invariant is violated. Invariant are checked
+	 * Run the OnInvariantViolation plugins when an Invariant is violated. Invariants are checked
 	 * when the state machine is updated that is when the dom is changed after a click on a
 	 * clickable. When a invariant fails this kind of plugins are executed. Warning the session is
-	 * not a clone, chaning the session can cause strange behaviour of Crawljax.
+	 * not a clone, changing the session can cause strange behaviour of Crawljax.
 	 * 
 	 * @param invariant
 	 *            the failed invariants

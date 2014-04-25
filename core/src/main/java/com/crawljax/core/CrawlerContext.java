@@ -88,7 +88,7 @@ public class CrawlerContext {
 	}
 
 	/**
-	 * @param The
+	 * @param path
 	 *            current {@link CrawlPath} in this context.
 	 */
 	protected void setCrawlPath(CrawlPath path) {

@@ -73,7 +73,7 @@ public class WaitConditionTest {
 	public void testWaitConditionNotRunBecauseUrl() {
 		WaitCondition wc =
 		        new WaitCondition("tmp/foo", WAIT_TIME_LONG, new TimeoutExpectedCondition());
-		Assert.assertEquals("Wait not run because browser url missmatch", -1,
+		Assert.assertEquals("Wait not run because browser url mismatch", -1,
 		        wc.testAndWait(browser));
 	}
 
@@ -85,7 +85,7 @@ public class WaitConditionTest {
 				return true;
 			}
 		});
-		Assert.assertEquals("Wait succeded", WAIT_SUCCESS, wc.testAndWait(browser));
+		Assert.assertEquals("Wait succeeded", WAIT_SUCCESS, wc.testAndWait(browser));
 	}
 
 	@Test
@@ -96,7 +96,7 @@ public class WaitConditionTest {
 				return true;
 			}
 		});
-		Assert.assertEquals("Wait succeded", WAIT_TIMEOUT, wc.testAndWait(browser));
+		Assert.assertEquals("Wait succeeded", WAIT_TIMEOUT, wc.testAndWait(browser));
 	}
 
 	/**
