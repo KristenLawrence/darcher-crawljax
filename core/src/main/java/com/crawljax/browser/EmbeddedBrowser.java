@@ -6,7 +6,6 @@ import java.net.URI;
 import com.crawljax.core.CrawljaxException;
 import com.crawljax.core.state.Eventable;
 import com.crawljax.core.state.Identification;
-import com.crawljax.forms.FormInput;
 import org.openqa.selenium.ElementNotVisibleException;
 import org.openqa.selenium.WebElement;
 
@@ -100,13 +99,6 @@ public interface EmbeddedBrowser {
 	 * @return The current browser url.
 	 */
 	String getCurrentUrl();
-
-	/**
-	 * @param inputForm
-	 *            the input form.
-	 * @return a FormInput filled with random data.
-	 */
-	FormInput getInputWithRandomValue(FormInput inputForm);
 
 	/**
 	 * @param iframeIdentification

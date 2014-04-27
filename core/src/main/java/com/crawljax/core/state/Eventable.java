@@ -5,17 +5,14 @@ package com.crawljax.core.state;
 
 import java.io.Serializable;
 import java.lang.reflect.Field;
-import java.util.concurrent.CopyOnWriteArrayList;
-
-import org.jgrapht.graph.DefaultEdge;
-import org.w3c.dom.Node;
 
 import com.crawljax.core.CandidateElement;
 import com.crawljax.core.CrawljaxException;
-import com.crawljax.forms.FormInput;
 import com.crawljax.util.XPathHelper;
 import com.google.common.annotations.VisibleForTesting;
 import com.google.common.base.Objects;
+import org.jgrapht.graph.DefaultEdge;
+import org.w3c.dom.Node;
 
 /**
  * Eventable class: an element having an event attached to it (onclick, onmouseover, ...) so that it
@@ -29,7 +26,6 @@ public class Eventable extends DefaultEdge implements Serializable {
 	private EventType eventType;
 	private Identification identification;
 	private Element element;
-	private CopyOnWriteArrayList<FormInput> relatedFormInputs = new CopyOnWriteArrayList<>();
 	private String relatedFrame = "";
 
 	/**
@@ -101,7 +97,6 @@ public class Eventable extends DefaultEdge implements Serializable {
 		if (candidateElement.getElement() != null) {
 			this.element = new Element(candidateElement.getElement());
 		}
-		this.relatedFormInputs = new CopyOnWriteArrayList<>(candidateElement.getFormInputs());
 		this.relatedFrame = candidateElement.getRelatedFrame();
 	}
 
@@ -163,25 +158,6 @@ public class Eventable extends DefaultEdge implements Serializable {
 	 */
 	public void setElement(Element element) {
 		this.element = element;
-	}
-
-	/**
-	 * Retrieve the related form inputs.
-	 * 
-	 * @return the formInputs
-	 */
-	public CopyOnWriteArrayList<FormInput> getRelatedFormInputs() {
-		return relatedFormInputs;
-	}
-
-	/**
-	 * Set the list of formInputs.
-	 * 
-	 * @param relatedFormInputs
-	 *            the list of formInputs
-	 */
-	public void setRelatedFormInputs(CopyOnWriteArrayList<FormInput> relatedFormInputs) {
-		this.relatedFormInputs = relatedFormInputs;
 	}
 
 	/**

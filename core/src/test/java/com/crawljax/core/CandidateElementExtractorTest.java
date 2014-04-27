@@ -21,7 +21,6 @@ import com.crawljax.core.configuration.CrawljaxConfiguration.CrawljaxConfigurati
 import com.crawljax.core.plugin.Plugins;
 import com.crawljax.core.state.DefaultStateVertexFactory;
 import com.crawljax.core.state.StateVertex;
-import com.crawljax.forms.FormHandler;
 import com.crawljax.test.BrowserTest;
 import com.crawljax.test.RunWithWebServer;
 import com.google.common.io.Resources;
@@ -41,9 +40,9 @@ import org.slf4j.LoggerFactory;
 public class CandidateElementExtractorTest {
 
 	private static final Logger LOG = LoggerFactory
-	        .getLogger(CandidateElementExtractorTest.class);
+			.getLogger(CandidateElementExtractorTest.class);
 	private static final StateVertex DUMMY_STATE = new DefaultStateVertexFactory().createIndex("http://localhost",
-	        "", "");
+			"", "");
 
 	@Mock
 	private Plugins plugins;
@@ -60,7 +59,7 @@ public class CandidateElementExtractorTest {
 	@Test
 	public void testExtract() throws InterruptedException, CrawljaxException {
 		CrawljaxConfigurationBuilder builder =
-		        CrawljaxConfiguration.builderFor(DEMO_SITE_SERVER.getSiteUrl());
+				CrawljaxConfiguration.builderFor(DEMO_SITE_SERVER.getSiteUrl());
 		builder.crawlRules().click("a");
 		builder.crawlRules().clickOnce(true);
 		CrawljaxConfiguration config = builder.build();
@@ -76,17 +75,16 @@ public class CandidateElementExtractorTest {
 
 	private CandidateElementExtractor newElementExtractor(CrawljaxConfiguration config) {
 		browser = provider.newEmbeddedBrowser();
-		FormHandler formHandler = new FormHandler(browser, config.getCrawlRules());
 
 		EventableConditionChecker eventableConditionChecker =
-		        new EventableConditionChecker(config.getCrawlRules());
+				new EventableConditionChecker(config.getCrawlRules());
 		ConditionTypeChecker<CrawlCondition> crawlConditionChecker =
-		        new ConditionTypeChecker<>(config.getCrawlRules().getPreCrawlConfig()
-		                .getCrawlConditions());
+				new ConditionTypeChecker<>(config.getCrawlRules().getPreCrawlConfig()
+						.getCrawlConditions());
 		ExtractorManager checker =
-		        new CandidateElementManager(eventableConditionChecker, crawlConditionChecker);
+				new CandidateElementManager(eventableConditionChecker, crawlConditionChecker);
 		CandidateElementExtractor extractor =
-		        new CandidateElementExtractor(checker, browser, formHandler, config);
+				new CandidateElementExtractor(checker, browser, config);
 
 		return extractor;
 	}
@@ -94,7 +92,7 @@ public class CandidateElementExtractorTest {
 	@Test
 	public void testExtractExclude() throws Exception {
 		CrawljaxConfigurationBuilder builder =
-		        CrawljaxConfiguration.builderFor(DEMO_SITE_SERVER.getSiteUrl());
+				CrawljaxConfiguration.builderFor(DEMO_SITE_SERVER.getSiteUrl());
 		builder.crawlRules().click("a");
 		builder.crawlRules().dontClick("div").withAttribute("id", "menubar");
 		builder.crawlRules().clickOnce(true);
@@ -115,7 +113,7 @@ public class CandidateElementExtractorTest {
 		RunWithWebServer server = new RunWithWebServer("/site");
 		server.before();
 		CrawljaxConfigurationBuilder builder = CrawljaxConfiguration
-		        .builderFor(server.getSiteUrl().resolve("iframe/"));
+				.builderFor(server.getSiteUrl().resolve("iframe/"));
 		builder.crawlRules().click("a");
 		builder.crawlRules().crawlFrames(true);
 		CrawljaxConfiguration config = builder.build();
@@ -139,7 +137,7 @@ public class CandidateElementExtractorTest {
 	@Test
 	public void whenNoFollowExternalUrlDoNotFollow() throws IOException, URISyntaxException {
 		CrawljaxConfigurationBuilder builder =
-		        CrawljaxConfiguration.builderFor("http://example.com");
+				CrawljaxConfiguration.builderFor("http://example.com");
 		builder.crawlRules().click("a");
 		CrawljaxConfiguration config = builder.build();
 		CandidateElementExtractor extractor = newElementExtractor(config);
@@ -153,7 +151,7 @@ public class CandidateElementExtractorTest {
 	@Test
 	public void whenFollowExternalUrlDoFollow() throws IOException, URISyntaxException {
 		CrawljaxConfigurationBuilder builder =
-		        CrawljaxConfiguration.builderFor("http://example.com");
+				CrawljaxConfiguration.builderFor("http://example.com");
 		builder.crawlRules().click("a");
 		builder.crawlRules().followExternalLinks(true);
 		CrawljaxConfiguration config = builder.build();

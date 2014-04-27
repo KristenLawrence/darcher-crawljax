@@ -19,7 +19,6 @@ import com.crawljax.core.state.InMemoryStateFlowGraph;
 import com.crawljax.core.state.StateFlowGraph;
 import com.crawljax.core.state.StateVertexFactory;
 import com.crawljax.domcomparators.DomStrippers;
-import com.crawljax.forms.FormHandler;
 import com.crawljax.metrics.MetricsModule;
 import com.google.inject.AbstractModule;
 import com.google.inject.Provides;
@@ -55,7 +54,6 @@ public class CoreModule extends AbstractModule {
 		bind(StateFlowGraph.class).to(InMemoryStateFlowGraph.class);
 		bind(InMemoryStateFlowGraph.class).in(Singleton.class);
 
-		install(new FactoryModuleBuilder().build(FormHandlerFactory.class));
 		install(new FactoryModuleBuilder().build(CandidateElementExtractorFactory.class));
 
 		if (configuration.getStateVertexFactory() == null) {
@@ -77,10 +75,6 @@ public class CoreModule extends AbstractModule {
 	ConditionTypeChecker<CrawlCondition> crawlConditionChecker() {
 		return new ConditionTypeChecker<>(configuration.getCrawlRules().getPreCrawlConfig()
 		        .getCrawlConditions());
-	}
-
-	public interface FormHandlerFactory {
-		FormHandler newFormHandler(EmbeddedBrowser browser);
 	}
 
 	public interface CandidateElementExtractorFactory {

@@ -23,7 +23,6 @@ import com.crawljax.core.configuration.BrowserConfiguration;
 import com.crawljax.core.configuration.CrawlElement;
 import com.crawljax.core.configuration.CrawljaxConfiguration;
 import com.crawljax.core.configuration.CrawljaxConfiguration.CrawljaxConfigurationBuilder;
-import com.crawljax.core.configuration.InputSpecification;
 import com.crawljax.core.plugin.HostInterface;
 import com.crawljax.core.plugin.HostInterfaceImpl;
 import com.crawljax.core.plugin.descriptor.Parameter;
@@ -39,7 +38,6 @@ import com.crawljax.web.model.Configurations;
 import com.crawljax.web.model.CrawlRecord;
 import com.crawljax.web.model.CrawlRecord.CrawlStatusType;
 import com.crawljax.web.model.CrawlRecords;
-import com.crawljax.web.model.NameValuePair;
 import com.crawljax.web.model.Plugin;
 import com.crawljax.web.model.Plugins;
 import com.google.inject.Inject;
@@ -163,13 +161,13 @@ public class CrawlRunner {
 					}
 				}
 
-				// Form Input
-				if (config.getFormInputValues().size() > 0) {
-					InputSpecification input = new InputSpecification();
-					for (NameValuePair p : config.getFormInputValues())
-						input.field(p.getName()).setValue(p.getValue());
-					builder.crawlRules().setInputSpec(input);
-				}
+				// Form Input TODO re-enable this.
+//				if (config.getFormInputValues().size() > 0) {
+//					InputSpecification input = new InputSpecification();
+//					for (NameValuePair p : config.getFormInputValues())
+//						input.field(p.getName()).setValue(p.getValue());
+//					builder.crawlRules().setInputSpec(input);
+//				}
 
 				// Crawl Conditions
 				if (config.getPageConditions().size() > 0) {

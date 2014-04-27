@@ -5,7 +5,6 @@ import javax.inject.Provider;
 
 import java.net.URI;
 import java.util.Map.Entry;
-import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.regex.Matcher;
@@ -27,9 +26,6 @@ import com.crawljax.core.state.StateMachine;
 import com.crawljax.core.state.StateVertex;
 import com.crawljax.core.state.StateVertexFactory;
 import com.crawljax.di.CoreModule.CandidateElementExtractorFactory;
-import com.crawljax.di.CoreModule.FormHandlerFactory;
-import com.crawljax.forms.FormHandler;
-import com.crawljax.forms.FormInput;
 import com.crawljax.domcomparators.DomStrippers;
 import com.crawljax.util.ElementResolver;
 import com.crawljax.util.UrlUtils;
@@ -51,7 +47,6 @@ public class Crawler {
 	private final DomStrippers domStrippers;
 	private final URI url;
 	private final Plugins plugins;
-	private final FormHandler formHandler;
 	private final CrawlRules crawlRules;
 	private final WaitConditionChecker waitConditionChecker;
 	private final CandidateElementExtractor candidateExtractor;
@@ -65,7 +60,6 @@ public class Crawler {
 	@Inject
 	Crawler(CrawlerContext context, CrawljaxConfiguration config,
 	        DomStrippers domStrippers, UnfiredCandidateActions candidateActionCache,
-	        FormHandlerFactory formHandlerFactory,
 	        WaitConditionChecker waitConditionChecker,
 	        CandidateElementExtractorFactory elementExtractor,
 	        Provider<InMemoryStateFlowGraph> graphProvider,
@@ -82,7 +76,6 @@ public class Crawler {
 		this.candidateActionCache = candidateActionCache;
 		this.waitConditionChecker = waitConditionChecker;
 		this.candidateExtractor = elementExtractor.newExtractor(browser);
-		this.formHandler = formHandlerFactory.newFormHandler(browser);
 		shouldCrawliFrames = config.getCrawlRules().shouldCrawlFrames();
 	}
 
@@ -147,7 +140,7 @@ public class Crawler {
 			LOG.debug("Backtracking by executing {} on element: {}", clickable.getEventType(),
 			        clickable);
 			curState = changeState(targetState, clickable);
-			handleInputElements(clickable);
+			//TODO INPUT STUFF HERE
 			tryToFireEvent(targetState, curState, clickable);
 			checkCrawlConditions(targetState);
 		}
@@ -190,24 +183,6 @@ public class Crawler {
 			throw new StateUnreachableException(targetState, "couldn't fire eventable "
 			        + clickable);
 		}
-	}
-
-	/**
-	 * Enters the form data. First, the related input elements (if any) to the eventable are filled
-	 * in and then it tries to fill in the remaining input elements.
-	 * 
-	 * @param eventable
-	 *            the eventable element.
-	 */
-	private void handleInputElements(Eventable eventable) {
-		CopyOnWriteArrayList<FormInput> formInputs = eventable.getRelatedFormInputs();
-
-		for (FormInput formInput : formHandler.getFormInputs()) {
-			if (!formInputs.contains(formInput)) {
-				formInputs.add(formInput);
-			}
-		}
-		formHandler.handleFormElements(formInputs);
 	}
 
 	/**
@@ -308,7 +283,7 @@ public class Crawler {
 			CandidateElement element = action.getCandidateElement();
 			if (element.allConditionsSatisfied(browser)) {
 				Eventable event = new Eventable(element, action.getEventType());
-				handleInputElements(event);
+				//TODO INPUT STUFF HERE
 				waitForRefreshTagIfAny(event);
 
 				boolean fired = fireEvent(event);

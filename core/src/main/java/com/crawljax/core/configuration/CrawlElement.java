@@ -36,7 +36,6 @@ public final class CrawlElement {
 	private final List<Condition> conditions = Lists.newLinkedList();
 	private final String id;
 	private final EventType eventType;
-	private final List<String> inputFieldIds = Lists.newLinkedList();
 
 	private String underXpath;
 
@@ -136,8 +135,7 @@ public final class CrawlElement {
 	 * @return the EventableCondition belonging to this CrawlElement
 	 */
 	public EventableCondition getEventableCondition() {
-		if ((getWithXpathExpression() == null || getWithXpathExpression().equals(""))
-		        && getConditions().isEmpty() && getInputFieldIds().isEmpty()) {
+		if (getWithXpathExpression() == null || getWithXpathExpression().equals("")) {
 			return null;
 		}
 		EventableCondition eventableCondition = new EventableCondition(getId());
@@ -146,9 +144,6 @@ public final class CrawlElement {
 		}
 		if (getConditions().size() > 0) {
 			eventableCondition.setConditions(getConditions());
-		}
-		if (getInputFieldIds().size() > 0) {
-			eventableCondition.setLinkedInputFields(getInputFieldIds());
 		}
 		return eventableCondition;
 	}
@@ -160,7 +155,6 @@ public final class CrawlElement {
 		        .add("conditions", conditions)
 		        .add("id", id)
 		        .add("eventType", eventType)
-		        .add("inputFieldIds", inputFieldIds)
 		        .add("underXpath", underXpath)
 		        .toString();
 	}
@@ -203,28 +197,6 @@ public final class CrawlElement {
 	 */
 	protected ImmutableList<Condition> getConditions() {
 		return ImmutableList.copyOf(conditions);
-	}
-
-	/**
-	 * @return the inputFieldIds
-	 */
-	protected ImmutableList<String> getInputFieldIds() {
-		return ImmutableList.copyOf(inputFieldIds);
-	}
-
-	/**
-	 * @param ids
-	 *            Sets the list of input field ids.
-	 */
-	protected void addInputFieldIds(List<String> ids) {
-		inputFieldIds.addAll(ids);
-	}
-
-	/**
-	 * @return the eventType
-	 */
-	public EventType getEventType() {
-		return eventType;
 	}
 
 	/**

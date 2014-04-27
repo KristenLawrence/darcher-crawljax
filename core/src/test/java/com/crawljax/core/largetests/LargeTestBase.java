@@ -1,21 +1,15 @@
 package com.crawljax.core.largetests;
 
 import static com.crawljax.browser.matchers.StateFlowGraphMatchers.stateWithDomSubstring;
-import static org.hamcrest.Matchers.containsInAnyOrder;
 import static org.hamcrest.Matchers.everyItem;
 import static org.hamcrest.core.IsNot.not;
 import static org.junit.Assert.assertThat;
 import static org.junit.Assert.assertTrue;
-import static org.junit.Assert.fail;
 
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicBoolean;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 import com.crawljax.condition.NotRegexCondition;
 import com.crawljax.condition.NotXPathCondition;
@@ -31,8 +25,6 @@ import com.crawljax.core.configuration.BrowserConfiguration;
 import com.crawljax.core.configuration.CrawlRules.CrawlRulesBuilder;
 import com.crawljax.core.configuration.CrawljaxConfiguration;
 import com.crawljax.core.configuration.CrawljaxConfiguration.CrawljaxConfigurationBuilder;
-import com.crawljax.core.configuration.Form;
-import com.crawljax.core.configuration.InputSpecification;
 import com.crawljax.core.plugin.OnInvariantViolationPlugin;
 import com.crawljax.core.state.Eventable;
 import com.crawljax.core.state.Identification;
@@ -117,8 +109,7 @@ public abstract class LargeTestBase {
 			crawljax = new CrawljaxRunner(getCrawljaxConfiguration());
 			session = crawljax.call();
 			HAS_FINISHED.set(true);
-		}
-		else {
+		} else {
 			while (!HAS_FINISHED.get()) {
 				LOG.debug("Waiting for crawl to finish...");
 				Thread.sleep(500);
@@ -141,9 +132,7 @@ public abstract class LargeTestBase {
 						.waitAfterReloadUrl(getTimeOutAfterReloadUrl(), TimeUnit.MILLISECONDS)
 						.clickOnce(true)
 						.crawlFrames(true)
-						.setInputSpec(getInputSpecification())
 						.endRules();
-
 
 		addCrawlElements(builder);
 		addCrawlConditions(builder);
@@ -152,26 +141,6 @@ public abstract class LargeTestBase {
 		addPlugins(builder);
 
 		return builder.build();
-	}
-
-	private static InputSpecification getInputSpecification() {
-		InputSpecification input = new InputSpecification();
-		input.field("textManual").setValue(MANUAL_INPUT_TEXT);
-		input.field("text2Manual").setValue(MANUAL_INPUT_TEXT2);
-		input.field("checkboxManual").setValue(MANUAL_INPUT_CHECKBOX);
-		input.field("radioManual").setValue(MANUAL_INPUT_RADIO);
-		input.field("selectManual").setValue(MANUAL_INPUT_SELECT);
-		input.field("textareaManual").setValue(MANUAL_INPUT_TEXTAREA);
-
-		Form form = new Form();
-		form.field("textMultiple").setValues(MULTIPLE_INPUT_TEXT);
-		form.field("text2Multiple").setValues(MULTIPLE_INPUT_TEXT2);
-		form.field("checkboxMultiple").setValues(MULTIPLE_INPUT_CHECKBOX);
-		form.field("radioMultiple").setValues(MULTIPLE_INPUT_RADIO);
-		form.field("selectMultiple").setValues(MULTIPLE_INPUT_SELECT);
-		form.field("textareaMultiple").setValues(MULTIPLE_INPUT_TEXTAREA);
-		input.setValuesInForm(form).beforeClickElement("a").withText("Submit Multiple");
-		return input;
 	}
 
 	private static void addWaitConditions(CrawljaxConfigurationBuilder crawler) {
@@ -220,7 +189,8 @@ public abstract class LargeTestBase {
 	/**
 	 * Add the plugins to the given crawljaxConfiguration.
 	 *
-	 * @param crawljaxConfiguration the configuration to add the plugins to.
+	 * @param crawljaxConfiguration
+	 * 		the configuration to add the plugins to.
 	 */
 	protected static void addPlugins(CrawljaxConfigurationBuilder crawljaxConfiguration) {
 		crawljaxConfiguration.addPlugin(new PostCrawlStateGraphChecker());
@@ -241,56 +211,6 @@ public abstract class LargeTestBase {
 
 	private StateFlowGraph getStateFlowGraph() {
 		return session.getStateFlowGraph();
-	}
-
-	/**
-	 * Tests random input.
-	 */
-	@Test
-	public void testRandomFormInput() {
-		for (StateVertex state : getStateFlowGraph().getAllStates()) {
-			if (state.getDom().contains(TITLE_RESULT_RANDOM_INPUT)) {
-				Pattern p = Pattern.compile(REGEX_RESULT_RANDOM_INPUT);
-				Matcher m = p.matcher(state.getDom());
-				assertTrue("Found correct random result", m.find());
-				return;
-			}
-		}
-		fail("Result random input found");
-	}
-
-	/**
-	 * Test manual form input.
-	 */
-	@Test
-	public void testManualFormInput() {
-		for (StateVertex state : getStateFlowGraph().getAllStates()) {
-			if (state.getDom().contains(TITLE_MANUAL_INPUT_RESULT)) {
-				assertTrue("Result contains the correct data",
-						state.getDom().contains(MANUAL_INPUT_RESULT));
-				return;
-			}
-		}
-		fail("Result manual input found");
-	}
-
-	/**
-	 * Tests whether all the different form values are submitted and found.
-	 */
-	@Test
-	public void testMultipleFormInput() {
-		Set<String> resultsFound = new HashSet<>();
-		for (StateVertex state : getStateFlowGraph().getAllStates()) {
-			if (state.getDom().contains(TITLE_MULTIPLE_INPUT_RESULT)) {
-				for (String result : MULTIPLE_INPUT_RESULTS) {
-					if (state.getDom().contains(result)) {
-						resultsFound.add(result);
-					}
-				}
-			}
-		}
-		assertThat(resultsFound, containsInAnyOrder(MULTIPLE_INPUT_RESULTS));
-
 	}
 
 	/**

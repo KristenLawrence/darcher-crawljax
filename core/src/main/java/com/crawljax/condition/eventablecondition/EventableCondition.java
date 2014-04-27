@@ -1,6 +1,7 @@
 package com.crawljax.condition.eventablecondition;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import com.crawljax.browser.EmbeddedBrowser;
@@ -18,7 +19,6 @@ public class EventableCondition {
 	private final String id;
 	private List<Condition> conditions = new ArrayList<Condition>();
 	private String inXPath;
-	private List<String> linkedInputFields = new ArrayList<String>();
 
 	/**
 	 * @param id
@@ -31,25 +31,12 @@ public class EventableCondition {
 	/**
 	 * @param id
 	 *            Identifier.
-	 * @param linkedInputFields
-	 *            List of input fields.
-	 */
-	public EventableCondition(String id, List<String> linkedInputFields) {
-		this.id = id;
-		this.linkedInputFields = linkedInputFields;
-	}
-
-	/**
-	 * @param id
-	 *            Identifier.
 	 * @param conditions
 	 *            Conditions that should be satisfied.
 	 */
 	public EventableCondition(String id, Condition... conditions) {
 		this.id = id;
-		for (Condition condition : conditions) {
-			this.conditions.add(condition);
-		}
+		this.conditions.addAll(Arrays.asList(conditions));
 	}
 
 	/**
@@ -85,21 +72,6 @@ public class EventableCondition {
 	 */
 	public String getInXPath() {
 		return inXPath;
-	}
-
-	/**
-	 * @return The linked input fields.
-	 */
-	public List<String> getLinkedInputFields() {
-		return linkedInputFields;
-	}
-
-	/**
-	 * @param linkedInputFields
-	 *            The linked input fields.
-	 */
-	public void setLinkedInputFields(List<String> linkedInputFields) {
-		this.linkedInputFields = linkedInputFields;
 	}
 
 	/**
@@ -146,10 +118,6 @@ public class EventableCondition {
 			builder.append("inXPath=");
 			builder.append(inXPath);
 			builder.append(", ");
-		}
-		if (linkedInputFields != null) {
-			builder.append("linkedInputFields=");
-			builder.append(linkedInputFields);
 		}
 		builder.append("]");
 		return builder.toString();

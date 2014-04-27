@@ -6,9 +6,7 @@ import java.net.MalformedURLException;
 import java.net.URI;
 import java.net.URL;
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 
 import com.crawljax.core.CrawljaxException;
 import com.crawljax.core.configuration.AcceptAllFramesChecker;
@@ -16,10 +14,6 @@ import com.crawljax.core.configuration.IgnoreFrameChecker;
 import com.crawljax.core.exception.BrowserConnectionException;
 import com.crawljax.core.state.Eventable;
 import com.crawljax.core.state.Identification;
-import com.crawljax.forms.FormHandler;
-import com.crawljax.forms.FormInput;
-import com.crawljax.forms.InputValue;
-import com.crawljax.forms.RandomInputValueGenerator;
 import com.crawljax.util.DomUtils;
 import com.google.common.io.Files;
 import org.openqa.selenium.ElementNotVisibleException;
@@ -39,7 +33,6 @@ import org.openqa.selenium.remote.DesiredCapabilities;
 import org.openqa.selenium.remote.ErrorHandler.UnknownServerException;
 import org.openqa.selenium.remote.HttpCommandExecutor;
 import org.openqa.selenium.remote.RemoteWebDriver;
-import org.openqa.selenium.support.ui.Select;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.w3c.dom.DOMException;
@@ -575,68 +568,6 @@ public final class WebDriverBackedEmbeddedBrowser implements EmbeddedBrowser {
 			browser.switchTo().frame(frameIdentification);
 		}
 
-	}
-
-	/**
-	 * @param input the input to be filled.
-	 * @return FormInput with random value assigned if possible. If no values were set it returns
-	 * <code>null</code>
-	 */
-	@Override
-	public FormInput getInputWithRandomValue(FormInput input) {
-
-		WebElement webElement;
-		try {
-			webElement = browser.findElement(input.getIdentification().getWebDriverBy());
-			if (!webElement.isDisplayed()) {
-				return null;
-			}
-		}
-		catch (WebDriverException e) {
-			throwIfConnectionException(e);
-			return null;
-		}
-
-		Set<InputValue> values = new HashSet<>();
-		try {
-			setRandomValues(input, webElement, values);
-		}
-		catch (WebDriverException e) {
-			throwIfConnectionException(e);
-			return null;
-		}
-		if (values.isEmpty()) {
-			return null;
-		}
-		input.setInputValues(values);
-		return input;
-
-	}
-
-	private void setRandomValues(FormInput input, WebElement webElement, Set<InputValue> values) {
-		String inputString = input.getType().toLowerCase();
-		if (inputString.startsWith("text")) {
-			values.add(new InputValue(new RandomInputValueGenerator()
-					.getRandomString(FormHandler.RANDOM_STRING_LENGTH), true));
-		}
-		else if (inputString.equals("checkbox") || inputString.equals("radio")
-				&& !webElement.isSelected()) {
-			if (new RandomInputValueGenerator().getCheck()) {
-				values.add(new InputValue("1", true));
-			}
-			else {
-				values.add(new InputValue("0", false));
-			}
-		}
-		else if (inputString.equals("select")) {
-			Select select = new Select(webElement);
-			if (!select.getOptions().isEmpty()) {
-				WebElement option =
-						new RandomInputValueGenerator().getRandomItem(select.getOptions());
-				values.add(new InputValue(option.getText(), true));
-			}
-
-		}
 	}
 
 	@Override
