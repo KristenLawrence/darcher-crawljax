@@ -2,10 +2,12 @@ package com.crawljax.browser;
 
 import java.io.File;
 import java.net.URI;
+import java.util.List;
 
 import com.crawljax.core.CrawljaxException;
 import com.crawljax.core.state.Eventable;
 import com.crawljax.core.state.Identification;
+import org.openqa.selenium.By;
 import org.openqa.selenium.ElementNotVisibleException;
 import org.openqa.selenium.WebElement;
 
@@ -135,5 +137,22 @@ public interface EmbeddedBrowser {
 	 *             if saving screenshots is not supported by the implementing class.
 	 */
 	byte[] getScreenShot() throws CrawljaxException;
+
+
+	/**
+	 * @param by
+	 * 		The selector
+	 * @return The elements found by webdriver.
+	 * @see {@link org.openqa.selenium.WebDriver#findElement(org.openqa.selenium.By)}
+	 */
+	public WebElement findElement(By by);
+
+	/**
+	 * @param by
+	 * 		The selector
+	 * @return The elements found by webdriver.
+	 * @see {@link org.openqa.selenium.WebDriver#findElements(org.openqa.selenium.By)}
+	 */
+	public List<WebElement> findElements(By by);
 
 }

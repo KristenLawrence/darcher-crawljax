@@ -1,5 +1,11 @@
 package com.crawljax.util;
 
+import javax.xml.xpath.XPath;
+import javax.xml.xpath.XPathConstants;
+import javax.xml.xpath.XPathExpression;
+import javax.xml.xpath.XPathExpressionException;
+import javax.xml.xpath.XPathFactory;
+
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -7,19 +13,14 @@ import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import javax.xml.xpath.XPath;
-import javax.xml.xpath.XPathConstants;
-import javax.xml.xpath.XPathExpression;
-import javax.xml.xpath.XPathExpressionException;
-import javax.xml.xpath.XPathFactory;
-
-import org.w3c.dom.Document;
-import org.w3c.dom.Node;
-import org.w3c.dom.NodeList;
-
 import com.google.common.base.Strings;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableList.Builder;
+import org.openqa.selenium.By;
+import org.openqa.selenium.WebElement;
+import org.w3c.dom.Document;
+import org.w3c.dom.Node;
+import org.w3c.dom.NodeList;
 
 /**
  * Utility class that contains methods used by Crawljax and some plugin to deal with XPath
@@ -78,6 +79,31 @@ public final class XPathHelper {
 		String xPath = buffer.toString();
 		node.setUserData(FULL_XPATH_CACHE, xPath, null);
 		return xPath;
+	}
+
+	public static String pathToClosestId(Element element) {
+		// If root or has ID return
+		// Get super
+		// Get children
+		// if childres.size == 1 its just me, return extended xpath
+		// if childer size > 1 get my index, return extended xpath
+		WebElement parent = element.findElement(By.xpath(".."));
+		String id = parent.getAttribute("id");
+		if (!Strings.isNullOrEmpty(id)) {
+			return parent.getTagName();
+		}
+		return parent.getTagName();
+	}
+
+	private static StringBuilder recurseFind(WebElement element, StringBuilder builder) {
+		if ("body".equalsIgnoreCase(element.getTagName())) {
+			return builder.insert(0, "/BODY/");
+		} else if ("html".equalsIgnoreCase(element.getTagName())) {
+			return builder.insert(0, "/");
+		} else {
+			WebElement parent = element.findElement(By.xpath(".."));
+			if (parent.)
+		}
 	}
 
 	/**
@@ -362,5 +388,6 @@ public final class XPathHelper {
 
 	private XPathHelper() {
 	}
+
 
 }

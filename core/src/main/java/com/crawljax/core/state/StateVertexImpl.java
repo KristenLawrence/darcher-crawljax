@@ -2,12 +2,14 @@ package com.crawljax.core.state;
 
 import java.io.IOException;
 import java.util.LinkedList;
+import java.util.List;
 
 import com.crawljax.core.CandidateElement;
 import com.crawljax.util.DomUtils;
 import com.google.common.annotations.VisibleForTesting;
 import com.google.common.base.Objects;
 import com.google.common.collect.ImmutableList;
+import com.google.common.collect.Lists;
 import org.w3c.dom.Document;
 
 /**
@@ -23,9 +25,10 @@ class StateVertexImpl implements StateVertex {
 	private final String dom;
 	private final String strippedDom;
 	private final String url;
-	private String name;
-
+	private final String name;
+	private final List<DomAction> stateActions = Lists.newArrayList();
 	private ImmutableList<CandidateElement> candidateElements;
+
 
 	/**
 	 * Creates a current state without an url and the stripped dom equals the dom.
@@ -121,6 +124,13 @@ class StateVertexImpl implements StateVertex {
 	@Override
 	public ImmutableList<CandidateElement> getCandidateElements() {
 		return candidateElements;
+	}
+
+	@Override
+	public void addDomAction(DomAction action) {
+		synchronized (stateActions) {
+			stateActions.add(action);
+		}
 	}
 
 }

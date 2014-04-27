@@ -16,6 +16,7 @@ import com.crawljax.core.state.Eventable;
 import com.crawljax.core.state.Identification;
 import com.crawljax.util.DomUtils;
 import com.google.common.io.Files;
+import org.openqa.selenium.By;
 import org.openqa.selenium.ElementNotVisibleException;
 import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.NoSuchElementException;
@@ -195,6 +196,17 @@ public final class WebDriverBackedEmbeddedBrowser implements EmbeddedBrowser {
 	 */
 	public static WebDriverBackedEmbeddedBrowser withDriver(WebDriver driver) {
 		return new WebDriverBackedEmbeddedBrowser(driver);
+	}
+
+
+	@Override
+	public WebElement findElement(By by) {
+		return browser.findElement(by);
+	}
+
+	@Override
+	public List<WebElement> findElements(By by) {
+		return browser.findElements(by);
 	}
 
 	/**
