@@ -54,15 +54,16 @@ public class WebDriverBrowserBuilder implements Provider<EmbeddedBrowser> {
 		EmbeddedBrowser browser = null;
 		EmbeddedBrowser.BrowserType browserType =
 				configuration.getBrowserConfig().getBrowserType();
+		String userDir = configuration.getBrowserConfig().getBrowserOptions().getUserDir();
 		try {
 			switch (browserType) {
 				case CHROME:
 					browser = newChromeBrowser(filterAttributes, crawlWaitReload, crawlWaitEvent,
-							false);
+							false, userDir);
 					break;
 				case CHROME_HEADLESS:
 					browser = newChromeBrowser(filterAttributes, crawlWaitReload,
-							crawlWaitEvent, true);
+							crawlWaitEvent, true, userDir);
 					break;
 				case FIREFOX:
 					browser = newFirefoxBrowser(filterAttributes, crawlWaitReload, crawlWaitEvent,
@@ -103,7 +104,7 @@ public class WebDriverBrowserBuilder implements Provider<EmbeddedBrowser> {
 	}
 
 	private EmbeddedBrowser newFirefoxBrowser(ImmutableSortedSet<String> filterAttributes,
-			long crawlWaitReload, long crawlWaitEvent, boolean headless) {
+											  long crawlWaitReload, long crawlWaitEvent, boolean headless) {
 
 		WebDriverManager.firefoxdriver().setup();
 
@@ -147,11 +148,16 @@ public class WebDriverBrowserBuilder implements Provider<EmbeddedBrowser> {
 	}
 
 	private EmbeddedBrowser newChromeBrowser(ImmutableSortedSet<String> filterAttributes,
-			long crawlWaitReload, long crawlWaitEvent, boolean headless) {
+											 long crawlWaitReload, long crawlWaitEvent, boolean headless, String userDir) {
 
 		WebDriverManager.chromedriver().setup();
 
 		ChromeOptions optionsChrome = new ChromeOptions();
+
+		// set the profile path of browser, if it is provided
+		if (userDir != null) {
+			optionsChrome.addArguments("user-data-dir=" + userDir);
+		}
 
 		/* enables headless Chrome. */
 		if (headless) {
@@ -177,7 +183,7 @@ public class WebDriverBrowserBuilder implements Provider<EmbeddedBrowser> {
 	}
 
 	private EmbeddedBrowser newPhantomJSDriver(ImmutableSortedSet<String> filterAttributes,
-			long crawlWaitReload, long crawlWaitEvent) {
+											   long crawlWaitReload, long crawlWaitEvent) {
 
 		WebDriverManager.phantomjs().setup();
 
