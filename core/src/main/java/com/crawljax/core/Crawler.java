@@ -380,6 +380,7 @@ public class Crawler {
 			// Let the controller execute its specified wait operation on the browser thread safe.
 			waitConditionChecker.wait(browser);
 			browser.closeOtherWindows();
+			plugins.runOnFireEventSuccessPlugins(context, eventable, crawlpath.immutableCopyWithoutLast());
 			return true;
 		} else {
 			/*

@@ -42,7 +42,8 @@ public class Plugins {
 					OnInvariantViolationPlugin.class, OnNewStatePlugin.class,
 					OnRevisitStatePlugin.class, OnUrlLoadPlugin.class,
 					PostCrawlingPlugin.class, PreStateCrawlingPlugin.class,
-					PreCrawlingPlugin.class, OnUrlFirstLoadPlugin.class);
+					PreCrawlingPlugin.class, OnUrlFirstLoadPlugin.class,
+					OnFireEventSucceededPlugin.class);
 
 	private final ImmutableListMultimap<Class<? extends Plugin>, Plugin> plugins;
 
@@ -304,6 +305,23 @@ public class Plugins {
 				LOGGER.debug("Calling plugin {}", plugin);
 				try {
 					((OnFireEventFailedPlugin) plugin).onFireEventFailed(
+							context, eventable, path);
+				} catch (RuntimeException e) {
+					reportFailingPlugin(plugin, e);
+				}
+			}
+		}
+	}
+
+	public void runOnFireEventSuccessPlugins(CrawlerContext context,
+											 Eventable eventable, List<Eventable> path) {
+		LOGGER.debug("Running OnFireEventSuccessPlugins...");
+		counters.get(OnFireEventSucceededPlugin.class).inc();
+		for (Plugin plugin : plugins.get(OnFireEventSucceededPlugin.class)) {
+			if (plugin instanceof OnFireEventSucceededPlugin) {
+				LOGGER.debug("Calling plugin {}", plugin);
+				try {
+					((OnFireEventSucceededPlugin) plugin).onFireEventSucceeded(
 							context, eventable, path);
 				} catch (RuntimeException e) {
 					reportFailingPlugin(plugin, e);
