@@ -55,5 +55,6 @@
 		<module>test-plugin</module>
 		<!-- <module>clickable-detector</module> -->
 		<module>testcasegenerator-plugin</module>
-  </modules>
+        <module>metamask-support-plugin</module>
+    </modules>
 </project>
