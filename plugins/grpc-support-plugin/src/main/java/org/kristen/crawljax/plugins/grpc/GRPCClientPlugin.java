@@ -14,9 +14,6 @@ import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.ui.WebDriverWait;
 import com.google.protobuf.Message;
-//import com.googlecode.protobuf.format.JsonFormat;
-//import com.service.test.ServiceApi.UnaryRequest;
-//import com.service.test.ServiceApi.UnaryResponse;
 import io.grpc.ManagedChannel;
 import io.grpc.ManagedChannelBuilder;
 import com.google.protobuf.InvalidProtocolBufferException;
@@ -29,7 +26,7 @@ import java.util.List;
 import java.util.Set;
 import java.util.concurrent.TimeUnit;
 
-public class GRPCSupportPlugin implements OnBrowserCreatedPlugin, OnFireEventSucceededPlugin, OnUrlFirstLoadPlugin{
+public class GRPCClientPlugin implements OnBrowserCreatedPlugin, OnFireEventSucceededPlugin, OnUrlFirstLoadPlugin{
     @Override
     public void onBrowserCreated(EmbeddedBrowser newBrowser) {
 
