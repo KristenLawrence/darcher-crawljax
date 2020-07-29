@@ -63,6 +63,7 @@
         <module>cli</module>
         <module>grpc-support-plugin</module>
         <module>grpc-support-plugin</module>
+        <module>rpc</module>
         <!-- <module>web</module> -->
     </modules>
 

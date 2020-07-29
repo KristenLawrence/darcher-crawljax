@@ -26,6 +26,8 @@ import java.util.List;
 import java.util.Set;
 import java.util.concurrent.TimeUnit;
 
+import org.kristen.rpc.darcher.*;
+
 public class GRPCClientPlugin implements OnBrowserCreatedPlugin, OnFireEventSucceededPlugin, OnUrlFirstLoadPlugin{
     @Override
     public void onBrowserCreated(EmbeddedBrowser newBrowser) {
