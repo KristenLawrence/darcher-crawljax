@@ -23,7 +23,7 @@ public final class CrawlExample {
 
 	private static final long WAIT_TIME_AFTER_EVENT = 500;
 	private static final long WAIT_TIME_AFTER_RELOAD = 500;
-	private static final String URL = "http://localhost:9966/petclinic/";
+	private static final String URL = "https://www.baidu.com";
 
 	/**
 	 * Run this method to start the crawl.

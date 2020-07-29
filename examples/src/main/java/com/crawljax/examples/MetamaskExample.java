@@ -15,7 +15,7 @@ import java.util.concurrent.TimeUnit;
 public class MetamaskExample {
     private static final long WAIT_TIME_AFTER_EVENT = 500;
     private static final long WAIT_TIME_AFTER_RELOAD = 500;
-    private static final String URL = "http://localhost:3010/";
+    private static final String URL = "http://localhost:8080/";
 
     /**
      * Run this method to start the crawl.
@@ -54,7 +54,7 @@ public class MetamaskExample {
 
         builder.setBrowserConfig(
                 new BrowserConfiguration(EmbeddedBrowser.BrowserType.CHROME, 1,
-                        new BrowserOptions("/Users/troublor/workspace/dArcher/browsers/Chrome/UserData")));
+                        new BrowserOptions("/Users/shuqing/Documents/application")));
 
         // CrawlOverview
         builder.addPlugin(new CrawlOverview());
