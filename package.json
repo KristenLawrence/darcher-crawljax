@@ -1,0 +1,17 @@
+{
+  "name": "@darcher/crawljax",
+  "version": "1.0.0",
+  "repository": {
+    "url": "https://github.com/KristenLawrence/darcher-crawljax"
+  },
+  "main": "scripts",
+  "types": "scripts",
+  "scripts": {
+  },
+  "author": "KristenLawrence",
+  "license": "ISC",
+  "dependencies": {
+  },
+  "devDependencies": {
+  }
+}
