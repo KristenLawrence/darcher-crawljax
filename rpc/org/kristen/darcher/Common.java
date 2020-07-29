@@ -102,10 +102,6 @@ public final class Common {
 
     public final com.google.protobuf.Descriptors.EnumValueDescriptor
         getValueDescriptor() {
-      if (this == UNRECOGNIZED) {
-        throw new java.lang.IllegalStateException(
-            "Can't get the descriptor of an unrecognized enum value.");
-      }
       return getDescriptor().getValues().get(ordinal());
     }
     public final com.google.protobuf.Descriptors.EnumDescriptor
@@ -114,7 +110,7 @@ public final class Common {
     }
     public static final com.google.protobuf.Descriptors.EnumDescriptor
         getDescriptor() {
-      return Common.getDescriptor().getEnumTypes().get(0);
+      return org.kristen.darcher.Common.getDescriptor().getEnumTypes().get(0);
     }
 
     private static final Role[] VALUES = values();
@@ -228,10 +224,6 @@ public final class Common {
 
     public final com.google.protobuf.Descriptors.EnumValueDescriptor
         getValueDescriptor() {
-      if (this == UNRECOGNIZED) {
-        throw new java.lang.IllegalStateException(
-            "Can't get the descriptor of an unrecognized enum value.");
-      }
       return getDescriptor().getValues().get(ordinal());
     }
     public final com.google.protobuf.Descriptors.EnumDescriptor
@@ -240,7 +232,7 @@ public final class Common {
     }
     public static final com.google.protobuf.Descriptors.EnumDescriptor
         getDescriptor() {
-      return Common.getDescriptor().getEnumTypes().get(1);
+      return org.kristen.darcher.Common.getDescriptor().getEnumTypes().get(1);
     }
 
     private static final Error[] VALUES = values();
@@ -363,10 +355,6 @@ public final class Common {
 
     public final com.google.protobuf.Descriptors.EnumValueDescriptor
         getValueDescriptor() {
-      if (this == UNRECOGNIZED) {
-        throw new java.lang.IllegalStateException(
-            "Can't get the descriptor of an unrecognized enum value.");
-      }
       return getDescriptor().getValues().get(ordinal());
     }
     public final com.google.protobuf.Descriptors.EnumDescriptor
@@ -375,7 +363,7 @@ public final class Common {
     }
     public static final com.google.protobuf.Descriptors.EnumDescriptor
         getDescriptor() {
-      return Common.getDescriptor().getEnumTypes().get(2);
+      return org.kristen.darcher.Common.getDescriptor().getEnumTypes().get(2);
     }
 
     private static final TxState[] VALUES = values();
@@ -416,8 +404,9 @@ public final class Common {
       "TimeoutErr\020\002\022\032\n\026ServiceNotAvailableErr\020\003" +
       "*M\n\007TxState\022\013\n\007CREATED\020\000\022\013\n\007PENDING\020\001\022\014\n" +
       "\010EXECUTED\020\002\022\013\n\007DROPPED\020\003\022\r\n\tCONFIRMED\020\004B" +
-      "8Z6github.com/Troublor/darcher-go-ethere" +
-      "um/ethmonitor/rpcb\006proto3"
+      "M\n\023org.kristen.darcherZ6github.com/Troub" +
+      "lor/darcher-go-ethereum/ethmonitor/rpcb\006" +
+      "proto3"
     };
     descriptor = com.google.protobuf.Descriptors.FileDescriptor
       .internalBuildGeneratedFileFrom(descriptorData,
