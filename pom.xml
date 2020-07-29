@@ -61,6 +61,8 @@
         <module>examples</module>
         <module>plugins</module>
         <module>cli</module>
+        <module>grpc-support-plugin</module>
+        <module>grpc-support-plugin</module>
         <!-- <module>web</module> -->
     </modules>
 
