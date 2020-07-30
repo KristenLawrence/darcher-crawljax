@@ -249,6 +249,8 @@ public class GRPCClientPlugin implements PreCrawlingPlugin, PostCrawlingPlugin, 
                     .build();
             blockingStub.waitForTxProcess(txMsg);
         }
+        driver.close();
+        driver.switchTo().window(currentHandle);
     }
 
 }
