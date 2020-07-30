@@ -1,4 +1,4 @@
-package darcher;
+package org.kristen.rpc.darcher;
 
 import static io.grpc.MethodDescriptor.generateFullMethodName;
 import static io.grpc.stub.ClientCalls.asyncBidiStreamingCall;
@@ -19,7 +19,7 @@ import static io.grpc.stub.ServerCalls.asyncUnimplementedUnaryCall;
  */
 @javax.annotation.Generated(
     value = "by gRPC proto compiler (version 1.30.2)",
-    comments = "Source: dapp_test_driver_service.proto")
+    comments = "Source: dapp_test_service.proto")
 public final class DAppTestDriverServiceGrpc {
 
   private DAppTestDriverServiceGrpc() {}
@@ -27,27 +27,27 @@ public final class DAppTestDriverServiceGrpc {
   public static final String SERVICE_NAME = "darcher.DAppTestDriverService";
 
   // Static method descriptors that strictly reflect the proto.
-  private static volatile io.grpc.MethodDescriptor<darcher.DappTestDriverService.TestStartMsg,
+  private static volatile io.grpc.MethodDescriptor<org.kristen.rpc.darcher.DappTestService.TestStartMsg,
       com.google.protobuf.Empty> getNotifyTestStartMethod;
 
   @io.grpc.stub.annotations.RpcMethod(
       fullMethodName = SERVICE_NAME + '/' + "notifyTestStart",
-      requestType = darcher.DappTestDriverService.TestStartMsg.class,
+      requestType = org.kristen.rpc.darcher.DappTestService.TestStartMsg.class,
       responseType = com.google.protobuf.Empty.class,
       methodType = io.grpc.MethodDescriptor.MethodType.UNARY)
-  public static io.grpc.MethodDescriptor<darcher.DappTestDriverService.TestStartMsg,
+  public static io.grpc.MethodDescriptor<org.kristen.rpc.darcher.DappTestService.TestStartMsg,
       com.google.protobuf.Empty> getNotifyTestStartMethod() {
-    io.grpc.MethodDescriptor<darcher.DappTestDriverService.TestStartMsg, com.google.protobuf.Empty> getNotifyTestStartMethod;
+    io.grpc.MethodDescriptor<org.kristen.rpc.darcher.DappTestService.TestStartMsg, com.google.protobuf.Empty> getNotifyTestStartMethod;
     if ((getNotifyTestStartMethod = DAppTestDriverServiceGrpc.getNotifyTestStartMethod) == null) {
       synchronized (DAppTestDriverServiceGrpc.class) {
         if ((getNotifyTestStartMethod = DAppTestDriverServiceGrpc.getNotifyTestStartMethod) == null) {
           DAppTestDriverServiceGrpc.getNotifyTestStartMethod = getNotifyTestStartMethod =
-              io.grpc.MethodDescriptor.<darcher.DappTestDriverService.TestStartMsg, com.google.protobuf.Empty>newBuilder()
+              io.grpc.MethodDescriptor.<org.kristen.rpc.darcher.DappTestService.TestStartMsg, com.google.protobuf.Empty>newBuilder()
               .setType(io.grpc.MethodDescriptor.MethodType.UNARY)
               .setFullMethodName(generateFullMethodName(SERVICE_NAME, "notifyTestStart"))
               .setSampledToLocalTracing(true)
               .setRequestMarshaller(io.grpc.protobuf.ProtoUtils.marshaller(
-                  darcher.DappTestDriverService.TestStartMsg.getDefaultInstance()))
+                  org.kristen.rpc.darcher.DappTestService.TestStartMsg.getDefaultInstance()))
               .setResponseMarshaller(io.grpc.protobuf.ProtoUtils.marshaller(
                   com.google.protobuf.Empty.getDefaultInstance()))
               .setSchemaDescriptor(new DAppTestDriverServiceMethodDescriptorSupplier("notifyTestStart"))
@@ -58,27 +58,27 @@ public final class DAppTestDriverServiceGrpc {
     return getNotifyTestStartMethod;
   }
 
-  private static volatile io.grpc.MethodDescriptor<darcher.DappTestDriverService.TestStartMsg,
+  private static volatile io.grpc.MethodDescriptor<org.kristen.rpc.darcher.DappTestService.TestEndMsg,
       com.google.protobuf.Empty> getNotifyTestEndMethod;
 
   @io.grpc.stub.annotations.RpcMethod(
       fullMethodName = SERVICE_NAME + '/' + "notifyTestEnd",
-      requestType = darcher.DappTestDriverService.TestStartMsg.class,
+      requestType = org.kristen.rpc.darcher.DappTestService.TestEndMsg.class,
       responseType = com.google.protobuf.Empty.class,
       methodType = io.grpc.MethodDescriptor.MethodType.UNARY)
-  public static io.grpc.MethodDescriptor<darcher.DappTestDriverService.TestStartMsg,
+  public static io.grpc.MethodDescriptor<org.kristen.rpc.darcher.DappTestService.TestEndMsg,
       com.google.protobuf.Empty> getNotifyTestEndMethod() {
-    io.grpc.MethodDescriptor<darcher.DappTestDriverService.TestStartMsg, com.google.protobuf.Empty> getNotifyTestEndMethod;
+    io.grpc.MethodDescriptor<org.kristen.rpc.darcher.DappTestService.TestEndMsg, com.google.protobuf.Empty> getNotifyTestEndMethod;
     if ((getNotifyTestEndMethod = DAppTestDriverServiceGrpc.getNotifyTestEndMethod) == null) {
       synchronized (DAppTestDriverServiceGrpc.class) {
         if ((getNotifyTestEndMethod = DAppTestDriverServiceGrpc.getNotifyTestEndMethod) == null) {
           DAppTestDriverServiceGrpc.getNotifyTestEndMethod = getNotifyTestEndMethod =
-              io.grpc.MethodDescriptor.<darcher.DappTestDriverService.TestStartMsg, com.google.protobuf.Empty>newBuilder()
+              io.grpc.MethodDescriptor.<org.kristen.rpc.darcher.DappTestService.TestEndMsg, com.google.protobuf.Empty>newBuilder()
               .setType(io.grpc.MethodDescriptor.MethodType.UNARY)
               .setFullMethodName(generateFullMethodName(SERVICE_NAME, "notifyTestEnd"))
               .setSampledToLocalTracing(true)
               .setRequestMarshaller(io.grpc.protobuf.ProtoUtils.marshaller(
-                  darcher.DappTestDriverService.TestStartMsg.getDefaultInstance()))
+                  org.kristen.rpc.darcher.DappTestService.TestEndMsg.getDefaultInstance()))
               .setResponseMarshaller(io.grpc.protobuf.ProtoUtils.marshaller(
                   com.google.protobuf.Empty.getDefaultInstance()))
               .setSchemaDescriptor(new DAppTestDriverServiceMethodDescriptorSupplier("notifyTestEnd"))
@@ -89,27 +89,27 @@ public final class DAppTestDriverServiceGrpc {
     return getNotifyTestEndMethod;
   }
 
-  private static volatile io.grpc.MethodDescriptor<darcher.DappTestDriverService.TxMsg,
+  private static volatile io.grpc.MethodDescriptor<org.kristen.rpc.darcher.DappTestService.TxMsg,
       com.google.protobuf.Empty> getWaitForTxProcessMethod;
 
   @io.grpc.stub.annotations.RpcMethod(
       fullMethodName = SERVICE_NAME + '/' + "waitForTxProcess",
-      requestType = darcher.DappTestDriverService.TxMsg.class,
+      requestType = org.kristen.rpc.darcher.DappTestService.TxMsg.class,
       responseType = com.google.protobuf.Empty.class,
       methodType = io.grpc.MethodDescriptor.MethodType.UNARY)
-  public static io.grpc.MethodDescriptor<darcher.DappTestDriverService.TxMsg,
+  public static io.grpc.MethodDescriptor<org.kristen.rpc.darcher.DappTestService.TxMsg,
       com.google.protobuf.Empty> getWaitForTxProcessMethod() {
-    io.grpc.MethodDescriptor<darcher.DappTestDriverService.TxMsg, com.google.protobuf.Empty> getWaitForTxProcessMethod;
+    io.grpc.MethodDescriptor<org.kristen.rpc.darcher.DappTestService.TxMsg, com.google.protobuf.Empty> getWaitForTxProcessMethod;
     if ((getWaitForTxProcessMethod = DAppTestDriverServiceGrpc.getWaitForTxProcessMethod) == null) {
       synchronized (DAppTestDriverServiceGrpc.class) {
         if ((getWaitForTxProcessMethod = DAppTestDriverServiceGrpc.getWaitForTxProcessMethod) == null) {
           DAppTestDriverServiceGrpc.getWaitForTxProcessMethod = getWaitForTxProcessMethod =
-              io.grpc.MethodDescriptor.<darcher.DappTestDriverService.TxMsg, com.google.protobuf.Empty>newBuilder()
+              io.grpc.MethodDescriptor.<org.kristen.rpc.darcher.DappTestService.TxMsg, com.google.protobuf.Empty>newBuilder()
               .setType(io.grpc.MethodDescriptor.MethodType.UNARY)
               .setFullMethodName(generateFullMethodName(SERVICE_NAME, "waitForTxProcess"))
               .setSampledToLocalTracing(true)
               .setRequestMarshaller(io.grpc.protobuf.ProtoUtils.marshaller(
-                  darcher.DappTestDriverService.TxMsg.getDefaultInstance()))
+                  org.kristen.rpc.darcher.DappTestService.TxMsg.getDefaultInstance()))
               .setResponseMarshaller(io.grpc.protobuf.ProtoUtils.marshaller(
                   com.google.protobuf.Empty.getDefaultInstance()))
               .setSchemaDescriptor(new DAppTestDriverServiceMethodDescriptorSupplier("waitForTxProcess"))
@@ -120,29 +120,29 @@ public final class DAppTestDriverServiceGrpc {
     return getWaitForTxProcessMethod;
   }
 
-  private static volatile io.grpc.MethodDescriptor<darcher.DappTestDriverService.DAppDriverControlMsg,
-      darcher.DappTestDriverService.DAppDriverControlMsg> getDappDriverControlMethod;
+  private static volatile io.grpc.MethodDescriptor<org.kristen.rpc.darcher.DappTestService.DAppDriverControlMsg,
+      org.kristen.rpc.darcher.DappTestService.DAppDriverControlMsg> getDappDriverControlMethod;
 
   @io.grpc.stub.annotations.RpcMethod(
       fullMethodName = SERVICE_NAME + '/' + "dappDriverControl",
-      requestType = darcher.DappTestDriverService.DAppDriverControlMsg.class,
-      responseType = darcher.DappTestDriverService.DAppDriverControlMsg.class,
+      requestType = org.kristen.rpc.darcher.DappTestService.DAppDriverControlMsg.class,
+      responseType = org.kristen.rpc.darcher.DappTestService.DAppDriverControlMsg.class,
       methodType = io.grpc.MethodDescriptor.MethodType.BIDI_STREAMING)
-  public static io.grpc.MethodDescriptor<darcher.DappTestDriverService.DAppDriverControlMsg,
-      darcher.DappTestDriverService.DAppDriverControlMsg> getDappDriverControlMethod() {
-    io.grpc.MethodDescriptor<darcher.DappTestDriverService.DAppDriverControlMsg, darcher.DappTestDriverService.DAppDriverControlMsg> getDappDriverControlMethod;
+  public static io.grpc.MethodDescriptor<org.kristen.rpc.darcher.DappTestService.DAppDriverControlMsg,
+      org.kristen.rpc.darcher.DappTestService.DAppDriverControlMsg> getDappDriverControlMethod() {
+    io.grpc.MethodDescriptor<org.kristen.rpc.darcher.DappTestService.DAppDriverControlMsg, org.kristen.rpc.darcher.DappTestService.DAppDriverControlMsg> getDappDriverControlMethod;
     if ((getDappDriverControlMethod = DAppTestDriverServiceGrpc.getDappDriverControlMethod) == null) {
       synchronized (DAppTestDriverServiceGrpc.class) {
         if ((getDappDriverControlMethod = DAppTestDriverServiceGrpc.getDappDriverControlMethod) == null) {
           DAppTestDriverServiceGrpc.getDappDriverControlMethod = getDappDriverControlMethod =
-              io.grpc.MethodDescriptor.<darcher.DappTestDriverService.DAppDriverControlMsg, darcher.DappTestDriverService.DAppDriverControlMsg>newBuilder()
+              io.grpc.MethodDescriptor.<org.kristen.rpc.darcher.DappTestService.DAppDriverControlMsg, org.kristen.rpc.darcher.DappTestService.DAppDriverControlMsg>newBuilder()
               .setType(io.grpc.MethodDescriptor.MethodType.BIDI_STREAMING)
               .setFullMethodName(generateFullMethodName(SERVICE_NAME, "dappDriverControl"))
               .setSampledToLocalTracing(true)
               .setRequestMarshaller(io.grpc.protobuf.ProtoUtils.marshaller(
-                  darcher.DappTestDriverService.DAppDriverControlMsg.getDefaultInstance()))
+                  org.kristen.rpc.darcher.DappTestService.DAppDriverControlMsg.getDefaultInstance()))
               .setResponseMarshaller(io.grpc.protobuf.ProtoUtils.marshaller(
-                  darcher.DappTestDriverService.DAppDriverControlMsg.getDefaultInstance()))
+                  org.kristen.rpc.darcher.DappTestService.DAppDriverControlMsg.getDefaultInstance()))
               .setSchemaDescriptor(new DAppTestDriverServiceMethodDescriptorSupplier("dappDriverControl"))
               .build();
         }
@@ -151,27 +151,27 @@ public final class DAppTestDriverServiceGrpc {
     return getDappDriverControlMethod;
   }
 
-  private static volatile io.grpc.MethodDescriptor<darcher.DappTestDriverService.ConsoleErrorMsg,
+  private static volatile io.grpc.MethodDescriptor<org.kristen.rpc.darcher.DappTestService.ConsoleErrorMsg,
       com.google.protobuf.Empty> getNotifyConsoleErrorMethod;
 
   @io.grpc.stub.annotations.RpcMethod(
       fullMethodName = SERVICE_NAME + '/' + "notifyConsoleError",
-      requestType = darcher.DappTestDriverService.ConsoleErrorMsg.class,
+      requestType = org.kristen.rpc.darcher.DappTestService.ConsoleErrorMsg.class,
       responseType = com.google.protobuf.Empty.class,
       methodType = io.grpc.MethodDescriptor.MethodType.UNARY)
-  public static io.grpc.MethodDescriptor<darcher.DappTestDriverService.ConsoleErrorMsg,
+  public static io.grpc.MethodDescriptor<org.kristen.rpc.darcher.DappTestService.ConsoleErrorMsg,
       com.google.protobuf.Empty> getNotifyConsoleErrorMethod() {
-    io.grpc.MethodDescriptor<darcher.DappTestDriverService.ConsoleErrorMsg, com.google.protobuf.Empty> getNotifyConsoleErrorMethod;
+    io.grpc.MethodDescriptor<org.kristen.rpc.darcher.DappTestService.ConsoleErrorMsg, com.google.protobuf.Empty> getNotifyConsoleErrorMethod;
     if ((getNotifyConsoleErrorMethod = DAppTestDriverServiceGrpc.getNotifyConsoleErrorMethod) == null) {
       synchronized (DAppTestDriverServiceGrpc.class) {
         if ((getNotifyConsoleErrorMethod = DAppTestDriverServiceGrpc.getNotifyConsoleErrorMethod) == null) {
           DAppTestDriverServiceGrpc.getNotifyConsoleErrorMethod = getNotifyConsoleErrorMethod =
-              io.grpc.MethodDescriptor.<darcher.DappTestDriverService.ConsoleErrorMsg, com.google.protobuf.Empty>newBuilder()
+              io.grpc.MethodDescriptor.<org.kristen.rpc.darcher.DappTestService.ConsoleErrorMsg, com.google.protobuf.Empty>newBuilder()
               .setType(io.grpc.MethodDescriptor.MethodType.UNARY)
               .setFullMethodName(generateFullMethodName(SERVICE_NAME, "notifyConsoleError"))
               .setSampledToLocalTracing(true)
               .setRequestMarshaller(io.grpc.protobuf.ProtoUtils.marshaller(
-                  darcher.DappTestDriverService.ConsoleErrorMsg.getDefaultInstance()))
+                  org.kristen.rpc.darcher.DappTestService.ConsoleErrorMsg.getDefaultInstance()))
               .setResponseMarshaller(io.grpc.protobuf.ProtoUtils.marshaller(
                   com.google.protobuf.Empty.getDefaultInstance()))
               .setSchemaDescriptor(new DAppTestDriverServiceMethodDescriptorSupplier("notifyConsoleError"))
@@ -236,7 +236,7 @@ public final class DAppTestDriverServiceGrpc {
      *DApp driver should call notifyTestStart() rpc once when test starts
      * </pre>
      */
-    public void notifyTestStart(darcher.DappTestDriverService.TestStartMsg request,
+    public void notifyTestStart(org.kristen.rpc.darcher.DappTestService.TestStartMsg request,
         io.grpc.stub.StreamObserver<com.google.protobuf.Empty> responseObserver) {
       asyncUnimplementedUnaryCall(getNotifyTestStartMethod(), responseObserver);
     }
@@ -247,7 +247,7 @@ public final class DAppTestDriverServiceGrpc {
      *DApp driver should call notifyTestEnd() rpc once when test ends
      * </pre>
      */
-    public void notifyTestEnd(darcher.DappTestDriverService.TestStartMsg request,
+    public void notifyTestEnd(org.kristen.rpc.darcher.DappTestService.TestEndMsg request,
         io.grpc.stub.StreamObserver<com.google.protobuf.Empty> responseObserver) {
       asyncUnimplementedUnaryCall(getNotifyTestEndMethod(), responseObserver);
     }
@@ -259,7 +259,7 @@ public final class DAppTestDriverServiceGrpc {
      *This rpc call may block for arbitrary amount of time. DApp driver must wait for this rpc call to return.
      * </pre>
      */
-    public void waitForTxProcess(darcher.DappTestDriverService.TxMsg request,
+    public void waitForTxProcess(org.kristen.rpc.darcher.DappTestService.TxMsg request,
         io.grpc.stub.StreamObserver<com.google.protobuf.Empty> responseObserver) {
       asyncUnimplementedUnaryCall(getWaitForTxProcessMethod(), responseObserver);
     }
@@ -273,8 +273,8 @@ public final class DAppTestDriverServiceGrpc {
      *During the connection, server may send a DAppDriverControlMsg as request to client and client should respond with the same (role, id, dapp_name, instance_id)
      * </pre>
      */
-    public io.grpc.stub.StreamObserver<darcher.DappTestDriverService.DAppDriverControlMsg> dappDriverControl(
-        io.grpc.stub.StreamObserver<darcher.DappTestDriverService.DAppDriverControlMsg> responseObserver) {
+    public io.grpc.stub.StreamObserver<org.kristen.rpc.darcher.DappTestService.DAppDriverControlMsg> dappDriverControl(
+        io.grpc.stub.StreamObserver<org.kristen.rpc.darcher.DappTestService.DAppDriverControlMsg> responseObserver) {
       return asyncUnimplementedStreamingCall(getDappDriverControlMethod(), responseObserver);
     }
 
@@ -284,7 +284,7 @@ public final class DAppTestDriverServiceGrpc {
      *DApp driver should call notifyConsoleError when there is an error in dapp console
      * </pre>
      */
-    public void notifyConsoleError(darcher.DappTestDriverService.ConsoleErrorMsg request,
+    public void notifyConsoleError(org.kristen.rpc.darcher.DappTestService.ConsoleErrorMsg request,
         io.grpc.stub.StreamObserver<com.google.protobuf.Empty> responseObserver) {
       asyncUnimplementedUnaryCall(getNotifyConsoleErrorMethod(), responseObserver);
     }
@@ -295,35 +295,35 @@ public final class DAppTestDriverServiceGrpc {
             getNotifyTestStartMethod(),
             asyncUnaryCall(
               new MethodHandlers<
-                darcher.DappTestDriverService.TestStartMsg,
+                org.kristen.rpc.darcher.DappTestService.TestStartMsg,
                 com.google.protobuf.Empty>(
                   this, METHODID_NOTIFY_TEST_START)))
           .addMethod(
             getNotifyTestEndMethod(),
             asyncUnaryCall(
               new MethodHandlers<
-                darcher.DappTestDriverService.TestStartMsg,
+                org.kristen.rpc.darcher.DappTestService.TestEndMsg,
                 com.google.protobuf.Empty>(
                   this, METHODID_NOTIFY_TEST_END)))
           .addMethod(
             getWaitForTxProcessMethod(),
             asyncUnaryCall(
               new MethodHandlers<
-                darcher.DappTestDriverService.TxMsg,
+                org.kristen.rpc.darcher.DappTestService.TxMsg,
                 com.google.protobuf.Empty>(
                   this, METHODID_WAIT_FOR_TX_PROCESS)))
           .addMethod(
             getDappDriverControlMethod(),
             asyncBidiStreamingCall(
               new MethodHandlers<
-                darcher.DappTestDriverService.DAppDriverControlMsg,
-                darcher.DappTestDriverService.DAppDriverControlMsg>(
+                org.kristen.rpc.darcher.DappTestService.DAppDriverControlMsg,
+                org.kristen.rpc.darcher.DappTestService.DAppDriverControlMsg>(
                   this, METHODID_DAPP_DRIVER_CONTROL)))
           .addMethod(
             getNotifyConsoleErrorMethod(),
             asyncUnaryCall(
               new MethodHandlers<
-                darcher.DappTestDriverService.ConsoleErrorMsg,
+                org.kristen.rpc.darcher.DappTestService.ConsoleErrorMsg,
                 com.google.protobuf.Empty>(
                   this, METHODID_NOTIFY_CONSOLE_ERROR)))
           .build();
@@ -350,7 +350,7 @@ public final class DAppTestDriverServiceGrpc {
      *DApp driver should call notifyTestStart() rpc once when test starts
      * </pre>
      */
-    public void notifyTestStart(darcher.DappTestDriverService.TestStartMsg request,
+    public void notifyTestStart(org.kristen.rpc.darcher.DappTestService.TestStartMsg request,
         io.grpc.stub.StreamObserver<com.google.protobuf.Empty> responseObserver) {
       asyncUnaryCall(
           getChannel().newCall(getNotifyTestStartMethod(), getCallOptions()), request, responseObserver);
@@ -362,7 +362,7 @@ public final class DAppTestDriverServiceGrpc {
      *DApp driver should call notifyTestEnd() rpc once when test ends
      * </pre>
      */
-    public void notifyTestEnd(darcher.DappTestDriverService.TestStartMsg request,
+    public void notifyTestEnd(org.kristen.rpc.darcher.DappTestService.TestEndMsg request,
         io.grpc.stub.StreamObserver<com.google.protobuf.Empty> responseObserver) {
       asyncUnaryCall(
           getChannel().newCall(getNotifyTestEndMethod(), getCallOptions()), request, responseObserver);
@@ -375,7 +375,7 @@ public final class DAppTestDriverServiceGrpc {
      *This rpc call may block for arbitrary amount of time. DApp driver must wait for this rpc call to return.
      * </pre>
      */
-    public void waitForTxProcess(darcher.DappTestDriverService.TxMsg request,
+    public void waitForTxProcess(org.kristen.rpc.darcher.DappTestService.TxMsg request,
         io.grpc.stub.StreamObserver<com.google.protobuf.Empty> responseObserver) {
       asyncUnaryCall(
           getChannel().newCall(getWaitForTxProcessMethod(), getCallOptions()), request, responseObserver);
@@ -390,8 +390,8 @@ public final class DAppTestDriverServiceGrpc {
      *During the connection, server may send a DAppDriverControlMsg as request to client and client should respond with the same (role, id, dapp_name, instance_id)
      * </pre>
      */
-    public io.grpc.stub.StreamObserver<darcher.DappTestDriverService.DAppDriverControlMsg> dappDriverControl(
-        io.grpc.stub.StreamObserver<darcher.DappTestDriverService.DAppDriverControlMsg> responseObserver) {
+    public io.grpc.stub.StreamObserver<org.kristen.rpc.darcher.DappTestService.DAppDriverControlMsg> dappDriverControl(
+        io.grpc.stub.StreamObserver<org.kristen.rpc.darcher.DappTestService.DAppDriverControlMsg> responseObserver) {
       return asyncBidiStreamingCall(
           getChannel().newCall(getDappDriverControlMethod(), getCallOptions()), responseObserver);
     }
@@ -402,7 +402,7 @@ public final class DAppTestDriverServiceGrpc {
      *DApp driver should call notifyConsoleError when there is an error in dapp console
      * </pre>
      */
-    public void notifyConsoleError(darcher.DappTestDriverService.ConsoleErrorMsg request,
+    public void notifyConsoleError(org.kristen.rpc.darcher.DappTestService.ConsoleErrorMsg request,
         io.grpc.stub.StreamObserver<com.google.protobuf.Empty> responseObserver) {
       asyncUnaryCall(
           getChannel().newCall(getNotifyConsoleErrorMethod(), getCallOptions()), request, responseObserver);
@@ -429,7 +429,7 @@ public final class DAppTestDriverServiceGrpc {
      *DApp driver should call notifyTestStart() rpc once when test starts
      * </pre>
      */
-    public com.google.protobuf.Empty notifyTestStart(darcher.DappTestDriverService.TestStartMsg request) {
+    public com.google.protobuf.Empty notifyTestStart(org.kristen.rpc.darcher.DappTestService.TestStartMsg request) {
       return blockingUnaryCall(
           getChannel(), getNotifyTestStartMethod(), getCallOptions(), request);
     }
@@ -440,7 +440,7 @@ public final class DAppTestDriverServiceGrpc {
      *DApp driver should call notifyTestEnd() rpc once when test ends
      * </pre>
      */
-    public com.google.protobuf.Empty notifyTestEnd(darcher.DappTestDriverService.TestStartMsg request) {
+    public com.google.protobuf.Empty notifyTestEnd(org.kristen.rpc.darcher.DappTestService.TestEndMsg request) {
       return blockingUnaryCall(
           getChannel(), getNotifyTestEndMethod(), getCallOptions(), request);
     }
@@ -452,7 +452,7 @@ public final class DAppTestDriverServiceGrpc {
      *This rpc call may block for arbitrary amount of time. DApp driver must wait for this rpc call to return.
      * </pre>
      */
-    public com.google.protobuf.Empty waitForTxProcess(darcher.DappTestDriverService.TxMsg request) {
+    public com.google.protobuf.Empty waitForTxProcess(org.kristen.rpc.darcher.DappTestService.TxMsg request) {
       return blockingUnaryCall(
           getChannel(), getWaitForTxProcessMethod(), getCallOptions(), request);
     }
@@ -463,7 +463,7 @@ public final class DAppTestDriverServiceGrpc {
      *DApp driver should call notifyConsoleError when there is an error in dapp console
      * </pre>
      */
-    public com.google.protobuf.Empty notifyConsoleError(darcher.DappTestDriverService.ConsoleErrorMsg request) {
+    public com.google.protobuf.Empty notifyConsoleError(org.kristen.rpc.darcher.DappTestService.ConsoleErrorMsg request) {
       return blockingUnaryCall(
           getChannel(), getNotifyConsoleErrorMethod(), getCallOptions(), request);
     }
@@ -490,7 +490,7 @@ public final class DAppTestDriverServiceGrpc {
      * </pre>
      */
     public com.google.common.util.concurrent.ListenableFuture<com.google.protobuf.Empty> notifyTestStart(
-        darcher.DappTestDriverService.TestStartMsg request) {
+        org.kristen.rpc.darcher.DappTestService.TestStartMsg request) {
       return futureUnaryCall(
           getChannel().newCall(getNotifyTestStartMethod(), getCallOptions()), request);
     }
@@ -502,7 +502,7 @@ public final class DAppTestDriverServiceGrpc {
      * </pre>
      */
     public com.google.common.util.concurrent.ListenableFuture<com.google.protobuf.Empty> notifyTestEnd(
-        darcher.DappTestDriverService.TestStartMsg request) {
+        org.kristen.rpc.darcher.DappTestService.TestEndMsg request) {
       return futureUnaryCall(
           getChannel().newCall(getNotifyTestEndMethod(), getCallOptions()), request);
     }
@@ -515,7 +515,7 @@ public final class DAppTestDriverServiceGrpc {
      * </pre>
      */
     public com.google.common.util.concurrent.ListenableFuture<com.google.protobuf.Empty> waitForTxProcess(
-        darcher.DappTestDriverService.TxMsg request) {
+        org.kristen.rpc.darcher.DappTestService.TxMsg request) {
       return futureUnaryCall(
           getChannel().newCall(getWaitForTxProcessMethod(), getCallOptions()), request);
     }
@@ -527,7 +527,7 @@ public final class DAppTestDriverServiceGrpc {
      * </pre>
      */
     public com.google.common.util.concurrent.ListenableFuture<com.google.protobuf.Empty> notifyConsoleError(
-        darcher.DappTestDriverService.ConsoleErrorMsg request) {
+        org.kristen.rpc.darcher.DappTestService.ConsoleErrorMsg request) {
       return futureUnaryCall(
           getChannel().newCall(getNotifyConsoleErrorMethod(), getCallOptions()), request);
     }
@@ -557,19 +557,19 @@ public final class DAppTestDriverServiceGrpc {
     public void invoke(Req request, io.grpc.stub.StreamObserver<Resp> responseObserver) {
       switch (methodId) {
         case METHODID_NOTIFY_TEST_START:
-          serviceImpl.notifyTestStart((darcher.DappTestDriverService.TestStartMsg) request,
+          serviceImpl.notifyTestStart((org.kristen.rpc.darcher.DappTestService.TestStartMsg) request,
               (io.grpc.stub.StreamObserver<com.google.protobuf.Empty>) responseObserver);
           break;
         case METHODID_NOTIFY_TEST_END:
-          serviceImpl.notifyTestEnd((darcher.DappTestDriverService.TestStartMsg) request,
+          serviceImpl.notifyTestEnd((org.kristen.rpc.darcher.DappTestService.TestEndMsg) request,
               (io.grpc.stub.StreamObserver<com.google.protobuf.Empty>) responseObserver);
           break;
         case METHODID_WAIT_FOR_TX_PROCESS:
-          serviceImpl.waitForTxProcess((darcher.DappTestDriverService.TxMsg) request,
+          serviceImpl.waitForTxProcess((org.kristen.rpc.darcher.DappTestService.TxMsg) request,
               (io.grpc.stub.StreamObserver<com.google.protobuf.Empty>) responseObserver);
           break;
         case METHODID_NOTIFY_CONSOLE_ERROR:
-          serviceImpl.notifyConsoleError((darcher.DappTestDriverService.ConsoleErrorMsg) request,
+          serviceImpl.notifyConsoleError((org.kristen.rpc.darcher.DappTestService.ConsoleErrorMsg) request,
               (io.grpc.stub.StreamObserver<com.google.protobuf.Empty>) responseObserver);
           break;
         default:
@@ -584,7 +584,7 @@ public final class DAppTestDriverServiceGrpc {
       switch (methodId) {
         case METHODID_DAPP_DRIVER_CONTROL:
           return (io.grpc.stub.StreamObserver<Req>) serviceImpl.dappDriverControl(
-              (io.grpc.stub.StreamObserver<darcher.DappTestDriverService.DAppDriverControlMsg>) responseObserver);
+              (io.grpc.stub.StreamObserver<org.kristen.rpc.darcher.DappTestService.DAppDriverControlMsg>) responseObserver);
         default:
           throw new AssertionError();
       }
@@ -597,7 +597,7 @@ public final class DAppTestDriverServiceGrpc {
 
     @java.lang.Override
     public com.google.protobuf.Descriptors.FileDescriptor getFileDescriptor() {
-      return darcher.DappTestDriverService.getDescriptor();
+      return org.kristen.rpc.darcher.DappTestService.getDescriptor();
     }
 
     @java.lang.Override
