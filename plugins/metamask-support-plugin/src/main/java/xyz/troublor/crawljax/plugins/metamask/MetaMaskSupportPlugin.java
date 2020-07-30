@@ -30,14 +30,20 @@ import java.util.concurrent.TimeUnit;
  * After crawling, it will stop the monitor thread.
  */
 public class MetaMaskSupportPlugin implements OnBrowserCreatedPlugin, OnFireEventSucceededPlugin, OnUrlFirstLoadPlugin {
-//    private static final String METAMASK_POPUP_URL = "chrome-extension://nkbihfbeogaeaoehlefnkodbefgpgknn/popup.html";
-    private static final String METAMASK_POPUP_URL = "chrome-extension://epdhlafdhlgodbdeconjfdcnbdknbiko/home.html";
-    private static final String METAMASK_PASSWORD = "gRP'b~jz|zz;DA7~[[P9";
+    private String METAMASK_POPUP_URL = "chrome-extension://nkbihfbeogaeaoehlefnkodbefgpgknn/popup.html";
+    private String METAMASK_PASSWORD = "";
+
     // how many milliseconds to wait after interacting with the MetaMask popup windows
     private static final int METAMASK_INTERACTION_LATENCY = 1000;
 
+    // TODO: Specific scenario
     // Specific data for DApps
-    private static final String AUGUR_URL = "http://localhost:8080";
+//    private static final String AUGUR_URL = "http://localhost:8080";
+
+    public MetaMaskSupportPlugin(String url, String password) {
+        this.METAMASK_POPUP_URL = url;
+        this.METAMASK_PASSWORD = password;
+    }
 
     /**
      * when browser is created, log in to MetaMask and start a thread to monitor new popup windows of MetaMask
@@ -55,20 +61,19 @@ public class MetaMaskSupportPlugin implements OnBrowserCreatedPlugin, OnFireEven
             System.out.println("ERROR: MetaMask login failed");
         }
 
-        // TODO handle other scenarios
-
+        // TODO: handle other scenarios (specific)
         // Sign up for Augur
-        try {
-            newBrowser.goToUrl(new URI(AUGUR_URL));
-
-            // Sign up for Augur
-            WebDriver driver = newBrowser.getWebDriver();
-            driver.manage().timeouts().implicitlyWait(10, TimeUnit.SECONDS);
-            driver.findElement(By.cssSelector(".buttons-styles_SecondaryButton")).click();
-            driver.findElement(By.cssSelector(".buttons-styles_SecondarySignInButton:nth-child(7) > div > div > div:nth-child(1)")).click();
-        } catch (URISyntaxException e) {
-            System.out.println("ERROR: invalid Augur url, " + METAMASK_POPUP_URL);
-        }
+//        try {
+//            newBrowser.goToUrl(new URI(AUGUR_URL));
+//
+//            // Sign up for Augur
+//            WebDriver driver = newBrowser.getWebDriver();
+//            driver.manage().timeouts().implicitlyWait(10, TimeUnit.SECONDS);
+//            driver.findElement(By.cssSelector(".buttons-styles_SecondaryButton")).click();
+//            driver.findElement(By.cssSelector(".buttons-styles_SecondarySignInButton:nth-child(7) > div > div > div:nth-child(1)")).click();
+//        } catch (URISyntaxException e) {
+//            System.out.println("ERROR: invalid Augur url, " + METAMASK_POPUP_URL);
+//        }
 
     }
 

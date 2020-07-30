@@ -16,6 +16,8 @@ public class MetamaskExample {
     private static final long WAIT_TIME_AFTER_EVENT = 500;
     private static final long WAIT_TIME_AFTER_RELOAD = 500;
     private static final String URL = "http://localhost:8080/";
+    private static final String METAMASK_POPUP_URL = "chrome-extension://nkbihfbeogaeaoehlefnkodbefgpgknn/popup.html";
+    private static final String METAMASK_PASSWORD = "gRP'b~jz|zz;DA7~[[P9";
 
     /**
      * Run this method to start the crawl.
@@ -58,7 +60,7 @@ public class MetamaskExample {
 
         // CrawlOverview
         builder.addPlugin(new CrawlOverview());
-        builder.addPlugin(new MetaMaskSupportPlugin());
+        builder.addPlugin(new MetaMaskSupportPlugin(METAMASK_POPUP_URL, METAMASK_PASSWORD));
 
         CrawljaxRunner crawljax = new CrawljaxRunner(builder.build());
         CrawlSession session = crawljax.call();
