@@ -35,6 +35,12 @@
             <version>${project.version}</version>
             <scope>compile</scope>
         </dependency>
+		<dependency>
+			<groupId>com.crawljax</groupId>
+			<artifactId>grpc-client-plugin</artifactId>
+			<version>${project.version}</version>
+			<scope>compile</scope>
+		</dependency>
     </dependencies>
 
 	<build>

@@ -38,7 +38,7 @@ public class MetaMaskSupportPlugin implements OnBrowserCreatedPlugin, OnFireEven
 
     // TODO: Specific scenario
     // Specific data for DApps
-//    private static final String AUGUR_URL = "http://localhost:8080";
+    private static final String AUGUR_URL = "http://localhost:8080";
 
     public MetaMaskSupportPlugin(String url, String password) {
         this.METAMASK_POPUP_URL = url;
@@ -62,18 +62,18 @@ public class MetaMaskSupportPlugin implements OnBrowserCreatedPlugin, OnFireEven
         }
 
         // TODO: handle other scenarios (specific)
-        // Sign up for Augur
-//        try {
-//            newBrowser.goToUrl(new URI(AUGUR_URL));
-//
-//            // Sign up for Augur
-//            WebDriver driver = newBrowser.getWebDriver();
-//            driver.manage().timeouts().implicitlyWait(10, TimeUnit.SECONDS);
-//            driver.findElement(By.cssSelector(".buttons-styles_SecondaryButton")).click();
-//            driver.findElement(By.cssSelector(".buttons-styles_SecondarySignInButton:nth-child(7) > div > div > div:nth-child(1)")).click();
-//        } catch (URISyntaxException e) {
-//            System.out.println("ERROR: invalid Augur url, " + METAMASK_POPUP_URL);
-//        }
+//         Sign up for Augur
+        try {
+            newBrowser.goToUrl(new URI(AUGUR_URL));
+
+            // Sign up for Augur
+            WebDriver driver = newBrowser.getWebDriver();
+            driver.manage().timeouts().implicitlyWait(10, TimeUnit.SECONDS);
+            driver.findElement(By.cssSelector(".buttons-styles_SecondaryButton")).click();
+            driver.findElement(By.cssSelector(".buttons-styles_SecondarySignInButton:nth-child(7) > div > div > div:nth-child(1)")).click();
+        } catch (URISyntaxException e) {
+            System.out.println("ERROR: invalid Augur url, " + METAMASK_POPUP_URL);
+        }
 
     }
 

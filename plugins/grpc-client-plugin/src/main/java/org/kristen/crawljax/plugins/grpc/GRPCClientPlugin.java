@@ -50,7 +50,7 @@ public class GRPCClientPlugin implements PreCrawlingPlugin, PostCrawlingPlugin, 
     private String txHash;
     private EmbeddedBrowser dappBrowser;
 
-    public GRPCClientPlugin(String hots, int port, String dappName, int instanceId, String url) {
+    public GRPCClientPlugin(String dappName, int instanceId, String url) {
         blockingStub = DAppTestDriverServiceGrpc.newBlockingStub(channel);
         asyncStub = DAppTestDriverServiceGrpc.newStub(channel);
 
@@ -224,17 +224,31 @@ public class GRPCClientPlugin implements PreCrawlingPlugin, PostCrawlingPlugin, 
             e.printStackTrace();
         }
 
-        System.out.println("One transaction has been sent out.");
-        EmbeddedBrowser browser = context.getBrowser();
-        getTxInfo(browser);
-        DappTestService.TxMsg txMsg = DappTestService.TxMsg.newBuilder()
-                .setDappName(this.dappName)
-                .setInstanceId(Integer.toString(this.instanceId))
-                .setHash(this.txHash)
-                .setFrom(this.fromAddress)
-                .setTo(this.toAddress)
-                .build();
-        blockingStub.waitForTxProcess(txMsg);
+        WebDriver driver = context.getBrowser().getWebDriver();
+        String currentHandle = driver.getWindowHandle();
+        ((JavascriptExecutor) driver).executeScript("window.open()");
+        ArrayList<String> tabs = new ArrayList<>(driver.getWindowHandles());
+        driver.switchTo().window(tabs.get(tabs.indexOf(currentHandle) + 1));
+        driver.get(METAMASK_POPUP_URL);
+        try {
+            Thread.sleep(500);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+
+        if (!isMetaMaskMainPage(context.getBrowser())) {
+            System.out.println("One transaction has been sent out.");
+            EmbeddedBrowser browser = context.getBrowser();
+            getTxInfo(browser);
+            DappTestService.TxMsg txMsg = DappTestService.TxMsg.newBuilder()
+                    .setDappName(this.dappName)
+                    .setInstanceId(Integer.toString(this.instanceId))
+                    .setHash(this.txHash)
+                    .setFrom(this.fromAddress)
+                    .setTo(this.toAddress)
+                    .build();
+            blockingStub.waitForTxProcess(txMsg);
+        }
     }
 
 }
