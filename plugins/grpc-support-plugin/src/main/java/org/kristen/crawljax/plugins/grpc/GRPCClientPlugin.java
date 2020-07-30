@@ -33,7 +33,7 @@ import java.util.concurrent.TimeUnit;
 
 import org.kristen.rpc.darcher.*;
 
-public class GRPCClientPlugin implements PreCrawlingPlugin, PostCrawlingPlugin, OnBrowserCreatedPlugin, OnFireEventSucceededPlugin, OnUrlFirstLoadPlugin {
+public class GRPCClientPlugin implements PreCrawlingPlugin, PostCrawlingPlugin, OnBrowserCreatedPlugin, OnFireEventSucceededPlugin {
     private String METAMASK_POPUP_URL = "chrome-extension://nkbihfbeogaeaoehlefnkodbefgpgknn/popup.html";
     private final String INIT_CONTROL_MSG_ID = "0";
     private int WAIT_TIME_FOR_METAMASK_PLUGIN = 1000;
@@ -235,11 +235,6 @@ public class GRPCClientPlugin implements PreCrawlingPlugin, PostCrawlingPlugin, 
                 .setTo(this.toAddress)
                 .build();
         blockingStub.waitForTxProcess(txMsg);
-    }
-
-    @Override
-    public void onUrlFirstLoad(CrawlerContext context) {
-
     }
 
 }
