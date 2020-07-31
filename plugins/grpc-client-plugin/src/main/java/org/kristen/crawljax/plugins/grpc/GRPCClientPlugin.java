@@ -37,10 +37,12 @@ public class GRPCClientPlugin implements PreCrawlingPlugin, PostCrawlingPlugin, 
     private String METAMASK_POPUP_URL = "chrome-extension://nkbihfbeogaeaoehlefnkodbefgpgknn/popup.html";
     private final String INIT_CONTROL_MSG_ID = "0";
     private int WAIT_TIME_FOR_METAMASK_PLUGIN = 1000;
+    private static String SERVER_HOST = "localhost";
+    private static int SERVER_PORT = 8899;
 
-    private static ManagedChannel channel = ManagedChannelBuilder.forAddress("localhost", 8899)
+    private static ManagedChannel channel = ManagedChannelBuilder.forAddress(SERVER_HOST, SERVER_PORT)
             .usePlaintext()
-            .build();;
+            .build();
     private final DAppTestDriverServiceGrpc.DAppTestDriverServiceBlockingStub blockingStub;
     private final DAppTestDriverServiceGrpc.DAppTestDriverServiceStub asyncStub;
     private String dappName;
