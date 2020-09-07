@@ -341,6 +341,11 @@ public class Crawler {
 
 		formHandler.handleFormElements(formInputs);
 
+		StateVertex newState = stateMachine.newStateFor(browser);
+		StateVertex clone = stateMachine.getStateFlowGraph().putIfAbsent(newState);
+		if (clone == null) {
+			parsePageForCandidateElements(newState);
+		}
 	}
 
 	/**
@@ -560,6 +565,16 @@ public class Crawler {
 
 		plugins.runPreStateCrawlingPlugins(context, extract, currentState);
 		candidateActionCache.addActions(extract, currentState);
+		System.out.println(extract);
+	}
+
+	private void parsePageForCandidateElements(StateVertex currentState) {
+		LOG.debug("Parsing DOM of state {} for candidate elements", currentState.getName());
+		ImmutableList<CandidateElement> extract = candidateExtractor.extract(currentState);
+
+		plugins.runPreStateCrawlingPlugins(context, extract, currentState);
+		candidateActionCache.addActions(extract, currentState);
+		System.out.println(extract);
 	}
 
 	private void waitForRefreshTagIfAny(final Eventable eventable) {

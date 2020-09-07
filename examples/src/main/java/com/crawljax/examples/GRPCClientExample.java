@@ -16,26 +16,29 @@ import java.util.concurrent.TimeUnit;
 public class GRPCClientExample {
     private static final long WAIT_TIME_AFTER_EVENT = 500;
     private static final long WAIT_TIME_AFTER_RELOAD = 500;
-    private static final String URL = "http://localhost:8080/";
+    private static final String DAPP_URL = "chrome-extension://pblaiiacglodkdimplphhfffmpblfgmh/home.html#send";
     private static final String DAPP_NAME = "Augur";
     private static int instanceId = 1;
-    private static final String METAMASK_POPUP_URL = "chrome-extension://epdhlafdhlgodbdeconjfdcnbdknbiko/home.html";
+//    chrome-extension://nkbihfbeogaeaoehlefnkodbefgpgknn/home.html
+    private static final String METAMASK_POPUP_URL = "chrome-extension://pblaiiacglodkdimplphhfffmpblfgmh/home.html";
     private static final String METAMASK_PASSWORD = "gRP'b~jz|zz;DA7~[[P9";
 
-    /**chrome-extension://nkbihfbeogaeaoehlefnkodbefgpgknn/popup.html
+    /**
      * Run this method to start the crawl.
      *
      * @throws IOException when the output folder cannot be created or emptied.
      */
     public static void main(String[] args) throws IOException {
-        CrawljaxConfiguration.CrawljaxConfigurationBuilder builder = CrawljaxConfiguration.builderFor(URL);
+        CrawljaxConfiguration.CrawljaxConfigurationBuilder builder = CrawljaxConfiguration.builderFor(DAPP_URL);
 
-        builder.crawlRules().setFormFillMode(CrawlRules.FormFillMode.RANDOM);
-
+//        builder.crawlRules().setFormFillMode(CrawlRules.FormFillMode.RANDOM);
+//        builder.crawlRules().click("div").withAttribute("")
+        builder.crawlRules().setFormFillMode(CrawlRules.FormFillMode.TRAINING);
         // click these elements
-        builder.crawlRules().clickDefaultElements();
-		 /*builder.crawlRules().click("A");
-		 builder.crawlRules().click("button");*/
+//        builder.crawlRules().clickDefaultElements();
+		 builder.crawlRules().click("A");
+		 builder.crawlRules().click("button");
+        builder.crawlRules().click("div");
         builder.crawlRules().crawlHiddenAnchors(true);
         builder.crawlRules().crawlFrames(false);
         builder.setUnlimitedCrawlDepth();
@@ -59,14 +62,16 @@ public class GRPCClientExample {
         input.inputField(FormInput.InputType.TEXT, id).inputValues("1");
         builder.crawlRules().setInputSpec(input);
 
+
+
         builder.setBrowserConfig(
                 new BrowserConfiguration(EmbeddedBrowser.BrowserType.CHROME, 1,
                         new BrowserOptions("/Users/shuqing/Documents/application")));
 
         // CrawlOverview
         builder.addPlugin(new CrawlOverview());
-        builder.addPlugin(new MetaMaskSupportPlugin(METAMASK_POPUP_URL, METAMASK_PASSWORD));
-        builder.addPlugin(new GRPCClientPlugin(DAPP_NAME, instanceId, URL));
+//        builder.addPlugin(new MetaMaskSupportPlugin(METAMASK_POPUP_URL, METAMASK_PASSWORD));
+        builder.addPlugin(new GRPCClientPlugin(DAPP_NAME, instanceId, METAMASK_POPUP_URL, DAPP_URL, METAMASK_PASSWORD));
 
         CrawljaxRunner crawljax = new CrawljaxRunner(builder.build());
         CrawlSession session = crawljax.call();

@@ -33,61 +33,80 @@ import java.util.concurrent.TimeUnit;
 
 import org.kristen.rpc.darcher.*;
 
-public class GRPCClientPlugin implements PreCrawlingPlugin, PostCrawlingPlugin, OnBrowserCreatedPlugin, OnFireEventSucceededPlugin {
-    private String METAMASK_POPUP_URL = "chrome-extension://nkbihfbeogaeaoehlefnkodbefgpgknn/popup.html";
+public class GRPCClientPlugin implements PreCrawlingPlugin, PostCrawlingPlugin, OnBrowserCreatedPlugin, OnUrlFirstLoadPlugin, OnFireEventSucceededPlugin {
+    private String METAMASK_PASSWORD = "";
+    private String METAMASK_POPUP_URL = "chrome-extension://pblaiiacglodkdimplphhfffmpblfgmh/home.html";
+    private String DAPP_URL = "http://localhost:8080";
     private final String INIT_CONTROL_MSG_ID = "0";
     private int WAIT_TIME_FOR_METAMASK_PLUGIN = 1000;
     private static String SERVER_HOST = "localhost";
-    private static int SERVER_PORT = 8899;
+    private static int SERVER_PORT = 1234;
 
-    private static ManagedChannel channel = ManagedChannelBuilder.forAddress(SERVER_HOST, SERVER_PORT)
+    public static ManagedChannel channel = ManagedChannelBuilder.forAddress(SERVER_HOST, SERVER_PORT)
             .usePlaintext()
             .build();
-    private final DAppTestDriverServiceGrpc.DAppTestDriverServiceBlockingStub blockingStub;
-    private final DAppTestDriverServiceGrpc.DAppTestDriverServiceStub asyncStub;
-    private String dappName;
-    private int instanceId;
+    public final DAppTestDriverServiceGrpc.DAppTestDriverServiceBlockingStub blockingStub;
+    public final DAppTestDriverServiceGrpc.DAppTestDriverServiceStub asyncStub;
+    public String dappName;
+    public int instanceId;
     private String fromAddress;
     private String toAddress;
     private String txHash;
-    private EmbeddedBrowser dappBrowser;
+    public ControlMsgHandlerThread controlMsgHandlerThread;
+    public MetamaskTxConfirmThread metamaskTxConfirmThread;
+    public EmbeddedBrowser dappBrowser;
+//    volatile WebDriver driver;
 
-    public GRPCClientPlugin(String dappName, int instanceId, String url) {
+//    public Thread controlThread;
+
+    public GRPCClientPlugin(String dappName, int instanceId, String metamaskUrl, String dappUrl, String metamaskPassword) {
         blockingStub = DAppTestDriverServiceGrpc.newBlockingStub(channel);
         asyncStub = DAppTestDriverServiceGrpc.newStub(channel);
 
         this.dappName = dappName;
         this.instanceId = instanceId;
-        this.METAMASK_POPUP_URL = url;
+        this.METAMASK_POPUP_URL = metamaskUrl;
+        this.DAPP_URL = dappUrl;
+        this.METAMASK_PASSWORD = metamaskPassword;
+
+//        this.controlMsgHandlerThread = new ControlMsgHandlerThread(SERVER_HOST, SERVER_PORT, channel, blockingStub, asyncStub, dappName, instanceId);
+        this.controlMsgHandlerThread = new ControlMsgHandlerThread(this.dappName, this.instanceId);
+        Thread controlThread = new Thread(this.controlMsgHandlerThread);
+        controlThread.start();
+
+//        this.metamaskTxConfirmThread = new MetamaskTxConfirmThread(METAMASK_POPUP_URL);
+//        Thread metamaskThread = new Thread(this.metamaskTxConfirmThread);
+//        metamaskThread.start();
     }
 
-    private StreamObserver<DappTestService.DAppDriverControlMsg> responseObserver =
-            DAppTestDriverServiceGrpc.newStub(channel).dappDriverControl(new StreamObserver<DappTestService.DAppDriverControlMsg>() {
-        @Override
-        public void onNext(DappTestService.DAppDriverControlMsg dAppDriverControlMsg) {
-            System.out.println("Receive from stream: " + dAppDriverControlMsg.getAllFields());
-            handleControlMsg(dAppDriverControlMsg);
-        }
+//    private StreamObserver<DappTestService.DAppDriverControlMsg> responseObserver =
+//            DAppTestDriverServiceGrpc.newStub(channel).dappDriverControl(new StreamObserver<DappTestService.DAppDriverControlMsg>() {
+//        @Override
+//        public void onNext(DappTestService.DAppDriverControlMsg dAppDriverControlMsg) {
+//            System.out.println("Receive from stream: " + dAppDriverControlMsg.getAllFields());
+//            handleControlMsg(dAppDriverControlMsg);
+//        }
+//
+//        @Override
+//        public void onError(Throwable t) {
+//            System.out.println("Error from stream");
+//        }
+//
+//        @Override
+//        public void onCompleted() {
+//            System.out.println("Stream completed");
+//        }
+//    });
+//
+//    private StreamObserver<DappTestService.DAppDriverControlMsg> requestObserver;
 
-        @Override
-        public void onError(Throwable t) {
-            System.out.println("Error from stream");
-        }
-
-        @Override
-        public void onCompleted() {
-            System.out.println("Stream completed");
-        }
-    });
-
-    private StreamObserver<DappTestService.DAppDriverControlMsg> requestObserver;
-
-    private void handleControlMsg(DappTestService.DAppDriverControlMsg dAppDriverControlMsg) {
+    public void handleControlMsg(DappTestService.DAppDriverControlMsg dAppDriverControlMsg) {
         DappTestService.DAppDriverControlType controlType = dAppDriverControlMsg.getControlType();
         switch(controlType) {
             case Refresh:
-                WebDriver driver = this.dappBrowser.getWebDriver();
+                WebDriver driver = dappBrowser.getWebDriver();
                 driver.navigate().refresh();
+                System.out.println("The page is successfully refreshed!!!!!");
                 break;
             case NilType:
             case UNRECOGNIZED:
@@ -104,55 +123,56 @@ public class GRPCClientPlugin implements PreCrawlingPlugin, PostCrawlingPlugin, 
      * @param browser the browser instance
      */
     private void getTxInfo(EmbeddedBrowser browser) {
-        WebDriver driver = browser.getWebDriver();
-        String currentHandle = driver.getWindowHandle();
-        ((JavascriptExecutor) driver).executeScript("window.open()");
-        ArrayList<String> tabs = new ArrayList<>(driver.getWindowHandles());
-        driver.switchTo().window(tabs.get(tabs.indexOf(currentHandle) + 1));
-        driver.get(METAMASK_POPUP_URL);
+        Identification activityPaneId = new Identification(Identification.How.xpath,
+                "/html/body/div[1]/div/div[4]/div/div/div/div[3]/ul/li[2]");
+        Identification txBoxId = new Identification(Identification.How.xpath,
+                "/html/body/div[1]/div/div[4]/div/div/div/div[3]/div/div/div/div/div[1]");
+//        Identification fromAddressBoxId = new Identification(Identification.How.xpath,
+//                "/html/body/div[2]/div/div/section/div/div/div[2]/div[1]/div/div[1]/div/div/div/span");
+//        Identification toAddressBoxId = new Identification(Identification.How.xpath,
+//                "/html/body/div[2]/div/div/section/div/div/div[2]/div[1]/div/div[1]/div/div/div/span");
+        Identification copyFromId = new Identification(Identification.How.xpath,
+                "/html/body/div[2]/div/div/section/div/div/div[2]/div[1]/div/div[1]/div/div/div");
+        Identification copyToId = new Identification(Identification.How.xpath,
+                "/html/body/div[2]/div/div/section/div/div/div[2]/div[1]/div/div[3]/div/div/div");
+        Identification copyTxHashId = new Identification(Identification.How.xpath,
+                "/html/body/div[2]/div/div/section/div/div/div[1]/div[2]/button[1]");
 
-        try {
-            Thread.sleep(500);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
+
+        if (browser.elementExists(activityPaneId)) {
+            System.out.println("*************************************************************************************");
+            WebElement activityPane = browser.getWebElement(activityPaneId);
+            activityPane.click();
         }
-
-        if (!isMetaMaskMainPage(browser)) {
-            Identification activityPaneId = new Identification(Identification.How.xpath,
-                    "/html/body/div[1]/div/div[4]/div/div/div/div[3]/ul/li[2]");
-            Identification txBoxId = new Identification(Identification.How.xpath,
-                    "/html/body/div[1]/div/div[4]/div/div/div/div[3]/div/div/div/div/div[1]");
-            Identification fromAddressBoxId = new Identification(Identification.How.xpath,
-                    "/html/body/div[2]/div/div/section/div/div/div[2]/div[1]/div/div[1]/div/div/div/span");
-            Identification toAddressBoxId = new Identification(Identification.How.xpath,
-                    "/html/body/div[2]/div/div/section/div/div/div[2]/div[1]/div/div[1]/div/div/div/span");
-            Identification copyTxHashId = new Identification(Identification.How.xpath,
-                    "/html/body/div[2]/div/div/section/div/div/div[1]/div[2]/button[1]");
-
-            if (browser.elementExists(activityPaneId)) {
-                WebElement activityPane = browser.getWebElement(activityPaneId);
-                activityPane.click();
-            }
-            if (browser.elementExists(txBoxId)) {
-                WebElement txBox = browser.getWebElement(txBoxId);
-                txBox.click();
-            }
-            if (browser.elementExists(fromAddressBoxId)) {
-                WebElement fromAddressBox = browser.getWebElement(fromAddressBoxId);
-                this.fromAddress = fromAddressBox.getAttribute("outerHTML").substring(6, 54);
-            }
-            if (browser.elementExists(toAddressBoxId)) {
-                WebElement toAddressBox = browser.getWebElement(toAddressBoxId);
-                this.toAddress = toAddressBox.getAttribute("outerHTML").substring(6, 54);
-            }
-            if (browser.elementExists(copyTxHashId)) {
-                WebElement copyTxHashElement = browser.getWebElement(copyTxHashId);
-                copyTxHashElement.click();
-            }
-            this.txHash = getTextFromClipboard();
+        if (browser.elementExists(txBoxId)) {
+            WebElement txBox = browser.getWebElement(txBoxId);
+            txBox.click();
         }
-        driver.close();
-        driver.switchTo().window(currentHandle);
+//        if (browser.elementExists(fromAddressBoxId)) {
+//            WebElement fromAddressBox = browser.getWebElement(fromAddressBoxId);
+//            this.fromAddress = fromAddressBox.getAttribute("outerHTML").substring(6, 54);
+//        }
+//        if (browser.elementExists(toAddressBoxId)) {
+//            WebElement toAddressBox = browser.getWebElement(toAddressBoxId);
+//            this.toAddress = toAddressBox.getAttribute("outerHTML").substring(6, 54);
+//        }
+        if (browser.elementExists(copyFromId)) {
+            WebElement copyFromElement = browser.getWebElement(copyFromId);
+            copyFromElement.click();
+        }
+        this.fromAddress = getTextFromClipboard();
+        if (browser.elementExists(copyToId)) {
+            WebElement copyToElement = browser.getWebElement(copyToId);
+            copyToElement.click();
+        }
+        this.toAddress = getTextFromClipboard();
+        if (browser.elementExists(copyTxHashId)) {
+            WebElement copyTxHashElement = browser.getWebElement(copyTxHashId);
+            copyTxHashElement.click();
+        }
+        this.txHash = getTextFromClipboard();
+
+        System.out.printf("From address: %s, to address: %s, txHash: %s\n", fromAddress, toAddress, txHash);
     }
 
     /**
@@ -191,15 +211,15 @@ public class GRPCClientPlugin implements PreCrawlingPlugin, PostCrawlingPlugin, 
                 .build();
         blockingStub.notifyTestStart(testStartMsg);
 
-        DappTestService.DAppDriverControlMsg dAppDriverControlMsg = DappTestService.DAppDriverControlMsg
-                .newBuilder()
-                .setRole(Common.Role.DAPP)
-                .setId(INIT_CONTROL_MSG_ID)
-                .setDappName(this.dappName)
-                .setInstanceId(Integer.toString(this.instanceId))
-                .setControlType(DappTestService.DAppDriverControlType.NilType)
-                .build();
-        this.requestObserver = asyncStub.dappDriverControl(responseObserver);
+//        DappTestService.DAppDriverControlMsg dAppDriverControlMsg = DappTestService.DAppDriverControlMsg
+//                .newBuilder()
+//                .setRole(Common.Role.DAPP)
+//                .setId(INIT_CONTROL_MSG_ID)
+//                .setDappName(this.dappName)
+//                .setInstanceId(Integer.toString(this.instanceId))
+//                .setControlType(DappTestService.DAppDriverControlType.NilType)
+//                .build();
+//        this.requestObserver = asyncStub.dappDriverControl(responseObserver);
     }
 
     @Override
@@ -215,32 +235,126 @@ public class GRPCClientPlugin implements PreCrawlingPlugin, PostCrawlingPlugin, 
 
     @Override
     public void onBrowserCreated(EmbeddedBrowser newBrowser) {
-        this.dappBrowser = newBrowser;
-    }
+//        if (newBrowser == null) {
+//            System.out.println("Before setting browser, browser is null");
+//        } else {
+//            System.out.println("Before setting browser, browser is not null");
+//        }
 
-    @Override
-    public void onFireEventSucceeded(CrawlerContext context, Eventable eventable, List<Eventable> pathToFailure) {
+//        controlMsgHandlerThread.setBrowser(newBrowser);
+
+        this.dappBrowser = newBrowser;
+
         try {
-            Thread.sleep(WAIT_TIME_FOR_METAMASK_PLUGIN);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
+            newBrowser.goToUrl(new URI(METAMASK_POPUP_URL));
+        } catch (URISyntaxException e) {
+            System.out.println("ERROR: invalid MetaMask popup url, " + METAMASK_POPUP_URL);
+        }
+        if (isLogInPage(newBrowser) && !logIn(newBrowser, METAMASK_PASSWORD)) {
+            System.out.println("ERROR: MetaMask login failed");
         }
 
-        WebDriver driver = context.getBrowser().getWebDriver();
+        // TODO: handle other scenarios (specific)
+//         Sign up for Augur
+        try {
+            newBrowser.goToUrl(new URI(DAPP_URL));
+
+            // Sign up for Augur
+            WebDriver driver = newBrowser.getWebDriver();
+            driver.manage().timeouts().implicitlyWait(10, TimeUnit.SECONDS);
+            driver.findElement(By.cssSelector(".buttons-styles_SecondaryButton")).click();
+            driver.findElement(By.cssSelector(".buttons-styles_SecondarySignInButton:nth-child(7) > div > div > div:nth-child(1)")).click();
+        } catch (URISyntaxException e) {
+            System.out.println("ERROR: invalid Augur url, " + METAMASK_POPUP_URL);
+        }
+
+//        this.dappBrowser = newBrowser;
+//        metamaskTxConfirmThread.setDriver(driver);
+
+//        DappTestService.TestStartMsg testStartMsg = DappTestService.TestStartMsg
+//                .newBuilder()
+//                .setDappName(this.dappName)
+//                .setInstanceId(Integer.toString(this.instanceId))
+//                .build();
+//        blockingStub.notifyTestStart(testStartMsg);
+
+//        this.controlThread.start();
+    }
+
+    /**
+     * Execute `ethereum.enable()` to connect dapp with MetaMask
+     *
+     * @param context the current crawler context.
+     */
+    @Override
+    public void onUrlFirstLoad(CrawlerContext context) {
+        EmbeddedBrowser browser = context.getBrowser();
+        WebDriver driver = browser.getWebDriver();
+        if (driver instanceof JavascriptExecutor) {
+            ((JavascriptExecutor)driver).executeScript("ethereum.enable()");
+        } else {
+            throw new IllegalStateException("This driver does not support JavaScript!");
+        }
+    }
+
+    /**
+     * this function will automatically click the primary button in the MetaMask popup window
+     *
+     * @param browser the browser instance
+     */
+    private void processMetaMaskPopup(EmbeddedBrowser browser) {
+
+        WebDriver driver = browser.getWebDriver();
         String currentHandle = driver.getWindowHandle();
         ((JavascriptExecutor) driver).executeScript("window.open()");
         ArrayList<String> tabs = new ArrayList<>(driver.getWindowHandles());
         driver.switchTo().window(tabs.get(tabs.indexOf(currentHandle) + 1));
         driver.get(METAMASK_POPUP_URL);
+
         try {
             Thread.sleep(500);
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
 
-        if (!isMetaMaskMainPage(context.getBrowser())) {
-            System.out.println("One transaction has been sent out.");
-            EmbeddedBrowser browser = context.getBrowser();
+        // TODO: Sign
+        if (!isMetaMaskMainPage(browser)) {
+            Identification primaryBtnId = new Identification(Identification.How.xpath,
+                    "//button[contains(@class, 'btn-primary')]");
+            Identification secondaryBtnId = new Identification(Identification.How.xpath,
+                    "//button[contains(@class, 'btn-secondary')]");
+            Identification defaultBtnId = new Identification(Identification.How.xpath,
+                    "//button[contains(@class, 'btn-default')]");
+            Identification signBtnId = new Identification(Identification.How.xpath, "//button[contains(@class, 'request-signature__footer__sign-button')]");
+            if (browser.elementExists(primaryBtnId)) {
+                WebElement primaryBtn = browser.getWebElement(primaryBtnId);
+                primaryBtn.click();
+
+            } else if (browser.elementExists(secondaryBtnId)) {
+                WebElement secondaryBtn = browser.getWebElement(secondaryBtnId);
+                secondaryBtn.click();
+              } else if (browser.elementExists(defaultBtnId)) {
+                WebElement defaultBtn = browser.getWebElement(defaultBtnId);
+                defaultBtn.click();
+            } else {
+                return;
+            }
+//            if (browser.elementExists(signBtnId)) {
+//                WebElement signBtn = browser.getWebElement(signBtnId);
+//                signBtn.click();
+//            } else {
+//                driver.close();
+//                driver.switchTo().window(currentHandle);
+//                System.out.println("Returned");
+//                return;
+//            }
+
+            try {
+                Thread.sleep(1500);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+
             getTxInfo(browser);
             DappTestService.TxMsg txMsg = DappTestService.TxMsg.newBuilder()
                     .setDappName(this.dappName)
@@ -249,10 +363,133 @@ public class GRPCClientPlugin implements PreCrawlingPlugin, PostCrawlingPlugin, 
                     .setFrom(this.fromAddress)
                     .setTo(this.toAddress)
                     .build();
+            System.out.println("##############################################################");
             blockingStub.waitForTxProcess(txMsg);
         }
+
         driver.close();
         driver.switchTo().window(currentHandle);
     }
 
+    private boolean isLogInPage(EmbeddedBrowser browser) {
+        Identification loginPage = new Identification(Identification.How.xpath, "//div[@class='unlock-page']");
+        return browser.elementExists(loginPage);
+    }
+
+
+    /**
+     * login MetaMask with password
+     *
+     * @param password the password of MetaMask
+     * @return whether the login is successful or not
+     */
+    private boolean logIn(EmbeddedBrowser browser, String password) {
+        try {
+            Identification passwordInput = new Identification(Identification.How.id, "password");
+            browser.input(passwordInput, password);
+            Identification loginBtnId = new Identification(Identification.How.xpath, "//button[@type='submit']");
+            if (!browser.elementExists(loginBtnId)) {
+                return false;
+            }
+            WebElement loginBtn = browser.getWebElement(loginBtnId);
+            loginBtn.click();
+        } catch (CrawljaxException e) {
+            return false;
+        }
+        return true;
+    }
+
+    @Override
+    public void onFireEventSucceeded(CrawlerContext context, Eventable eventable, List<Eventable> pathToFailure) {
+        System.out.println("succeed");
+        EmbeddedBrowser browser = context.getBrowser();
+        processMetaMaskPopup(browser);
+    }
+
+
+    public class ControlMsgHandlerThread implements Runnable {
+        private String dappName;
+        private int instanceId;
+        public DappTestService.DAppDriverControlMsg dAppDriverCtlMsg;
+//        volatile EmbeddedBrowser browser;
+
+        public ControlMsgHandlerThread (String dappName, int instanceId) {
+            this.dappName = dappName;
+            this.instanceId = instanceId;
+        }
+
+        StreamObserver<DappTestService.DAppDriverControlMsg> requestObserver;
+
+        StreamObserver<DappTestService.DAppDriverControlMsg> responseObserver =
+                DAppTestDriverServiceGrpc.newStub(channel).dappDriverControl(new StreamObserver<DappTestService.DAppDriverControlMsg>() {
+                    @Override
+                    public void onNext(DappTestService.DAppDriverControlMsg dAppDriverControlMsg) {
+                        System.out.println("Receive from stream: " + dAppDriverControlMsg.getAllFields());
+                        if (dappBrowser == null) {
+                            System.out.println("Browser is null !?!");
+                            return;
+                        }
+                        handleControlMsg(dAppDriverControlMsg);
+                        dAppDriverCtlMsg = DappTestService.DAppDriverControlMsg
+                                .newBuilder()
+                                .setRole(Common.Role.DAPP)
+                                .setId(dAppDriverControlMsg.getId())
+                                .setDappName(dAppDriverControlMsg.getDappName())
+                                .setInstanceId(dAppDriverControlMsg.getInstanceId())
+                                .setControlType(DappTestService.DAppDriverControlType.NilType)
+                                .build();
+                        responseObserver.onNext(dAppDriverControlMsg);
+                        try {
+                            Thread.sleep(5000);
+                        } catch (InterruptedException e) {
+                            e.printStackTrace();
+                        }
+                    }
+
+                    @Override
+                    public void onError(Throwable t) {
+                        System.out.printf("Error from stream %s", t.toString());
+                        t.printStackTrace();
+                    }
+
+                    @Override
+                    public void onCompleted() {
+                        System.out.println("Stream completed");
+                    }
+                });
+
+//        public void setBrowser(EmbeddedBrowser browser) {
+//            this.browser = browser;
+//
+//            if (browser == null) {
+//                System.out.println("After setting browser, browser is null");
+//            } else {
+//                System.out.println("After setting browser, browser is not null");
+//            }
+//        }
+
+
+        @Override
+        public void run() {
+            requestObserver = asyncStub.dappDriverControl(responseObserver);
+
+            DappTestService.DAppDriverControlMsg dAppDriverControlMsg = DappTestService.DAppDriverControlMsg
+                    .newBuilder()
+                    .setRole(Common.Role.DAPP)
+                    .setId(INIT_CONTROL_MSG_ID)
+                    .setDappName(this.dappName)
+                    .setInstanceId(Integer.toString(this.instanceId))
+                    .setControlType(DappTestService.DAppDriverControlType.NilType)
+                    .build();
+            responseObserver.onNext(dAppDriverControlMsg);
+//            requestObserver.onCompleted();
+
+
+//            try {
+//                Thread.sleep(5000);
+//            } catch (InterruptedException e) {
+//                e.printStackTrace();
+//            }
+        }
+    }
 }
