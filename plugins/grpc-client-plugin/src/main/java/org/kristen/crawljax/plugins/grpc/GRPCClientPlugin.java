@@ -175,6 +175,8 @@ public class GRPCClientPlugin implements PreCrawlingPlugin, PostCrawlingPlugin, 
         System.out.printf("From address: %s, to address: %s, txHash: %s\n", fromAddress, toAddress, txHash);
     }
 
+
+
     /**
      * Get the text from system clipboard.
      * @return the text in clipboard

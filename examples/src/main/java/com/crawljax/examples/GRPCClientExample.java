@@ -31,14 +31,20 @@ public class GRPCClientExample {
     public static void main(String[] args) throws IOException {
         CrawljaxConfiguration.CrawljaxConfigurationBuilder builder = CrawljaxConfiguration.builderFor(DAPP_URL);
 
-//        builder.crawlRules().setFormFillMode(CrawlRules.FormFillMode.RANDOM);
+        builder.crawlRules().setFormFillMode(CrawlRules.FormFillMode.RANDOM);
 //        builder.crawlRules().click("div").withAttribute("")
-        builder.crawlRules().setFormFillMode(CrawlRules.FormFillMode.TRAINING);
+//        builder.crawlRules().setFormFillMode(CrawlRules.FormFillMode.XPATH_TRAINING);
         // click these elements
 //        builder.crawlRules().clickDefaultElements();
-		 builder.crawlRules().click("A");
-		 builder.crawlRules().click("button");
-        builder.crawlRules().click("div");
+//        CrawljaxConfiguration crawler = new CrawljaxConfiguration();
+//        crawler.click("a");
+//        crawler.click("div").withAttribute("class", "clickable");
+//        crawler.dontClick("a").withText("id", "logout");
+//        crawler.dontClick("a").underXpath("//DIV[@id='header']");
+        builder.crawlRules().click("A");
+        builder.crawlRules().click("button");
+        builder.crawlRules().click("div").underXPath("//*[@onclick]");
+
         builder.crawlRules().crawlHiddenAnchors(true);
         builder.crawlRules().crawlFrames(false);
         builder.setUnlimitedCrawlDepth();
