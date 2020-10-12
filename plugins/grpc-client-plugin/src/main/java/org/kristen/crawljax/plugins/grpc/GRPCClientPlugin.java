@@ -35,7 +35,7 @@ import org.kristen.rpc.darcher.*;
 
 public class GRPCClientPlugin implements PreCrawlingPlugin, PostCrawlingPlugin, OnBrowserCreatedPlugin, OnUrlFirstLoadPlugin, OnFireEventSucceededPlugin {
     private String METAMASK_PASSWORD = "";
-    private String METAMASK_POPUP_URL = "chrome-extension://pblaiiacglodkdimplphhfffmpblfgmh/home.html";
+    private String METAMASK_POPUP_URL = "chrome-extension://pblaiiacglodkdimplphhfffmpblfgmh/home.html#send";
     private String DAPP_URL = "http://localhost:8080";
     private final String INIT_CONTROL_MSG_ID = "0";
     private int WAIT_TIME_FOR_METAMASK_PLUGIN = 1000;
@@ -293,7 +293,7 @@ public class GRPCClientPlugin implements PreCrawlingPlugin, PostCrawlingPlugin, 
         EmbeddedBrowser browser = context.getBrowser();
         WebDriver driver = browser.getWebDriver();
         if (driver instanceof JavascriptExecutor) {
-            ((JavascriptExecutor)driver).executeScript("ethereum.enable()");
+//            ((JavascriptExecutor)driver).executeScript("ethereum.enable()");
         } else {
             throw new IllegalStateException("This driver does not support JavaScript!");
         }

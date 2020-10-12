@@ -17,11 +17,12 @@ public class GRPCClientExample {
     private static final long WAIT_TIME_AFTER_EVENT = 500;
     private static final long WAIT_TIME_AFTER_RELOAD = 500;
     private static final String DAPP_URL = "chrome-extension://pblaiiacglodkdimplphhfffmpblfgmh/home.html#send";
-    private static final String DAPP_NAME = "Augur";
+    private static final String DAPP_NAME = "Metamask";
     private static int instanceId = 1;
-//    chrome-extension://nkbihfbeogaeaoehlefnkodbefgpgknn/home.html
     private static final String METAMASK_POPUP_URL = "chrome-extension://pblaiiacglodkdimplphhfffmpblfgmh/home.html";
     private static final String METAMASK_PASSWORD = "gRP'b~jz|zz;DA7~[[P9";
+    private static final String BROWSER_PROFILE_PATH = "/Users/shuqing/Documents/application";
+
 
     /**
      * Run this method to start the crawl.
@@ -31,9 +32,9 @@ public class GRPCClientExample {
     public static void main(String[] args) throws IOException {
         CrawljaxConfiguration.CrawljaxConfigurationBuilder builder = CrawljaxConfiguration.builderFor(DAPP_URL);
 
-        builder.crawlRules().setFormFillMode(CrawlRules.FormFillMode.RANDOM);
+//        builder.crawlRules().setFormFillMode(CrawlRules.FormFillMode.RANDOM);
 //        builder.crawlRules().click("div").withAttribute("")
-//        builder.crawlRules().setFormFillMode(CrawlRules.FormFillMode.XPATH_TRAINING);
+        builder.crawlRules().setFormFillMode(CrawlRules.FormFillMode.XPATH_TRAINING);
         // click these elements
 //        builder.crawlRules().clickDefaultElements();
 //        CrawljaxConfiguration crawler = new CrawljaxConfiguration();
@@ -43,7 +44,8 @@ public class GRPCClientExample {
 //        crawler.dontClick("a").underXpath("//DIV[@id='header']");
         builder.crawlRules().click("A");
         builder.crawlRules().click("button");
-        builder.crawlRules().click("div").underXPath("//*[@onclick]");
+        builder.crawlRules().click("div");
+//        builder.crawlRules().click("div").underXPath("//*[@onclick]");
 
         builder.crawlRules().crawlHiddenAnchors(true);
         builder.crawlRules().crawlFrames(false);
@@ -72,7 +74,7 @@ public class GRPCClientExample {
 
         builder.setBrowserConfig(
                 new BrowserConfiguration(EmbeddedBrowser.BrowserType.CHROME, 1,
-                        new BrowserOptions("/Users/shuqing/Documents/application")));
+                        new BrowserOptions(BROWSER_PROFILE_PATH)));
 
         // CrawlOverview
         builder.addPlugin(new CrawlOverview());
