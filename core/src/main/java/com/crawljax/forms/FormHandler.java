@@ -61,6 +61,7 @@ public class FormHandler {
 
 			switch (input.getType()) {
 				case TEXT:
+				case NUMBER:
 				case TEXTAREA:
 				case PASSWORD:
 					handleText(input);
@@ -190,7 +191,7 @@ public class FormHandler {
 			List<Node> nodes = getInputElements(dom);
 			for (Node node : nodes) {
 				FormInput formInput =
-						formInputValueHelper.getFormInputWithIndexValue(browser, node, 0);
+						formInputValueHelper.getFormInputWithIndexValue(browser, dom, node, 0);
 				if (formInput != null) {
 					formInputs.add(formInput);
 				}
