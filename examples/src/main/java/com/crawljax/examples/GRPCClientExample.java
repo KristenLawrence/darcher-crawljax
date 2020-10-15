@@ -11,17 +11,20 @@ import xyz.troublor.crawljax.plugins.metamask.MetaMaskSupportPlugin;
 import org.kristen.crawljax.plugins.grpc.GRPCClientPlugin;
 
 import java.io.IOException;
+import java.util.Arrays;
+import java.util.List;
 import java.util.concurrent.TimeUnit;
 
 public class GRPCClientExample {
     private static final long WAIT_TIME_AFTER_EVENT = 500;
     private static final long WAIT_TIME_AFTER_RELOAD = 500;
-    private static final String DAPP_URL = "chrome-extension://pblaiiacglodkdimplphhfffmpblfgmh/home.html#send";
+    private static final String DAPP_URL = "chrome-extension://jbppcachblnkaogkgacckpgohjbpcekf/home.html";
     private static final String DAPP_NAME = "Metamask";
     private static int instanceId = 1;
-    private static final String METAMASK_POPUP_URL = "chrome-extension://pblaiiacglodkdimplphhfffmpblfgmh/home.html";
-    private static final String METAMASK_PASSWORD = "gRP'b~jz|zz;DA7~[[P9";
-    private static final String BROWSER_PROFILE_PATH = "/Users/shuqing/Documents/application";
+    private static final String METAMASK_POPUP_URL = "chrome-extension://jbppcachblnkaogkgacckpgohjbpcekf/home.html";
+    private static final String METAMASK_PASSWORD = "T20ub1or";
+    private static final String BROWSER_PROFILE_PATH = "/Users/troublor/workspace/darcher_mics/browsers/Chrome" +
+            "/UserData";
 
 
     /**
@@ -34,7 +37,9 @@ public class GRPCClientExample {
 
 //        builder.crawlRules().setFormFillMode(CrawlRules.FormFillMode.RANDOM);
 //        builder.crawlRules().click("div").withAttribute("")
-        builder.crawlRules().setFormFillMode(CrawlRules.FormFillMode.XPATH_TRAINING);
+        // we use normal mode to avoid randomly fill forms and only allow predefined form inputs
+        builder.crawlRules().setFormFillMode(CrawlRules.FormFillMode.NORMAL);
+        builder.crawlRules().clickOnce(true);
         // click these elements
 //        builder.crawlRules().clickDefaultElements();
 //        CrawljaxConfiguration crawler = new CrawljaxConfiguration();
@@ -44,7 +49,7 @@ public class GRPCClientExample {
 //        crawler.dontClick("a").underXpath("//DIV[@id='header']");
         builder.crawlRules().click("A");
         builder.crawlRules().click("button");
-        builder.crawlRules().click("div");
+//        builder.crawlRules().click("div");
 //        builder.crawlRules().click("div").underXPath("//*[@onclick]");
 
         builder.crawlRules().crawlHiddenAnchors(true);
@@ -52,6 +57,9 @@ public class GRPCClientExample {
         builder.setUnlimitedCrawlDepth();
         builder.setUnlimitedRuntime();
         builder.setUnlimitedStates();
+
+        // 1 hour timeout
+        builder.setMaximumRunTime(1, TimeUnit.HOURS);
 
         //builder.setMaximumStates(10);
         //builder.setMaximumDepth(3);
@@ -61,16 +69,44 @@ public class GRPCClientExample {
         builder.crawlRules().waitAfterReloadUrl(WAIT_TIME_AFTER_RELOAD, TimeUnit.MILLISECONDS);
         builder.crawlRules().waitAfterEvent(WAIT_TIME_AFTER_EVENT, TimeUnit.MILLISECONDS);
 
+        // click "Transfer between my accounts"
+        builder.crawlRules().click("A").withText("Transfer between my accounts");
+        // click the transfer recipient accounts from the list of "My Accounts"
+        builder.crawlRules().click("DIV").withAttribute("class", "send__select-recipient-wrapper__group-item");
+        // click to change the asset when transferring, make it possible to transfer ERC20 token
+        builder.crawlRules().click("DIV").withAttribute("class", "send-v2__asset-dropdown");
+        builder.crawlRules().click("DIV").withAttribute("class", "send-v2__asset-dropdown__input-wrapper");
+        builder.crawlRules().click("DIV").withAttribute("class", "send-v2__asset-dropdown__asset");
+        // click home page asset tab
+        builder.crawlRules().click("LI").withAttribute("data-testid", "home__asset-tab");
+        builder.crawlRules().click("BUTTON").withText("Send WETH");
+        builder.crawlRules().click("BUTTON").withAttribute("data-testid", "page-container-footer-next");
+        // prevent removing an account
+        builder.crawlRules().dontClick("BUTTON").withAttribute("data-testid", "account-options-menu__remove-account");
+        // don't bother buy ether
+        builder.crawlRules().dontClick("BUTTON").withText("Buy");
+        // don't change network
+        builder.crawlRules().dontClick("DIV").withAttribute("class", "network-component pointer");
+        // don't select ETH again when sending assets
+        builder.crawlRules().dontClick("DIV").withText("ETH");
+        // don't change account
+        builder.crawlRules().dontClick("DIV").withAttribute("class", "account-menu__icon");
+        // don't send to my self
+        builder.crawlRules().dontClick("DIV").underXPath("//DIV[@class='send__select-recipient-wrapper__group']/DIV[2" +
+                "]");
+//        builder.crawlRules().dontClick("BUTTON").withText("Send");
+        // form input specifications
         InputSpecification input = new InputSpecification();
-        Identification id = new Identification(Identification.How.id, "limit-price");
-        input.inputField(FormInput.InputType.TEXT, id).inputValues("121");
-        id = new Identification(Identification.How.id, "quantity");
-        input.inputField(FormInput.InputType.TEXT, id).inputValues("1");
-        id = new Identification(Identification.How.id, "total-order-value");
-        input.inputField(FormInput.InputType.TEXT, id).inputValues("1");
+        // fill recipient address when sending ether
+//        Identification recipientInputId = new Identification(Identification.How.xpath, "//INPUT[@class='ens" +
+//                "-input__wrapper__input']");
+//        input.inputField(FormInput.InputType.TEXT, recipientInputId).inputValues(
+//                "0x2ecB718297080fF730269176E42C8278aA193434");
+//         fill the amount of ether to transfer
+        Identification amountId = new Identification(Identification.How.xpath, "//INPUT[@class='unit" +
+                "-input__input']");
+        input.inputField(FormInput.InputType.NUMBER, amountId).inputValues("1");
         builder.crawlRules().setInputSpec(input);
-
-
 
         builder.setBrowserConfig(
                 new BrowserConfiguration(EmbeddedBrowser.BrowserType.CHROME, 1,
