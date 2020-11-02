@@ -1,5 +1,5 @@
 /**
- * Plugin class for GRPC client. This class handles the communication with GRPC server.
+ * Plugin for GRPC client. Handles the communication with GRPC server.
  */
 
 package org.kristen.crawljax.plugins.grpc;
@@ -10,12 +10,16 @@ import com.crawljax.core.configuration.CrawljaxConfiguration;
 import com.crawljax.core.plugin.*;
 import com.crawljax.core.state.Eventable;
 import com.crawljax.core.state.Identification;
+
 import io.grpc.stub.StreamObserver;
+import io.grpc.ManagedChannel;
+import io.grpc.ManagedChannelBuilder;
 import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
-import io.grpc.ManagedChannel;
-import io.grpc.ManagedChannelBuilder;
+import lombok.extern.slf4j.Slf4j;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.awt.*;
 import java.awt.datatransfer.Clipboard;
@@ -28,6 +32,7 @@ import java.util.List;
 
 import org.kristen.rpc.darcher.*;
 
+@Slf4j
 public class GRPCClientPlugin implements PreCrawlingPlugin, PostCrawlingPlugin, OnBrowserCreatedPlugin, OnUrlFirstLoadPlugin, OnFireEventSucceededPlugin {
     private String METAMASK_PASSWORD;
     private String METAMASK_POPUP_URL;
@@ -50,12 +55,10 @@ public class GRPCClientPlugin implements PreCrawlingPlugin, PostCrawlingPlugin, 
     private String toAddress;
     private String txHash;
     public ControlMsgHandlerThread controlMsgHandlerThread;
-    public MetamaskTxConfirmThread metamaskTxConfirmThread;
     public EmbeddedBrowser dappBrowser;
-//    volatile WebDriver driver;
-//    public Thread controlThread;
 
     public GRPCClientPlugin(String dappName, int instanceId, String metamaskUrl, String dappUrl, String metamaskPassword) {
+        log.info("Init GRPC client plugin, dappName={}, instanceId={}, dapUrl={}", dappName, instanceId, dappUrl);
         blockingStub = DAppTestDriverServiceGrpc.newBlockingStub(channel);
         asyncStub = DAppTestDriverServiceGrpc.newStub(channel);
 
@@ -68,44 +71,28 @@ public class GRPCClientPlugin implements PreCrawlingPlugin, PostCrawlingPlugin, 
         this.controlMsgHandlerThread = new ControlMsgHandlerThread(this.dappName, this.instanceId);
         Thread controlThread = new Thread(this.controlMsgHandlerThread);
         controlThread.start();
-
-//        this.metamaskTxConfirmThread = new MetamaskTxConfirmThread(METAMASK_POPUP_URL);
-//        Thread metamaskThread = new Thread(this.metamaskTxConfirmThread);
-//        metamaskThread.start();
+        log.info("Start the control msg handler thread, dappName={}, instanceId={}", dappName, instanceId);
     }
 
-//    private StreamObserver<DappTestService.DAppDriverControlMsg> responseObserver =
-//            DAppTestDriverServiceGrpc.newStub(channel).dappDriverControl(new StreamObserver<DappTestService.DAppDriverControlMsg>() {
-//        @Override
-//        public void onNext(DappTestService.DAppDriverControlMsg dAppDriverControlMsg) {
-//            System.out.println("Receive from stream: " + dAppDriverControlMsg.getAllFields());
-//            handleControlMsg(dAppDriverControlMsg);
-//        }
-//
-//        @Override
-//        public void onError(Throwable t) {
-//            System.out.println("Error from stream");
-//        }
-//
-//        @Override
-//        public void onCompleted() {
-//            System.out.println("Stream completed");
-//        }
-//    });
-//
-//    private StreamObserver<DappTestService.DAppDriverControlMsg> requestObserver;
-
+    /**
+     * Handles the control message sent by server and performs correct behavior.
+     *
+     * @param dAppDriverControlMsg the message sent by server
+     */
     public void handleControlMsg(DappTestService.DAppDriverControlMsg dAppDriverControlMsg) {
         DappTestService.DAppDriverControlType controlType = dAppDriverControlMsg.getControlType();
+        log.debug("Enter the msg handler, begin to handle {} msg", controlType);
         switch(controlType) {
             case Refresh:
                 WebDriver driver = dappBrowser.getWebDriver();
                 driver.navigate().refresh();
-                System.out.println("The page is successfully refreshed!!!!!");
+                log.info("Finish refreshing the page");
                 break;
             case NilType:
+                log.warn("Received nil type control message");
+                break;
             case UNRECOGNIZED:
-                System.out.println("Unrecognized control type.");
+                log.warn("Received unrecognized control type.");
                 break;
             default:
                 break;
@@ -113,19 +100,18 @@ public class GRPCClientPlugin implements PreCrawlingPlugin, PostCrawlingPlugin, 
     }
 
     /**
-     * Get the information of the latest transaction.
+     * Gets the necessary information of the latest transaction.
      *
      * @param browser the browser instance
      */
     private void getTxInfo(EmbeddedBrowser browser) {
+        log.debug("Begin to get the transaction information, from address, to address and txhash");
+
+        // Xpath identification for the elements which contain necessary information.
         Identification activityPaneId = new Identification(Identification.How.xpath,
                 "/html/body/div[1]/div/div[4]/div/div/div/div[3]/ul/li[2]");
         Identification txBoxId = new Identification(Identification.How.xpath,
                 "/html/body/div[1]/div/div[4]/div/div/div/div[3]/div/div/div/div/div[1]");
-//        Identification fromAddressBoxId = new Identification(Identification.How.xpath,
-//                "/html/body/div[2]/div/div/section/div/div/div[2]/div[1]/div/div[1]/div/div/div/span");
-//        Identification toAddressBoxId = new Identification(Identification.How.xpath,
-//                "/html/body/div[2]/div/div/section/div/div/div[2]/div[1]/div/div[1]/div/div/div/span");
         Identification copyFromId = new Identification(Identification.How.xpath,
                 "/html/body/div[2]/div/div/section/div/div/div[2]/div[1]/div/div[1]/div/div/div");
         Identification copyToId = new Identification(Identification.How.xpath,
@@ -133,7 +119,7 @@ public class GRPCClientPlugin implements PreCrawlingPlugin, PostCrawlingPlugin, 
         Identification copyTxHashId = new Identification(Identification.How.xpath,
                 "/html/body/div[2]/div/div/section/div/div/div[1]/div[2]/button[1]");
 
-
+        // Click the elements step by step to get pop-up window for tx information.
         if (browser.elementExists(activityPaneId)) {
             WebElement activityPane = browser.getWebElement(activityPaneId);
             activityPane.click();
@@ -142,14 +128,8 @@ public class GRPCClientPlugin implements PreCrawlingPlugin, PostCrawlingPlugin, 
             WebElement txBox = browser.getWebElement(txBoxId);
             txBox.click();
         }
-//        if (browser.elementExists(fromAddressBoxId)) {
-//            WebElement fromAddressBox = browser.getWebElement(fromAddressBoxId);
-//            this.fromAddress = fromAddressBox.getAttribute("outerHTML").substring(6, 54);
-//        }
-//        if (browser.elementExists(toAddressBoxId)) {
-//            WebElement toAddressBox = browser.getWebElement(toAddressBoxId);
-//            this.toAddress = toAddressBox.getAttribute("outerHTML").substring(6, 54);
-//        }
+
+        // Click to copy from address, to address and hash for the tx, get the information from clipboard.
         if (browser.elementExists(copyFromId)) {
             WebElement copyFromElement = browser.getWebElement(copyFromId);
             copyFromElement.click();
@@ -166,13 +146,12 @@ public class GRPCClientPlugin implements PreCrawlingPlugin, PostCrawlingPlugin, 
         }
         this.txHash = getTextFromClipboard();
 
-        System.out.printf("From address: %s, to address: %s, txHash: %s\n", fromAddress, toAddress, txHash);
+        log.debug("Finish getting transaction information, fromAddress={}, toAddress={}, txHash={}", fromAddress, toAddress, txHash);
     }
 
-
-
     /**
-     * Get the text from system clipboard.
+     * Gets the text from system clipboard.
+     *
      * @return the text in clipboard
      */
     private String getTextFromClipboard() {
@@ -191,15 +170,21 @@ public class GRPCClientPlugin implements PreCrawlingPlugin, PostCrawlingPlugin, 
         return null;
     }
 
+    /**
+     * Judges whether current page is Metamask processing page (not the main page)
+     *
+     * @param browser the browser instance
+     * @return if the current page is Metamask processing page
+     */
     private boolean isMetaMaskProcessPage(EmbeddedBrowser browser) {
         Identification mainId = new Identification(Identification.How.xpath, "//div[@class='main-container']");
-//        System.out.println(browser.elementExists(mainId));
+        log.debug("Current page is Metamask process page --> [{}]", !browser.elementExists(mainId));
         return !browser.elementExists(mainId);
     }
 
     @Override
     public void preCrawling(CrawljaxConfiguration config) throws RuntimeException {
-        System.out.println("Start crawling...");
+        log.info("Begin crawling, send testStartMsg to the server, dappName={}, instanceId={}", dappName, instanceId);
 
         DappTestService.TestStartMsg testStartMsg = DappTestService.TestStartMsg
                 .newBuilder()
@@ -207,21 +192,12 @@ public class GRPCClientPlugin implements PreCrawlingPlugin, PostCrawlingPlugin, 
                 .setInstanceId(Integer.toString(this.instanceId))
                 .build();
         blockingStub.notifyTestStart(testStartMsg);
-
-//        DappTestService.DAppDriverControlMsg dAppDriverControlMsg = DappTestService.DAppDriverControlMsg
-//                .newBuilder()
-//                .setRole(Common.Role.DAPP)
-//                .setId(INIT_CONTROL_MSG_ID)
-//                .setDappName(this.dappName)
-//                .setInstanceId(Integer.toString(this.instanceId))
-//                .setControlType(DappTestService.DAppDriverControlType.NilType)
-//                .build();
-//        this.requestObserver = asyncStub.dappDriverControl(responseObserver);
     }
 
     @Override
     public void postCrawling(CrawlSession session, ExitNotifier.ExitStatus exitReason) {
-        System.out.println("Crawling ended.");
+        log.info("End crawling, send testEndMsg to the server, dappName={}, instanceId={}", dappName, instanceId);
+
         DappTestService.TestEndMsg testEndMsg = DappTestService.TestEndMsg
                 .newBuilder()
                 .setDappName(this.dappName)
@@ -232,15 +208,7 @@ public class GRPCClientPlugin implements PreCrawlingPlugin, PostCrawlingPlugin, 
 
     @Override
     public void onBrowserCreated(EmbeddedBrowser newBrowser) {
-
-//        if (newBrowser == null) {
-//            System.out.println("Before setting browser, browser is null");
-//        } else {
-//            System.out.println("Before setting browser, browser is not null");
-//        }
-
-//        controlMsgHandlerThread.setBrowser(newBrowser);
-
+        log.info("Finish creating the browser");
         this.dappBrowser = newBrowser;
 
         try {
@@ -252,14 +220,15 @@ public class GRPCClientPlugin implements PreCrawlingPlugin, PostCrawlingPlugin, 
             System.out.println("ERROR: MetaMask login failed");
         }
 
+        // TODO: just for test, need to be removed
         if (isMetaMaskProcessPage(newBrowser)) {
-            processMetaMaskPopup(newBrowser);
+            processMetamaskPopup(newBrowser);
         }
 
         // TODO: handle other scenarios (specific)
         try {
             newBrowser.goToUrl(new URI(DAPP_URL));
-//
+
 //            // Sign up for Augur
 //            WebDriver driver = newBrowser.getWebDriver();
 //            driver.manage().timeouts().implicitlyWait(10, TimeUnit.SECONDS);
@@ -268,30 +237,20 @@ public class GRPCClientPlugin implements PreCrawlingPlugin, PostCrawlingPlugin, 
         } catch (URISyntaxException e) {
             System.out.println("ERROR: invalid DAPP url, " + DAPP_URL);
         }
-
-//        this.dappBrowser = newBrowser;
-//        metamaskTxConfirmThread.setDriver(driver);
-
-//        DappTestService.TestStartMsg testStartMsg = DappTestService.TestStartMsg
-//                .newBuilder()
-//                .setDappName(this.dappName)
-//                .setInstanceId(Integer.toString(this.instanceId))
-//                .build();
-//        blockingStub.notifyTestStart(testStartMsg);
-
-//        this.controlThread.start();
     }
 
     /**
-     * Execute `ethereum.enable()` to connect dapp with MetaMask
+     * Executes `ethereum.enable()` to connect dapp with MetaMask
      *
      * @param context the current crawler context.
      */
     @Override
     public void onUrlFirstLoad(CrawlerContext context) {
+        log.info("The url is loaded for the first time");
         EmbeddedBrowser browser = context.getBrowser();
         WebDriver driver = browser.getWebDriver();
 
+        // TODO: Metamask is different from other dapps, br careful
         if (driver instanceof JavascriptExecutor) {
 //            ((JavascriptExecutor)driver).executeScript("ethereum.enable()");
         } else {
@@ -300,12 +259,14 @@ public class GRPCClientPlugin implements PreCrawlingPlugin, PostCrawlingPlugin, 
     }
 
     /**
-     * this function will automatically click the primary button in the MetaMask popup window
+     * Clicks the primary button in the MetaMask pop-up window.
      *
      * @param browser the browser instance
      */
-    private void processMetaMaskPopup(EmbeddedBrowser browser) {
+    private void processMetamaskPopup(EmbeddedBrowser browser) {
+        log.debug("Enter processMetamaskPopup function, begin to process");
 
+        // Open a new tab in the browser and visit Metamask pop-up page
         WebDriver driver = browser.getWebDriver();
         String currentHandle = driver.getWindowHandle();
         ((JavascriptExecutor) driver).executeScript("window.open()");
@@ -320,6 +281,7 @@ public class GRPCClientPlugin implements PreCrawlingPlugin, PostCrawlingPlugin, 
         }
 
         // TODO: Sign
+        // Process the page, click buttons
         if (isMetaMaskProcessPage(browser)) {
             Identification primaryBtnId = new Identification(Identification.How.xpath,
                     "//button[contains(@class, 'btn-primary')]");
@@ -327,7 +289,7 @@ public class GRPCClientPlugin implements PreCrawlingPlugin, PostCrawlingPlugin, 
                     "//button[contains(@class, 'btn-secondary')]");
             Identification defaultBtnId = new Identification(Identification.How.xpath,
                     "//button[contains(@class, 'btn-default')]");
-            Identification signBtnId = new Identification(Identification.How.xpath, "//button[contains(@class, 'request-signature__footer__sign-button')]");
+//            Identification signBtnId = new Identification(Identification.How.xpath, "//button[contains(@class, 'request-signature__footer__sign-button')]");
             if (browser.elementExists(primaryBtnId)) {
                 WebElement primaryBtn = browser.getWebElement(primaryBtnId);
                 primaryBtn.click();
@@ -358,6 +320,7 @@ public class GRPCClientPlugin implements PreCrawlingPlugin, PostCrawlingPlugin, 
             }
 
             getTxInfo(browser);
+            log.info("Send out a transaction, send txMsg to the server, dappName={}, instanceId={}, txHash={}, fromAddress={}, toAddress={}", dappName, instanceId, txHash, fromAddress, toAddress);
             DappTestService.TxMsg txMsg = DappTestService.TxMsg.newBuilder()
                     .setDappName(this.dappName)
                     .setInstanceId(Integer.toString(this.instanceId))
@@ -365,12 +328,16 @@ public class GRPCClientPlugin implements PreCrawlingPlugin, PostCrawlingPlugin, 
                     .setFrom(this.fromAddress)
                     .setTo(this.toAddress)
                     .build();
-            System.out.println("##############################################################");
+            log.debug("Begin to send txMsg and wait for tx being processed, dappName={}, instanceId={}, txHash={}, fromAddress={}, toAddress={}", dappName, instanceId, txHash, fromAddress, toAddress);
             blockingStub.waitForTxProcess(txMsg);
+            log.debug("Finish sending txMsg and processing tx, dappName={}, instanceId={}, txHash={}, fromAddress={}, toAddress={}", dappName, instanceId, txHash, fromAddress, toAddress);
         }
 
+        // Close current tab, return to the original testing tab
         driver.close();
         driver.switchTo().window(currentHandle);
+
+        log.debug("Exit processMetamaskPopup function, end processing");
     }
 
     private boolean isLogInPage(EmbeddedBrowser browser) {
@@ -380,7 +347,7 @@ public class GRPCClientPlugin implements PreCrawlingPlugin, PostCrawlingPlugin, 
 
 
     /**
-     * login MetaMask with password
+     * Login MetaMask with password
      *
      * @param password the password of MetaMask
      * @return whether the login is successful or not
@@ -403,19 +370,22 @@ public class GRPCClientPlugin implements PreCrawlingPlugin, PostCrawlingPlugin, 
 
     @Override
     public void onFireEventSucceeded(CrawlerContext context, Eventable eventable, List<Eventable> pathToFailure) {
-        System.out.println("succeed");
+        log.info("One event is fired successfully");
         EmbeddedBrowser browser = context.getBrowser();
-        processMetaMaskPopup(browser);
+        processMetamaskPopup(browser);
     }
 
 
+    /**
+     * The class to handle the control messages sent by the server
+     */
     public class ControlMsgHandlerThread implements Runnable {
         private String dappName;
         private int instanceId;
         public DappTestService.DAppDriverControlMsg dAppDriverCtlMsg;
-//        volatile EmbeddedBrowser browser;
 
         public ControlMsgHandlerThread (String dappName, int instanceId) {
+            log.debug("Init the ControlMsgHandlerThread");
             this.dappName = dappName;
             this.instanceId = instanceId;
         }
@@ -426,9 +396,9 @@ public class GRPCClientPlugin implements PreCrawlingPlugin, PostCrawlingPlugin, 
                 DAppTestDriverServiceGrpc.newStub(channel).dappDriverControl(new StreamObserver<DappTestService.DAppDriverControlMsg>() {
                     @Override
                     public void onNext(DappTestService.DAppDriverControlMsg dAppDriverControlMsg) {
-                        System.out.println("Receive from stream: " + dAppDriverControlMsg.getAllFields());
+                        log.info("Receive some information from the stream: " + dAppDriverControlMsg.getAllFields());
                         if (dappBrowser == null) {
-                            System.out.println("Browser is null !?!");
+                            log.error("The browser is null");
                             return;
                         }
                         handleControlMsg(dAppDriverControlMsg);
@@ -440,6 +410,7 @@ public class GRPCClientPlugin implements PreCrawlingPlugin, PostCrawlingPlugin, 
                                 .setInstanceId(dAppDriverControlMsg.getInstanceId())
                                 .setControlType(DappTestService.DAppDriverControlType.NilType)
                                 .build();
+//                        log.info("Send feedback DAppDriverControlMsg to the server, tell the server the operation is finished");
                         responseObserver.onNext(dAppDriverControlMsg);
                         try {
                             Thread.sleep(2000);
@@ -459,17 +430,6 @@ public class GRPCClientPlugin implements PreCrawlingPlugin, PostCrawlingPlugin, 
                         System.out.println("Stream completed");
                     }
                 });
-
-//        public void setBrowser(EmbeddedBrowser browser) {
-//            this.browser = browser;
-//
-//            if (browser == null) {
-//                System.out.println("After setting browser, browser is null");
-//            } else {
-//                System.out.println("After setting browser, browser is not null");
-//            }
-//        }
-
 
         @Override
         public void run() {
