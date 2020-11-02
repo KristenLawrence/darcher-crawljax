@@ -1,3 +1,7 @@
+/**
+ * Plugin class for GRPC client. This class handles the communication with GRPC server.
+ */
+
 package org.kristen.crawljax.plugins.grpc;
 
 import com.crawljax.browser.EmbeddedBrowser;
@@ -6,19 +10,12 @@ import com.crawljax.core.configuration.CrawljaxConfiguration;
 import com.crawljax.core.plugin.*;
 import com.crawljax.core.state.Eventable;
 import com.crawljax.core.state.Identification;
-import com.crawljax.core.state.StateVertex;
-import com.google.common.collect.ImmutableList;
 import io.grpc.stub.StreamObserver;
-import org.openqa.selenium.By;
 import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
-import org.openqa.selenium.support.ui.WebDriverWait;
-import com.google.protobuf.Message;
 import io.grpc.ManagedChannel;
 import io.grpc.ManagedChannelBuilder;
-import com.google.protobuf.InvalidProtocolBufferException;
-import com.sun.org.apache.xml.internal.security.utils.Base64;
 
 import java.awt.*;
 import java.awt.datatransfer.Clipboard;
@@ -28,15 +25,14 @@ import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Set;
-import java.util.concurrent.TimeUnit;
 
 import org.kristen.rpc.darcher.*;
 
 public class GRPCClientPlugin implements PreCrawlingPlugin, PostCrawlingPlugin, OnBrowserCreatedPlugin, OnUrlFirstLoadPlugin, OnFireEventSucceededPlugin {
-    private String METAMASK_PASSWORD = "";
-    private String METAMASK_POPUP_URL = "chrome-extension://pblaiiacglodkdimplphhfffmpblfgmh/home.html#send";
-    private String DAPP_URL = "http://localhost:8080";
+    private String METAMASK_PASSWORD;
+    private String METAMASK_POPUP_URL;
+    private String DAPP_URL;
+
     private final String INIT_CONTROL_MSG_ID = "0";
     private int WAIT_TIME_FOR_METAMASK_PLUGIN = 1000;
     private static String SERVER_HOST = "localhost";
@@ -47,6 +43,7 @@ public class GRPCClientPlugin implements PreCrawlingPlugin, PostCrawlingPlugin, 
             .build();
     public final DAppTestDriverServiceGrpc.DAppTestDriverServiceBlockingStub blockingStub;
     public final DAppTestDriverServiceGrpc.DAppTestDriverServiceStub asyncStub;
+
     public String dappName;
     public int instanceId;
     private String fromAddress;
@@ -56,7 +53,6 @@ public class GRPCClientPlugin implements PreCrawlingPlugin, PostCrawlingPlugin, 
     public MetamaskTxConfirmThread metamaskTxConfirmThread;
     public EmbeddedBrowser dappBrowser;
 //    volatile WebDriver driver;
-
 //    public Thread controlThread;
 
     public GRPCClientPlugin(String dappName, int instanceId, String metamaskUrl, String dappUrl, String metamaskPassword) {
@@ -69,7 +65,6 @@ public class GRPCClientPlugin implements PreCrawlingPlugin, PostCrawlingPlugin, 
         this.DAPP_URL = dappUrl;
         this.METAMASK_PASSWORD = metamaskPassword;
 
-//        this.controlMsgHandlerThread = new ControlMsgHandlerThread(SERVER_HOST, SERVER_PORT, channel, blockingStub, asyncStub, dappName, instanceId);
         this.controlMsgHandlerThread = new ControlMsgHandlerThread(this.dappName, this.instanceId);
         Thread controlThread = new Thread(this.controlMsgHandlerThread);
         controlThread.start();
@@ -140,7 +135,6 @@ public class GRPCClientPlugin implements PreCrawlingPlugin, PostCrawlingPlugin, 
 
 
         if (browser.elementExists(activityPaneId)) {
-            System.out.println("*************************************************************************************");
             WebElement activityPane = browser.getWebElement(activityPaneId);
             activityPane.click();
         }
@@ -197,9 +191,10 @@ public class GRPCClientPlugin implements PreCrawlingPlugin, PostCrawlingPlugin, 
         return null;
     }
 
-    private boolean isMetaMaskMainPage(EmbeddedBrowser browser) {
+    private boolean isMetaMaskProcessPage(EmbeddedBrowser browser) {
         Identification mainId = new Identification(Identification.How.xpath, "//div[@class='main-container']");
-        return browser.elementExists(mainId);
+//        System.out.println(browser.elementExists(mainId));
+        return !browser.elementExists(mainId);
     }
 
     @Override
@@ -237,6 +232,7 @@ public class GRPCClientPlugin implements PreCrawlingPlugin, PostCrawlingPlugin, 
 
     @Override
     public void onBrowserCreated(EmbeddedBrowser newBrowser) {
+
 //        if (newBrowser == null) {
 //            System.out.println("Before setting browser, browser is null");
 //        } else {
@@ -256,18 +252,21 @@ public class GRPCClientPlugin implements PreCrawlingPlugin, PostCrawlingPlugin, 
             System.out.println("ERROR: MetaMask login failed");
         }
 
+        if (isMetaMaskProcessPage(newBrowser)) {
+            processMetaMaskPopup(newBrowser);
+        }
+
         // TODO: handle other scenarios (specific)
-//         Sign up for Augur
         try {
             newBrowser.goToUrl(new URI(DAPP_URL));
-
-            // Sign up for Augur
-            WebDriver driver = newBrowser.getWebDriver();
-            driver.manage().timeouts().implicitlyWait(10, TimeUnit.SECONDS);
-            driver.findElement(By.cssSelector(".buttons-styles_SecondaryButton")).click();
-            driver.findElement(By.cssSelector(".buttons-styles_SecondarySignInButton:nth-child(7) > div > div > div:nth-child(1)")).click();
+//
+//            // Sign up for Augur
+//            WebDriver driver = newBrowser.getWebDriver();
+//            driver.manage().timeouts().implicitlyWait(10, TimeUnit.SECONDS);
+//            driver.findElement(By.cssSelector(".buttons-styles_SecondaryButton")).click();
+//            driver.findElement(By.cssSelector(".buttons-styles_SecondarySignInButton:nth-child(7) > div > div > div:nth-child(1)")).click();
         } catch (URISyntaxException e) {
-            System.out.println("ERROR: invalid Augur url, " + METAMASK_POPUP_URL);
+            System.out.println("ERROR: invalid DAPP url, " + DAPP_URL);
         }
 
 //        this.dappBrowser = newBrowser;
@@ -292,6 +291,7 @@ public class GRPCClientPlugin implements PreCrawlingPlugin, PostCrawlingPlugin, 
     public void onUrlFirstLoad(CrawlerContext context) {
         EmbeddedBrowser browser = context.getBrowser();
         WebDriver driver = browser.getWebDriver();
+
         if (driver instanceof JavascriptExecutor) {
 //            ((JavascriptExecutor)driver).executeScript("ethereum.enable()");
         } else {
@@ -320,7 +320,7 @@ public class GRPCClientPlugin implements PreCrawlingPlugin, PostCrawlingPlugin, 
         }
 
         // TODO: Sign
-        if (!isMetaMaskMainPage(browser)) {
+        if (isMetaMaskProcessPage(browser)) {
             Identification primaryBtnId = new Identification(Identification.How.xpath,
                     "//button[contains(@class, 'btn-primary')]");
             Identification secondaryBtnId = new Identification(Identification.How.xpath,
@@ -442,7 +442,7 @@ public class GRPCClientPlugin implements PreCrawlingPlugin, PostCrawlingPlugin, 
                                 .build();
                         responseObserver.onNext(dAppDriverControlMsg);
                         try {
-                            Thread.sleep(5000);
+                            Thread.sleep(2000);
                         } catch (InterruptedException e) {
                             e.printStackTrace();
                         }
