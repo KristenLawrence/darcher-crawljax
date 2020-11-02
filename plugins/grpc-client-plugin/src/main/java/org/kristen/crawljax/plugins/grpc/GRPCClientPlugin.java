@@ -62,6 +62,7 @@ public class GRPCClientPlugin implements PreCrawlingPlugin, PostCrawlingPlugin, 
         blockingStub = DAppTestDriverServiceGrpc.newBlockingStub(channel);
         asyncStub = DAppTestDriverServiceGrpc.newStub(channel);
 
+
         this.dappName = dappName;
         this.instanceId = instanceId;
         this.METAMASK_POPUP_URL = metamaskUrl;
