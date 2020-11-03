@@ -48,7 +48,7 @@ public class GRPCClientExample {
 //        crawler.dontClick("a").underXpath("//DIV[@id='header']");
         builder.crawlRules().click("A");
         builder.crawlRules().click("button");
-        builder.crawlRules().click("div");
+//        builder.crawlRules().click("div");
 //        builder.crawlRules().click("div").underXPath("//*[@onclick]");
 
         builder.crawlRules().crawlHiddenAnchors(true);
@@ -120,6 +120,7 @@ public class GRPCClientExample {
         CrawljaxRunner crawljax = new CrawljaxRunner(builder.build());
         CrawlSession session = crawljax.call();
         System.out.println("Crawl Complete: " + crawljax.getReason());
+
 
     }
 }

@@ -58,7 +58,7 @@ public final class DappTestService {
 
     public final int getNumber() {
       if (this == UNRECOGNIZED) {
-        throw new java.lang.IllegalArgumentException(
+        throw new IllegalArgumentException(
             "Can't get the number of an unknown enum value.");
       }
       return value;
@@ -69,7 +69,7 @@ public final class DappTestService {
      * @return The enum associated with the given numeric wire value.
      * @deprecated Use {@link #forNumber(int)} instead.
      */
-    @java.lang.Deprecated
+    @Deprecated
     public static DAppDriverControlType valueOf(int value) {
       return forNumber(value);
     }
@@ -100,6 +100,10 @@ public final class DappTestService {
 
     public final com.google.protobuf.Descriptors.EnumValueDescriptor
         getValueDescriptor() {
+      if (this == UNRECOGNIZED) {
+        throw new IllegalStateException(
+            "Can't get the descriptor of an unrecognized enum value.");
+      }
       return getDescriptor().getValues().get(ordinal());
     }
     public final com.google.protobuf.Descriptors.EnumDescriptor
@@ -108,7 +112,7 @@ public final class DappTestService {
     }
     public static final com.google.protobuf.Descriptors.EnumDescriptor
         getDescriptor() {
-      return org.kristen.rpc.darcher.DappTestService.getDescriptor().getEnumTypes().get(0);
+      return DappTestService.getDescriptor().getEnumTypes().get(0);
     }
 
     private static final DAppDriverControlType[] VALUES = values();
@@ -116,7 +120,7 @@ public final class DappTestService {
     public static DAppDriverControlType valueOf(
         com.google.protobuf.Descriptors.EnumValueDescriptor desc) {
       if (desc.getType() != getDescriptor()) {
-        throw new java.lang.IllegalArgumentException(
+        throw new IllegalArgumentException(
           "EnumValueDescriptor is not for this type.");
       }
       if (desc.getIndex() == -1) {
@@ -146,7 +150,7 @@ public final class DappTestService {
      * <code>string dapp_name = 1;</code>
      * @return The dappName.
      */
-    java.lang.String getDappName();
+    String getDappName();
     /**
      * <pre>
      * name of dapp, only used to identify a dapp
@@ -166,7 +170,7 @@ public final class DappTestService {
      * <code>string instance_id = 2;</code>
      * @return The instanceId.
      */
-    java.lang.String getInstanceId();
+    String getInstanceId();
     /**
      * <pre>
      * id of the instance of the dapp. One dapp could have multiple instances (e.g. multiple websites)
@@ -181,7 +185,7 @@ public final class DappTestService {
   /**
    * Protobuf type {@code darcher.TestStartMsg}
    */
-  public  static final class TestStartMsg extends
+  public static final class TestStartMsg extends
       com.google.protobuf.GeneratedMessageV3 implements
       // @@protoc_insertion_point(message_implements:darcher.TestStartMsg)
       TestStartMsgOrBuilder {
@@ -195,14 +199,14 @@ public final class DappTestService {
       instanceId_ = "";
     }
 
-    @java.lang.Override
+    @Override
     @SuppressWarnings({"unused"})
-    protected java.lang.Object newInstance(
+    protected Object newInstance(
         UnusedPrivateParameter unused) {
       return new TestStartMsg();
     }
 
-    @java.lang.Override
+    @Override
     public final com.google.protobuf.UnknownFieldSet
     getUnknownFields() {
       return this.unknownFields;
@@ -213,7 +217,7 @@ public final class DappTestService {
         throws com.google.protobuf.InvalidProtocolBufferException {
       this();
       if (extensionRegistry == null) {
-        throw new java.lang.NullPointerException();
+        throw new NullPointerException();
       }
       com.google.protobuf.UnknownFieldSet.Builder unknownFields =
           com.google.protobuf.UnknownFieldSet.newBuilder();
@@ -226,13 +230,13 @@ public final class DappTestService {
               done = true;
               break;
             case 10: {
-              java.lang.String s = input.readStringRequireUtf8();
+              String s = input.readStringRequireUtf8();
 
               dappName_ = s;
               break;
             }
             case 18: {
-              java.lang.String s = input.readStringRequireUtf8();
+              String s = input.readStringRequireUtf8();
 
               instanceId_ = s;
               break;
@@ -258,19 +262,19 @@ public final class DappTestService {
     }
     public static final com.google.protobuf.Descriptors.Descriptor
         getDescriptor() {
-      return org.kristen.rpc.darcher.DappTestService.internal_static_darcher_TestStartMsg_descriptor;
+      return DappTestService.internal_static_darcher_TestStartMsg_descriptor;
     }
 
-    @java.lang.Override
-    protected com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
+    @Override
+    protected FieldAccessorTable
         internalGetFieldAccessorTable() {
-      return org.kristen.rpc.darcher.DappTestService.internal_static_darcher_TestStartMsg_fieldAccessorTable
+      return DappTestService.internal_static_darcher_TestStartMsg_fieldAccessorTable
           .ensureFieldAccessorsInitialized(
-              org.kristen.rpc.darcher.DappTestService.TestStartMsg.class, org.kristen.rpc.darcher.DappTestService.TestStartMsg.Builder.class);
+              TestStartMsg.class, Builder.class);
     }
 
     public static final int DAPP_NAME_FIELD_NUMBER = 1;
-    private volatile java.lang.Object dappName_;
+    private volatile Object dappName_;
     /**
      * <pre>
      * name of dapp, only used to identify a dapp
@@ -279,14 +283,15 @@ public final class DappTestService {
      * <code>string dapp_name = 1;</code>
      * @return The dappName.
      */
-    public java.lang.String getDappName() {
-      java.lang.Object ref = dappName_;
-      if (ref instanceof java.lang.String) {
-        return (java.lang.String) ref;
+    @Override
+    public String getDappName() {
+      Object ref = dappName_;
+      if (ref instanceof String) {
+        return (String) ref;
       } else {
         com.google.protobuf.ByteString bs = 
             (com.google.protobuf.ByteString) ref;
-        java.lang.String s = bs.toStringUtf8();
+        String s = bs.toStringUtf8();
         dappName_ = s;
         return s;
       }
@@ -299,13 +304,14 @@ public final class DappTestService {
      * <code>string dapp_name = 1;</code>
      * @return The bytes for dappName.
      */
+    @Override
     public com.google.protobuf.ByteString
         getDappNameBytes() {
-      java.lang.Object ref = dappName_;
-      if (ref instanceof java.lang.String) {
+      Object ref = dappName_;
+      if (ref instanceof String) {
         com.google.protobuf.ByteString b = 
             com.google.protobuf.ByteString.copyFromUtf8(
-                (java.lang.String) ref);
+                (String) ref);
         dappName_ = b;
         return b;
       } else {
@@ -314,7 +320,7 @@ public final class DappTestService {
     }
 
     public static final int INSTANCE_ID_FIELD_NUMBER = 2;
-    private volatile java.lang.Object instanceId_;
+    private volatile Object instanceId_;
     /**
      * <pre>
      * id of the instance of the dapp. One dapp could have multiple instances (e.g. multiple websites)
@@ -323,14 +329,15 @@ public final class DappTestService {
      * <code>string instance_id = 2;</code>
      * @return The instanceId.
      */
-    public java.lang.String getInstanceId() {
-      java.lang.Object ref = instanceId_;
-      if (ref instanceof java.lang.String) {
-        return (java.lang.String) ref;
+    @Override
+    public String getInstanceId() {
+      Object ref = instanceId_;
+      if (ref instanceof String) {
+        return (String) ref;
       } else {
         com.google.protobuf.ByteString bs = 
             (com.google.protobuf.ByteString) ref;
-        java.lang.String s = bs.toStringUtf8();
+        String s = bs.toStringUtf8();
         instanceId_ = s;
         return s;
       }
@@ -343,13 +350,14 @@ public final class DappTestService {
      * <code>string instance_id = 2;</code>
      * @return The bytes for instanceId.
      */
+    @Override
     public com.google.protobuf.ByteString
         getInstanceIdBytes() {
-      java.lang.Object ref = instanceId_;
-      if (ref instanceof java.lang.String) {
+      Object ref = instanceId_;
+      if (ref instanceof String) {
         com.google.protobuf.ByteString b = 
             com.google.protobuf.ByteString.copyFromUtf8(
-                (java.lang.String) ref);
+                (String) ref);
         instanceId_ = b;
         return b;
       } else {
@@ -358,7 +366,7 @@ public final class DappTestService {
     }
 
     private byte memoizedIsInitialized = -1;
-    @java.lang.Override
+    @Override
     public final boolean isInitialized() {
       byte isInitialized = memoizedIsInitialized;
       if (isInitialized == 1) return true;
@@ -368,7 +376,7 @@ public final class DappTestService {
       return true;
     }
 
-    @java.lang.Override
+    @Override
     public void writeTo(com.google.protobuf.CodedOutputStream output)
                         throws java.io.IOException {
       if (!getDappNameBytes().isEmpty()) {
@@ -380,7 +388,7 @@ public final class DappTestService {
       unknownFields.writeTo(output);
     }
 
-    @java.lang.Override
+    @Override
     public int getSerializedSize() {
       int size = memoizedSize;
       if (size != -1) return size;
@@ -397,15 +405,15 @@ public final class DappTestService {
       return size;
     }
 
-    @java.lang.Override
-    public boolean equals(final java.lang.Object obj) {
+    @Override
+    public boolean equals(final Object obj) {
       if (obj == this) {
        return true;
       }
-      if (!(obj instanceof org.kristen.rpc.darcher.DappTestService.TestStartMsg)) {
+      if (!(obj instanceof TestStartMsg)) {
         return super.equals(obj);
       }
-      org.kristen.rpc.darcher.DappTestService.TestStartMsg other = (org.kristen.rpc.darcher.DappTestService.TestStartMsg) obj;
+      TestStartMsg other = (TestStartMsg) obj;
 
       if (!getDappName()
           .equals(other.getDappName())) return false;
@@ -415,7 +423,7 @@ public final class DappTestService {
       return true;
     }
 
-    @java.lang.Override
+    @Override
     public int hashCode() {
       if (memoizedHashCode != 0) {
         return memoizedHashCode;
@@ -431,69 +439,69 @@ public final class DappTestService {
       return hash;
     }
 
-    public static org.kristen.rpc.darcher.DappTestService.TestStartMsg parseFrom(
+    public static TestStartMsg parseFrom(
         java.nio.ByteBuffer data)
         throws com.google.protobuf.InvalidProtocolBufferException {
       return PARSER.parseFrom(data);
     }
-    public static org.kristen.rpc.darcher.DappTestService.TestStartMsg parseFrom(
+    public static TestStartMsg parseFrom(
         java.nio.ByteBuffer data,
         com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws com.google.protobuf.InvalidProtocolBufferException {
       return PARSER.parseFrom(data, extensionRegistry);
     }
-    public static org.kristen.rpc.darcher.DappTestService.TestStartMsg parseFrom(
+    public static TestStartMsg parseFrom(
         com.google.protobuf.ByteString data)
         throws com.google.protobuf.InvalidProtocolBufferException {
       return PARSER.parseFrom(data);
     }
-    public static org.kristen.rpc.darcher.DappTestService.TestStartMsg parseFrom(
+    public static TestStartMsg parseFrom(
         com.google.protobuf.ByteString data,
         com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws com.google.protobuf.InvalidProtocolBufferException {
       return PARSER.parseFrom(data, extensionRegistry);
     }
-    public static org.kristen.rpc.darcher.DappTestService.TestStartMsg parseFrom(byte[] data)
+    public static TestStartMsg parseFrom(byte[] data)
         throws com.google.protobuf.InvalidProtocolBufferException {
       return PARSER.parseFrom(data);
     }
-    public static org.kristen.rpc.darcher.DappTestService.TestStartMsg parseFrom(
+    public static TestStartMsg parseFrom(
         byte[] data,
         com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws com.google.protobuf.InvalidProtocolBufferException {
       return PARSER.parseFrom(data, extensionRegistry);
     }
-    public static org.kristen.rpc.darcher.DappTestService.TestStartMsg parseFrom(java.io.InputStream input)
+    public static TestStartMsg parseFrom(java.io.InputStream input)
         throws java.io.IOException {
       return com.google.protobuf.GeneratedMessageV3
           .parseWithIOException(PARSER, input);
     }
-    public static org.kristen.rpc.darcher.DappTestService.TestStartMsg parseFrom(
+    public static TestStartMsg parseFrom(
         java.io.InputStream input,
         com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws java.io.IOException {
       return com.google.protobuf.GeneratedMessageV3
           .parseWithIOException(PARSER, input, extensionRegistry);
     }
-    public static org.kristen.rpc.darcher.DappTestService.TestStartMsg parseDelimitedFrom(java.io.InputStream input)
+    public static TestStartMsg parseDelimitedFrom(java.io.InputStream input)
         throws java.io.IOException {
       return com.google.protobuf.GeneratedMessageV3
           .parseDelimitedWithIOException(PARSER, input);
     }
-    public static org.kristen.rpc.darcher.DappTestService.TestStartMsg parseDelimitedFrom(
+    public static TestStartMsg parseDelimitedFrom(
         java.io.InputStream input,
         com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws java.io.IOException {
       return com.google.protobuf.GeneratedMessageV3
           .parseDelimitedWithIOException(PARSER, input, extensionRegistry);
     }
-    public static org.kristen.rpc.darcher.DappTestService.TestStartMsg parseFrom(
+    public static TestStartMsg parseFrom(
         com.google.protobuf.CodedInputStream input)
         throws java.io.IOException {
       return com.google.protobuf.GeneratedMessageV3
           .parseWithIOException(PARSER, input);
     }
-    public static org.kristen.rpc.darcher.DappTestService.TestStartMsg parseFrom(
+    public static TestStartMsg parseFrom(
         com.google.protobuf.CodedInputStream input,
         com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws java.io.IOException {
@@ -501,23 +509,23 @@ public final class DappTestService {
           .parseWithIOException(PARSER, input, extensionRegistry);
     }
 
-    @java.lang.Override
+    @Override
     public Builder newBuilderForType() { return newBuilder(); }
     public static Builder newBuilder() {
       return DEFAULT_INSTANCE.toBuilder();
     }
-    public static Builder newBuilder(org.kristen.rpc.darcher.DappTestService.TestStartMsg prototype) {
+    public static Builder newBuilder(TestStartMsg prototype) {
       return DEFAULT_INSTANCE.toBuilder().mergeFrom(prototype);
     }
-    @java.lang.Override
+    @Override
     public Builder toBuilder() {
       return this == DEFAULT_INSTANCE
           ? new Builder() : new Builder().mergeFrom(this);
     }
 
-    @java.lang.Override
+    @Override
     protected Builder newBuilderForType(
-        com.google.protobuf.GeneratedMessageV3.BuilderParent parent) {
+        BuilderParent parent) {
       Builder builder = new Builder(parent);
       return builder;
     }
@@ -527,18 +535,18 @@ public final class DappTestService {
     public static final class Builder extends
         com.google.protobuf.GeneratedMessageV3.Builder<Builder> implements
         // @@protoc_insertion_point(builder_implements:darcher.TestStartMsg)
-        org.kristen.rpc.darcher.DappTestService.TestStartMsgOrBuilder {
+        TestStartMsgOrBuilder {
       public static final com.google.protobuf.Descriptors.Descriptor
           getDescriptor() {
-        return org.kristen.rpc.darcher.DappTestService.internal_static_darcher_TestStartMsg_descriptor;
+        return DappTestService.internal_static_darcher_TestStartMsg_descriptor;
       }
 
-      @java.lang.Override
-      protected com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
+      @Override
+      protected FieldAccessorTable
           internalGetFieldAccessorTable() {
-        return org.kristen.rpc.darcher.DappTestService.internal_static_darcher_TestStartMsg_fieldAccessorTable
+        return DappTestService.internal_static_darcher_TestStartMsg_fieldAccessorTable
             .ensureFieldAccessorsInitialized(
-                org.kristen.rpc.darcher.DappTestService.TestStartMsg.class, org.kristen.rpc.darcher.DappTestService.TestStartMsg.Builder.class);
+                TestStartMsg.class, Builder.class);
       }
 
       // Construct using org.kristen.rpc.darcher.DappTestService.TestStartMsg.newBuilder()
@@ -547,7 +555,7 @@ public final class DappTestService {
       }
 
       private Builder(
-          com.google.protobuf.GeneratedMessageV3.BuilderParent parent) {
+          BuilderParent parent) {
         super(parent);
         maybeForceBuilderInitialization();
       }
@@ -556,7 +564,7 @@ public final class DappTestService {
                 .alwaysUseFieldBuilders) {
         }
       }
-      @java.lang.Override
+      @Override
       public Builder clear() {
         super.clear();
         dappName_ = "";
@@ -566,79 +574,79 @@ public final class DappTestService {
         return this;
       }
 
-      @java.lang.Override
+      @Override
       public com.google.protobuf.Descriptors.Descriptor
           getDescriptorForType() {
-        return org.kristen.rpc.darcher.DappTestService.internal_static_darcher_TestStartMsg_descriptor;
+        return DappTestService.internal_static_darcher_TestStartMsg_descriptor;
       }
 
-      @java.lang.Override
-      public org.kristen.rpc.darcher.DappTestService.TestStartMsg getDefaultInstanceForType() {
-        return org.kristen.rpc.darcher.DappTestService.TestStartMsg.getDefaultInstance();
+      @Override
+      public TestStartMsg getDefaultInstanceForType() {
+        return TestStartMsg.getDefaultInstance();
       }
 
-      @java.lang.Override
-      public org.kristen.rpc.darcher.DappTestService.TestStartMsg build() {
-        org.kristen.rpc.darcher.DappTestService.TestStartMsg result = buildPartial();
+      @Override
+      public TestStartMsg build() {
+        TestStartMsg result = buildPartial();
         if (!result.isInitialized()) {
           throw newUninitializedMessageException(result);
         }
         return result;
       }
 
-      @java.lang.Override
-      public org.kristen.rpc.darcher.DappTestService.TestStartMsg buildPartial() {
-        org.kristen.rpc.darcher.DappTestService.TestStartMsg result = new org.kristen.rpc.darcher.DappTestService.TestStartMsg(this);
+      @Override
+      public TestStartMsg buildPartial() {
+        TestStartMsg result = new TestStartMsg(this);
         result.dappName_ = dappName_;
         result.instanceId_ = instanceId_;
         onBuilt();
         return result;
       }
 
-      @java.lang.Override
+      @Override
       public Builder clone() {
         return super.clone();
       }
-      @java.lang.Override
+      @Override
       public Builder setField(
           com.google.protobuf.Descriptors.FieldDescriptor field,
-          java.lang.Object value) {
+          Object value) {
         return super.setField(field, value);
       }
-      @java.lang.Override
+      @Override
       public Builder clearField(
           com.google.protobuf.Descriptors.FieldDescriptor field) {
         return super.clearField(field);
       }
-      @java.lang.Override
+      @Override
       public Builder clearOneof(
           com.google.protobuf.Descriptors.OneofDescriptor oneof) {
         return super.clearOneof(oneof);
       }
-      @java.lang.Override
+      @Override
       public Builder setRepeatedField(
           com.google.protobuf.Descriptors.FieldDescriptor field,
-          int index, java.lang.Object value) {
+          int index, Object value) {
         return super.setRepeatedField(field, index, value);
       }
-      @java.lang.Override
+      @Override
       public Builder addRepeatedField(
           com.google.protobuf.Descriptors.FieldDescriptor field,
-          java.lang.Object value) {
+          Object value) {
         return super.addRepeatedField(field, value);
       }
-      @java.lang.Override
+      @Override
       public Builder mergeFrom(com.google.protobuf.Message other) {
-        if (other instanceof org.kristen.rpc.darcher.DappTestService.TestStartMsg) {
-          return mergeFrom((org.kristen.rpc.darcher.DappTestService.TestStartMsg)other);
+        if (other instanceof TestStartMsg) {
+          return mergeFrom((TestStartMsg)other);
         } else {
           super.mergeFrom(other);
           return this;
         }
       }
 
-      public Builder mergeFrom(org.kristen.rpc.darcher.DappTestService.TestStartMsg other) {
-        if (other == org.kristen.rpc.darcher.DappTestService.TestStartMsg.getDefaultInstance()) return this;
+      public Builder mergeFrom(TestStartMsg other) {
+        if (other == TestStartMsg.getDefaultInstance()) return this;
         if (!other.getDappName().isEmpty()) {
           dappName_ = other.dappName_;
           onChanged();
@@ -652,21 +660,21 @@ public final class DappTestService {
         return this;
       }
 
-      @java.lang.Override
+      @Override
       public final boolean isInitialized() {
         return true;
       }
 
-      @java.lang.Override
+      @Override
       public Builder mergeFrom(
           com.google.protobuf.CodedInputStream input,
           com.google.protobuf.ExtensionRegistryLite extensionRegistry)
           throws java.io.IOException {
-        org.kristen.rpc.darcher.DappTestService.TestStartMsg parsedMessage = null;
+        TestStartMsg parsedMessage = null;
         try {
           parsedMessage = PARSER.parsePartialFrom(input, extensionRegistry);
         } catch (com.google.protobuf.InvalidProtocolBufferException e) {
-          parsedMessage = (org.kristen.rpc.darcher.DappTestService.TestStartMsg) e.getUnfinishedMessage();
+          parsedMessage = (TestStartMsg) e.getUnfinishedMessage();
           throw e.unwrapIOException();
         } finally {
           if (parsedMessage != null) {
@@ -676,7 +684,7 @@ public final class DappTestService {
         return this;
       }
 
-      private java.lang.Object dappName_ = "";
+      private Object dappName_ = "";
       /**
        * <pre>
        * name of dapp, only used to identify a dapp
@@ -685,16 +693,16 @@ public final class DappTestService {
        * <code>string dapp_name = 1;</code>
        * @return The dappName.
        */
-      public java.lang.String getDappName() {
-        java.lang.Object ref = dappName_;
-        if (!(ref instanceof java.lang.String)) {
+      public String getDappName() {
+        Object ref = dappName_;
+        if (!(ref instanceof String)) {
           com.google.protobuf.ByteString bs =
               (com.google.protobuf.ByteString) ref;
-          java.lang.String s = bs.toStringUtf8();
+          String s = bs.toStringUtf8();
           dappName_ = s;
           return s;
         } else {
-          return (java.lang.String) ref;
+          return (String) ref;
         }
       }
       /**
@@ -707,11 +715,11 @@ public final class DappTestService {
        */
       public com.google.protobuf.ByteString
           getDappNameBytes() {
-        java.lang.Object ref = dappName_;
+        Object ref = dappName_;
         if (ref instanceof String) {
           com.google.protobuf.ByteString b = 
               com.google.protobuf.ByteString.copyFromUtf8(
-                  (java.lang.String) ref);
+                  (String) ref);
           dappName_ = b;
           return b;
         } else {
@@ -728,7 +736,7 @@ public final class DappTestService {
        * @return This builder for chaining.
        */
       public Builder setDappName(
-          java.lang.String value) {
+          String value) {
         if (value == null) {
     throw new NullPointerException();
   }
@@ -772,7 +780,7 @@ public final class DappTestService {
         return this;
       }
 
-      private java.lang.Object instanceId_ = "";
+      private Object instanceId_ = "";
       /**
        * <pre>
        * id of the instance of the dapp. One dapp could have multiple instances (e.g. multiple websites)
@@ -781,16 +789,16 @@ public final class DappTestService {
        * <code>string instance_id = 2;</code>
        * @return The instanceId.
        */
-      public java.lang.String getInstanceId() {
-        java.lang.Object ref = instanceId_;
-        if (!(ref instanceof java.lang.String)) {
+      public String getInstanceId() {
+        Object ref = instanceId_;
+        if (!(ref instanceof String)) {
           com.google.protobuf.ByteString bs =
               (com.google.protobuf.ByteString) ref;
-          java.lang.String s = bs.toStringUtf8();
+          String s = bs.toStringUtf8();
           instanceId_ = s;
           return s;
         } else {
-          return (java.lang.String) ref;
+          return (String) ref;
         }
       }
       /**
@@ -803,11 +811,11 @@ public final class DappTestService {
        */
       public com.google.protobuf.ByteString
           getInstanceIdBytes() {
-        java.lang.Object ref = instanceId_;
+        Object ref = instanceId_;
         if (ref instanceof String) {
           com.google.protobuf.ByteString b = 
               com.google.protobuf.ByteString.copyFromUtf8(
-                  (java.lang.String) ref);
+                  (String) ref);
           instanceId_ = b;
           return b;
         } else {
@@ -824,7 +832,7 @@ public final class DappTestService {
        * @return This builder for chaining.
        */
       public Builder setInstanceId(
-          java.lang.String value) {
+          String value) {
         if (value == null) {
     throw new NullPointerException();
   }
@@ -867,13 +875,13 @@ public final class DappTestService {
         onChanged();
         return this;
       }
-      @java.lang.Override
+      @Override
       public final Builder setUnknownFields(
           final com.google.protobuf.UnknownFieldSet unknownFields) {
         return super.setUnknownFields(unknownFields);
       }
 
-      @java.lang.Override
+      @Override
       public final Builder mergeUnknownFields(
           final com.google.protobuf.UnknownFieldSet unknownFields) {
         return super.mergeUnknownFields(unknownFields);
@@ -884,18 +892,18 @@ public final class DappTestService {
     }
 
     // @@protoc_insertion_point(class_scope:darcher.TestStartMsg)
-    private static final org.kristen.rpc.darcher.DappTestService.TestStartMsg DEFAULT_INSTANCE;
+    private static final TestStartMsg DEFAULT_INSTANCE;
     static {
-      DEFAULT_INSTANCE = new org.kristen.rpc.darcher.DappTestService.TestStartMsg();
+      DEFAULT_INSTANCE = new TestStartMsg();
     }
 
-    public static org.kristen.rpc.darcher.DappTestService.TestStartMsg getDefaultInstance() {
+    public static TestStartMsg getDefaultInstance() {
       return DEFAULT_INSTANCE;
     }
 
     private static final com.google.protobuf.Parser<TestStartMsg>
         PARSER = new com.google.protobuf.AbstractParser<TestStartMsg>() {
-      @java.lang.Override
+      @Override
       public TestStartMsg parsePartialFrom(
           com.google.protobuf.CodedInputStream input,
           com.google.protobuf.ExtensionRegistryLite extensionRegistry)
@@ -908,13 +916,13 @@ public final class DappTestService {
       return PARSER;
     }
 
-    @java.lang.Override
+    @Override
     public com.google.protobuf.Parser<TestStartMsg> getParserForType() {
       return PARSER;
     }
 
-    @java.lang.Override
-    public org.kristen.rpc.darcher.DappTestService.TestStartMsg getDefaultInstanceForType() {
+    @Override
+    public TestStartMsg getDefaultInstanceForType() {
       return DEFAULT_INSTANCE;
     }
 
@@ -932,7 +940,7 @@ public final class DappTestService {
      * <code>string dapp_name = 1;</code>
      * @return The dappName.
      */
-    java.lang.String getDappName();
+    String getDappName();
     /**
      * <pre>
      * name of dapp, should keep consistent with that in TestStartMsg
@@ -952,7 +960,7 @@ public final class DappTestService {
      * <code>string instance_id = 2;</code>
      * @return The instanceId.
      */
-    java.lang.String getInstanceId();
+    String getInstanceId();
     /**
      * <pre>
      * id of the instance of the dapp. One dapp could have multiple instances (e.g. multiple websites)
@@ -967,7 +975,7 @@ public final class DappTestService {
   /**
    * Protobuf type {@code darcher.TestEndMsg}
    */
-  public  static final class TestEndMsg extends
+  public static final class TestEndMsg extends
       com.google.protobuf.GeneratedMessageV3 implements
       // @@protoc_insertion_point(message_implements:darcher.TestEndMsg)
       TestEndMsgOrBuilder {
@@ -981,14 +989,14 @@ public final class DappTestService {
       instanceId_ = "";
     }
 
-    @java.lang.Override
+    @Override
     @SuppressWarnings({"unused"})
-    protected java.lang.Object newInstance(
+    protected Object newInstance(
         UnusedPrivateParameter unused) {
       return new TestEndMsg();
     }
 
-    @java.lang.Override
+    @Override
     public final com.google.protobuf.UnknownFieldSet
     getUnknownFields() {
       return this.unknownFields;
@@ -999,7 +1007,7 @@ public final class DappTestService {
         throws com.google.protobuf.InvalidProtocolBufferException {
       this();
       if (extensionRegistry == null) {
-        throw new java.lang.NullPointerException();
+        throw new NullPointerException();
       }
       com.google.protobuf.UnknownFieldSet.Builder unknownFields =
           com.google.protobuf.UnknownFieldSet.newBuilder();
@@ -1012,13 +1020,13 @@ public final class DappTestService {
               done = true;
               break;
             case 10: {
-              java.lang.String s = input.readStringRequireUtf8();
+              String s = input.readStringRequireUtf8();
 
               dappName_ = s;
               break;
             }
             case 18: {
-              java.lang.String s = input.readStringRequireUtf8();
+              String s = input.readStringRequireUtf8();
 
               instanceId_ = s;
               break;
@@ -1044,19 +1052,19 @@ public final class DappTestService {
     }
     public static final com.google.protobuf.Descriptors.Descriptor
         getDescriptor() {
-      return org.kristen.rpc.darcher.DappTestService.internal_static_darcher_TestEndMsg_descriptor;
+      return DappTestService.internal_static_darcher_TestEndMsg_descriptor;
     }
 
-    @java.lang.Override
-    protected com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
+    @Override
+    protected FieldAccessorTable
         internalGetFieldAccessorTable() {
-      return org.kristen.rpc.darcher.DappTestService.internal_static_darcher_TestEndMsg_fieldAccessorTable
+      return DappTestService.internal_static_darcher_TestEndMsg_fieldAccessorTable
           .ensureFieldAccessorsInitialized(
-              org.kristen.rpc.darcher.DappTestService.TestEndMsg.class, org.kristen.rpc.darcher.DappTestService.TestEndMsg.Builder.class);
+              TestEndMsg.class, Builder.class);
     }
 
     public static final int DAPP_NAME_FIELD_NUMBER = 1;
-    private volatile java.lang.Object dappName_;
+    private volatile Object dappName_;
     /**
      * <pre>
      * name of dapp, should keep consistent with that in TestStartMsg
@@ -1065,14 +1073,15 @@ public final class DappTestService {
      * <code>string dapp_name = 1;</code>
      * @return The dappName.
      */
-    public java.lang.String getDappName() {
-      java.lang.Object ref = dappName_;
-      if (ref instanceof java.lang.String) {
-        return (java.lang.String) ref;
+    @Override
+    public String getDappName() {
+      Object ref = dappName_;
+      if (ref instanceof String) {
+        return (String) ref;
       } else {
         com.google.protobuf.ByteString bs = 
             (com.google.protobuf.ByteString) ref;
-        java.lang.String s = bs.toStringUtf8();
+        String s = bs.toStringUtf8();
         dappName_ = s;
         return s;
       }
@@ -1085,13 +1094,14 @@ public final class DappTestService {
      * <code>string dapp_name = 1;</code>
      * @return The bytes for dappName.
      */
+    @Override
     public com.google.protobuf.ByteString
         getDappNameBytes() {
-      java.lang.Object ref = dappName_;
-      if (ref instanceof java.lang.String) {
+      Object ref = dappName_;
+      if (ref instanceof String) {
         com.google.protobuf.ByteString b = 
             com.google.protobuf.ByteString.copyFromUtf8(
-                (java.lang.String) ref);
+                (String) ref);
         dappName_ = b;
         return b;
       } else {
@@ -1100,7 +1110,7 @@ public final class DappTestService {
     }
 
     public static final int INSTANCE_ID_FIELD_NUMBER = 2;
-    private volatile java.lang.Object instanceId_;
+    private volatile Object instanceId_;
     /**
      * <pre>
      * id of the instance of the dapp. One dapp could have multiple instances (e.g. multiple websites)
@@ -1109,14 +1119,15 @@ public final class DappTestService {
      * <code>string instance_id = 2;</code>
      * @return The instanceId.
      */
-    public java.lang.String getInstanceId() {
-      java.lang.Object ref = instanceId_;
-      if (ref instanceof java.lang.String) {
-        return (java.lang.String) ref;
+    @Override
+    public String getInstanceId() {
+      Object ref = instanceId_;
+      if (ref instanceof String) {
+        return (String) ref;
       } else {
         com.google.protobuf.ByteString bs = 
             (com.google.protobuf.ByteString) ref;
-        java.lang.String s = bs.toStringUtf8();
+        String s = bs.toStringUtf8();
         instanceId_ = s;
         return s;
       }
@@ -1129,13 +1140,14 @@ public final class DappTestService {
      * <code>string instance_id = 2;</code>
      * @return The bytes for instanceId.
      */
+    @Override
     public com.google.protobuf.ByteString
         getInstanceIdBytes() {
-      java.lang.Object ref = instanceId_;
-      if (ref instanceof java.lang.String) {
+      Object ref = instanceId_;
+      if (ref instanceof String) {
         com.google.protobuf.ByteString b = 
             com.google.protobuf.ByteString.copyFromUtf8(
-                (java.lang.String) ref);
+                (String) ref);
         instanceId_ = b;
         return b;
       } else {
@@ -1144,7 +1156,7 @@ public final class DappTestService {
     }
 
     private byte memoizedIsInitialized = -1;
-    @java.lang.Override
+    @Override
     public final boolean isInitialized() {
       byte isInitialized = memoizedIsInitialized;
       if (isInitialized == 1) return true;
@@ -1154,7 +1166,7 @@ public final class DappTestService {
       return true;
     }
 
-    @java.lang.Override
+    @Override
     public void writeTo(com.google.protobuf.CodedOutputStream output)
                         throws java.io.IOException {
       if (!getDappNameBytes().isEmpty()) {
@@ -1166,7 +1178,7 @@ public final class DappTestService {
       unknownFields.writeTo(output);
     }
 
-    @java.lang.Override
+    @Override
     public int getSerializedSize() {
       int size = memoizedSize;
       if (size != -1) return size;
@@ -1183,15 +1195,15 @@ public final class DappTestService {
       return size;
     }
 
-    @java.lang.Override
-    public boolean equals(final java.lang.Object obj) {
+    @Override
+    public boolean equals(final Object obj) {
       if (obj == this) {
        return true;
       }
-      if (!(obj instanceof org.kristen.rpc.darcher.DappTestService.TestEndMsg)) {
+      if (!(obj instanceof TestEndMsg)) {
         return super.equals(obj);
       }
-      org.kristen.rpc.darcher.DappTestService.TestEndMsg other = (org.kristen.rpc.darcher.DappTestService.TestEndMsg) obj;
+      TestEndMsg other = (TestEndMsg) obj;
 
       if (!getDappName()
           .equals(other.getDappName())) return false;
@@ -1201,7 +1213,7 @@ public final class DappTestService {
       return true;
     }
 
-    @java.lang.Override
+    @Override
     public int hashCode() {
       if (memoizedHashCode != 0) {
         return memoizedHashCode;
@@ -1217,69 +1229,69 @@ public final class DappTestService {
       return hash;
     }
 
-    public static org.kristen.rpc.darcher.DappTestService.TestEndMsg parseFrom(
+    public static TestEndMsg parseFrom(
         java.nio.ByteBuffer data)
         throws com.google.protobuf.InvalidProtocolBufferException {
       return PARSER.parseFrom(data);
     }
-    public static org.kristen.rpc.darcher.DappTestService.TestEndMsg parseFrom(
+    public static TestEndMsg parseFrom(
         java.nio.ByteBuffer data,
         com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws com.google.protobuf.InvalidProtocolBufferException {
       return PARSER.parseFrom(data, extensionRegistry);
     }
-    public static org.kristen.rpc.darcher.DappTestService.TestEndMsg parseFrom(
+    public static TestEndMsg parseFrom(
         com.google.protobuf.ByteString data)
         throws com.google.protobuf.InvalidProtocolBufferException {
       return PARSER.parseFrom(data);
     }
-    public static org.kristen.rpc.darcher.DappTestService.TestEndMsg parseFrom(
+    public static TestEndMsg parseFrom(
         com.google.protobuf.ByteString data,
         com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws com.google.protobuf.InvalidProtocolBufferException {
       return PARSER.parseFrom(data, extensionRegistry);
     }
-    public static org.kristen.rpc.darcher.DappTestService.TestEndMsg parseFrom(byte[] data)
+    public static TestEndMsg parseFrom(byte[] data)
         throws com.google.protobuf.InvalidProtocolBufferException {
       return PARSER.parseFrom(data);
     }
-    public static org.kristen.rpc.darcher.DappTestService.TestEndMsg parseFrom(
+    public static TestEndMsg parseFrom(
         byte[] data,
         com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws com.google.protobuf.InvalidProtocolBufferException {
       return PARSER.parseFrom(data, extensionRegistry);
     }
-    public static org.kristen.rpc.darcher.DappTestService.TestEndMsg parseFrom(java.io.InputStream input)
+    public static TestEndMsg parseFrom(java.io.InputStream input)
         throws java.io.IOException {
       return com.google.protobuf.GeneratedMessageV3
           .parseWithIOException(PARSER, input);
     }
-    public static org.kristen.rpc.darcher.DappTestService.TestEndMsg parseFrom(
+    public static TestEndMsg parseFrom(
         java.io.InputStream input,
         com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws java.io.IOException {
       return com.google.protobuf.GeneratedMessageV3
           .parseWithIOException(PARSER, input, extensionRegistry);
     }
-    public static org.kristen.rpc.darcher.DappTestService.TestEndMsg parseDelimitedFrom(java.io.InputStream input)
+    public static TestEndMsg parseDelimitedFrom(java.io.InputStream input)
         throws java.io.IOException {
       return com.google.protobuf.GeneratedMessageV3
           .parseDelimitedWithIOException(PARSER, input);
     }
-    public static org.kristen.rpc.darcher.DappTestService.TestEndMsg parseDelimitedFrom(
+    public static TestEndMsg parseDelimitedFrom(
         java.io.InputStream input,
         com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws java.io.IOException {
       return com.google.protobuf.GeneratedMessageV3
           .parseDelimitedWithIOException(PARSER, input, extensionRegistry);
     }
-    public static org.kristen.rpc.darcher.DappTestService.TestEndMsg parseFrom(
+    public static TestEndMsg parseFrom(
         com.google.protobuf.CodedInputStream input)
         throws java.io.IOException {
       return com.google.protobuf.GeneratedMessageV3
           .parseWithIOException(PARSER, input);
     }
-    public static org.kristen.rpc.darcher.DappTestService.TestEndMsg parseFrom(
+    public static TestEndMsg parseFrom(
         com.google.protobuf.CodedInputStream input,
         com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws java.io.IOException {
@@ -1287,23 +1299,23 @@ public final class DappTestService {
           .parseWithIOException(PARSER, input, extensionRegistry);
     }
 
-    @java.lang.Override
+    @Override
     public Builder newBuilderForType() { return newBuilder(); }
     public static Builder newBuilder() {
       return DEFAULT_INSTANCE.toBuilder();
     }
-    public static Builder newBuilder(org.kristen.rpc.darcher.DappTestService.TestEndMsg prototype) {
+    public static Builder newBuilder(TestEndMsg prototype) {
       return DEFAULT_INSTANCE.toBuilder().mergeFrom(prototype);
     }
-    @java.lang.Override
+    @Override
     public Builder toBuilder() {
       return this == DEFAULT_INSTANCE
           ? new Builder() : new Builder().mergeFrom(this);
     }
 
-    @java.lang.Override
+    @Override
     protected Builder newBuilderForType(
-        com.google.protobuf.GeneratedMessageV3.BuilderParent parent) {
+        BuilderParent parent) {
       Builder builder = new Builder(parent);
       return builder;
     }
@@ -1313,18 +1325,18 @@ public final class DappTestService {
     public static final class Builder extends
         com.google.protobuf.GeneratedMessageV3.Builder<Builder> implements
         // @@protoc_insertion_point(builder_implements:darcher.TestEndMsg)
-        org.kristen.rpc.darcher.DappTestService.TestEndMsgOrBuilder {
+        TestEndMsgOrBuilder {
       public static final com.google.protobuf.Descriptors.Descriptor
           getDescriptor() {
-        return org.kristen.rpc.darcher.DappTestService.internal_static_darcher_TestEndMsg_descriptor;
+        return DappTestService.internal_static_darcher_TestEndMsg_descriptor;
       }
 
-      @java.lang.Override
-      protected com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
+      @Override
+      protected FieldAccessorTable
           internalGetFieldAccessorTable() {
-        return org.kristen.rpc.darcher.DappTestService.internal_static_darcher_TestEndMsg_fieldAccessorTable
+        return DappTestService.internal_static_darcher_TestEndMsg_fieldAccessorTable
             .ensureFieldAccessorsInitialized(
-                org.kristen.rpc.darcher.DappTestService.TestEndMsg.class, org.kristen.rpc.darcher.DappTestService.TestEndMsg.Builder.class);
+                TestEndMsg.class, Builder.class);
       }
 
       // Construct using org.kristen.rpc.darcher.DappTestService.TestEndMsg.newBuilder()
@@ -1333,7 +1345,7 @@ public final class DappTestService {
       }
 
       private Builder(
-          com.google.protobuf.GeneratedMessageV3.BuilderParent parent) {
+          BuilderParent parent) {
         super(parent);
         maybeForceBuilderInitialization();
       }
@@ -1342,7 +1354,7 @@ public final class DappTestService {
                 .alwaysUseFieldBuilders) {
         }
       }
-      @java.lang.Override
+      @Override
       public Builder clear() {
         super.clear();
         dappName_ = "";
@@ -1352,79 +1364,79 @@ public final class DappTestService {
         return this;
       }
 
-      @java.lang.Override
+      @Override
       public com.google.protobuf.Descriptors.Descriptor
           getDescriptorForType() {
-        return org.kristen.rpc.darcher.DappTestService.internal_static_darcher_TestEndMsg_descriptor;
+        return DappTestService.internal_static_darcher_TestEndMsg_descriptor;
       }
 
-      @java.lang.Override
-      public org.kristen.rpc.darcher.DappTestService.TestEndMsg getDefaultInstanceForType() {
-        return org.kristen.rpc.darcher.DappTestService.TestEndMsg.getDefaultInstance();
+      @Override
+      public TestEndMsg getDefaultInstanceForType() {
+        return TestEndMsg.getDefaultInstance();
       }
 
-      @java.lang.Override
-      public org.kristen.rpc.darcher.DappTestService.TestEndMsg build() {
-        org.kristen.rpc.darcher.DappTestService.TestEndMsg result = buildPartial();
+      @Override
+      public TestEndMsg build() {
+        TestEndMsg result = buildPartial();
         if (!result.isInitialized()) {
           throw newUninitializedMessageException(result);
         }
         return result;
       }
 
-      @java.lang.Override
-      public org.kristen.rpc.darcher.DappTestService.TestEndMsg buildPartial() {
-        org.kristen.rpc.darcher.DappTestService.TestEndMsg result = new org.kristen.rpc.darcher.DappTestService.TestEndMsg(this);
+      @Override
+      public TestEndMsg buildPartial() {
+        TestEndMsg result = new TestEndMsg(this);
         result.dappName_ = dappName_;
         result.instanceId_ = instanceId_;
         onBuilt();
         return result;
       }
 
-      @java.lang.Override
+      @Override
       public Builder clone() {
         return super.clone();
       }
-      @java.lang.Override
+      @Override
       public Builder setField(
           com.google.protobuf.Descriptors.FieldDescriptor field,
-          java.lang.Object value) {
+          Object value) {
         return super.setField(field, value);
       }
-      @java.lang.Override
+      @Override
       public Builder clearField(
           com.google.protobuf.Descriptors.FieldDescriptor field) {
         return super.clearField(field);
       }
-      @java.lang.Override
+      @Override
       public Builder clearOneof(
           com.google.protobuf.Descriptors.OneofDescriptor oneof) {
         return super.clearOneof(oneof);
       }
-      @java.lang.Override
+      @Override
       public Builder setRepeatedField(
           com.google.protobuf.Descriptors.FieldDescriptor field,
-          int index, java.lang.Object value) {
+          int index, Object value) {
         return super.setRepeatedField(field, index, value);
       }
-      @java.lang.Override
+      @Override
       public Builder addRepeatedField(
           com.google.protobuf.Descriptors.FieldDescriptor field,
-          java.lang.Object value) {
+          Object value) {
         return super.addRepeatedField(field, value);
       }
-      @java.lang.Override
+      @Override
       public Builder mergeFrom(com.google.protobuf.Message other) {
-        if (other instanceof org.kristen.rpc.darcher.DappTestService.TestEndMsg) {
-          return mergeFrom((org.kristen.rpc.darcher.DappTestService.TestEndMsg)other);
+        if (other instanceof TestEndMsg) {
+          return mergeFrom((TestEndMsg)other);
         } else {
           super.mergeFrom(other);
           return this;
         }
       }
 
-      public Builder mergeFrom(org.kristen.rpc.darcher.DappTestService.TestEndMsg other) {
-        if (other == org.kristen.rpc.darcher.DappTestService.TestEndMsg.getDefaultInstance()) return this;
+      public Builder mergeFrom(TestEndMsg other) {
+        if (other == TestEndMsg.getDefaultInstance()) return this;
         if (!other.getDappName().isEmpty()) {
           dappName_ = other.dappName_;
           onChanged();
@@ -1438,21 +1450,21 @@ public final class DappTestService {
         return this;
       }
 
-      @java.lang.Override
+      @Override
       public final boolean isInitialized() {
         return true;
       }
 
-      @java.lang.Override
+      @Override
       public Builder mergeFrom(
           com.google.protobuf.CodedInputStream input,
           com.google.protobuf.ExtensionRegistryLite extensionRegistry)
           throws java.io.IOException {
-        org.kristen.rpc.darcher.DappTestService.TestEndMsg parsedMessage = null;
+        TestEndMsg parsedMessage = null;
         try {
           parsedMessage = PARSER.parsePartialFrom(input, extensionRegistry);
         } catch (com.google.protobuf.InvalidProtocolBufferException e) {
-          parsedMessage = (org.kristen.rpc.darcher.DappTestService.TestEndMsg) e.getUnfinishedMessage();
+          parsedMessage = (TestEndMsg) e.getUnfinishedMessage();
           throw e.unwrapIOException();
         } finally {
           if (parsedMessage != null) {
@@ -1462,7 +1474,7 @@ public final class DappTestService {
         return this;
       }
 
-      private java.lang.Object dappName_ = "";
+      private Object dappName_ = "";
       /**
        * <pre>
        * name of dapp, should keep consistent with that in TestStartMsg
@@ -1471,16 +1483,16 @@ public final class DappTestService {
        * <code>string dapp_name = 1;</code>
        * @return The dappName.
        */
-      public java.lang.String getDappName() {
-        java.lang.Object ref = dappName_;
-        if (!(ref instanceof java.lang.String)) {
+      public String getDappName() {
+        Object ref = dappName_;
+        if (!(ref instanceof String)) {
           com.google.protobuf.ByteString bs =
               (com.google.protobuf.ByteString) ref;
-          java.lang.String s = bs.toStringUtf8();
+          String s = bs.toStringUtf8();
           dappName_ = s;
           return s;
         } else {
-          return (java.lang.String) ref;
+          return (String) ref;
         }
       }
       /**
@@ -1493,11 +1505,11 @@ public final class DappTestService {
        */
       public com.google.protobuf.ByteString
           getDappNameBytes() {
-        java.lang.Object ref = dappName_;
+        Object ref = dappName_;
         if (ref instanceof String) {
           com.google.protobuf.ByteString b = 
               com.google.protobuf.ByteString.copyFromUtf8(
-                  (java.lang.String) ref);
+                  (String) ref);
           dappName_ = b;
           return b;
         } else {
@@ -1514,7 +1526,7 @@ public final class DappTestService {
        * @return This builder for chaining.
        */
       public Builder setDappName(
-          java.lang.String value) {
+          String value) {
         if (value == null) {
     throw new NullPointerException();
   }
@@ -1558,7 +1570,7 @@ public final class DappTestService {
         return this;
       }
 
-      private java.lang.Object instanceId_ = "";
+      private Object instanceId_ = "";
       /**
        * <pre>
        * id of the instance of the dapp. One dapp could have multiple instances (e.g. multiple websites)
@@ -1567,16 +1579,16 @@ public final class DappTestService {
        * <code>string instance_id = 2;</code>
        * @return The instanceId.
        */
-      public java.lang.String getInstanceId() {
-        java.lang.Object ref = instanceId_;
-        if (!(ref instanceof java.lang.String)) {
+      public String getInstanceId() {
+        Object ref = instanceId_;
+        if (!(ref instanceof String)) {
           com.google.protobuf.ByteString bs =
               (com.google.protobuf.ByteString) ref;
-          java.lang.String s = bs.toStringUtf8();
+          String s = bs.toStringUtf8();
           instanceId_ = s;
           return s;
         } else {
-          return (java.lang.String) ref;
+          return (String) ref;
         }
       }
       /**
@@ -1589,11 +1601,11 @@ public final class DappTestService {
        */
       public com.google.protobuf.ByteString
           getInstanceIdBytes() {
-        java.lang.Object ref = instanceId_;
+        Object ref = instanceId_;
         if (ref instanceof String) {
           com.google.protobuf.ByteString b = 
               com.google.protobuf.ByteString.copyFromUtf8(
-                  (java.lang.String) ref);
+                  (String) ref);
           instanceId_ = b;
           return b;
         } else {
@@ -1610,7 +1622,7 @@ public final class DappTestService {
        * @return This builder for chaining.
        */
       public Builder setInstanceId(
-          java.lang.String value) {
+          String value) {
         if (value == null) {
     throw new NullPointerException();
   }
@@ -1653,13 +1665,13 @@ public final class DappTestService {
         onChanged();
         return this;
       }
-      @java.lang.Override
+      @Override
       public final Builder setUnknownFields(
           final com.google.protobuf.UnknownFieldSet unknownFields) {
         return super.setUnknownFields(unknownFields);
       }
 
-      @java.lang.Override
+      @Override
       public final Builder mergeUnknownFields(
           final com.google.protobuf.UnknownFieldSet unknownFields) {
         return super.mergeUnknownFields(unknownFields);
@@ -1670,18 +1682,18 @@ public final class DappTestService {
     }
 
     // @@protoc_insertion_point(class_scope:darcher.TestEndMsg)
-    private static final org.kristen.rpc.darcher.DappTestService.TestEndMsg DEFAULT_INSTANCE;
+    private static final TestEndMsg DEFAULT_INSTANCE;
     static {
-      DEFAULT_INSTANCE = new org.kristen.rpc.darcher.DappTestService.TestEndMsg();
+      DEFAULT_INSTANCE = new TestEndMsg();
     }
 
-    public static org.kristen.rpc.darcher.DappTestService.TestEndMsg getDefaultInstance() {
+    public static TestEndMsg getDefaultInstance() {
       return DEFAULT_INSTANCE;
     }
 
     private static final com.google.protobuf.Parser<TestEndMsg>
         PARSER = new com.google.protobuf.AbstractParser<TestEndMsg>() {
-      @java.lang.Override
+      @Override
       public TestEndMsg parsePartialFrom(
           com.google.protobuf.CodedInputStream input,
           com.google.protobuf.ExtensionRegistryLite extensionRegistry)
@@ -1694,13 +1706,13 @@ public final class DappTestService {
       return PARSER;
     }
 
-    @java.lang.Override
+    @Override
     public com.google.protobuf.Parser<TestEndMsg> getParserForType() {
       return PARSER;
     }
 
-    @java.lang.Override
-    public org.kristen.rpc.darcher.DappTestService.TestEndMsg getDefaultInstanceForType() {
+    @Override
+    public TestEndMsg getDefaultInstanceForType() {
       return DEFAULT_INSTANCE;
     }
 
@@ -1718,7 +1730,7 @@ public final class DappTestService {
      * <code>string dapp_name = 1;</code>
      * @return The dappName.
      */
-    java.lang.String getDappName();
+    String getDappName();
     /**
      * <pre>
      * name of dapp, should keep consistent with that in TestStartMsg
@@ -1738,7 +1750,7 @@ public final class DappTestService {
      * <code>string instance_id = 2;</code>
      * @return The instanceId.
      */
-    java.lang.String getInstanceId();
+    String getInstanceId();
     /**
      * <pre>
      * id of the instance of the dapp. One dapp could have multiple instances (e.g. multiple websites)
@@ -1758,7 +1770,7 @@ public final class DappTestService {
      * <code>string hash = 3;</code>
      * @return The hash.
      */
-    java.lang.String getHash();
+    String getHash();
     /**
      * <pre>
      * hash of the transaction, in the form of hex string
@@ -1778,7 +1790,7 @@ public final class DappTestService {
      * <code>string from = 4;</code>
      * @return The from.
      */
-    java.lang.String getFrom();
+    String getFrom();
     /**
      * <pre>
      * transaction sender account, hex string
@@ -1798,7 +1810,7 @@ public final class DappTestService {
      * <code>string to = 5;</code>
      * @return The to.
      */
-    java.lang.String getTo();
+    String getTo();
     /**
      * <pre>
      * transaction receiver account, hex string
@@ -1809,11 +1821,51 @@ public final class DappTestService {
      */
     com.google.protobuf.ByteString
         getToBytes();
+
+    /**
+     * <pre>
+     * states (name and url) experienced on the dapp so far
+     * </pre>
+     *
+     * <code>string states = 6;</code>
+     * @return The states.
+     */
+    String getStates();
+    /**
+     * <pre>
+     * states (name and url) experienced on the dapp so far
+     * </pre>
+     *
+     * <code>string states = 6;</code>
+     * @return The bytes for states.
+     */
+    com.google.protobuf.ByteString
+        getStatesBytes();
+
+    /**
+     * <pre>
+     * events (event type, identification of elements, tag, etc.) executed on the dapp so far
+     * </pre>
+     *
+     * <code>string events = 7;</code>
+     * @return The events.
+     */
+    String getEvents();
+    /**
+     * <pre>
+     * events (event type, identification of elements, tag, etc.) executed on the dapp so far
+     * </pre>
+     *
+     * <code>string events = 7;</code>
+     * @return The bytes for events.
+     */
+    com.google.protobuf.ByteString
+        getEventsBytes();
   }
   /**
    * Protobuf type {@code darcher.TxMsg}
    */
-  public  static final class TxMsg extends
+  public static final class TxMsg extends
       com.google.protobuf.GeneratedMessageV3 implements
       // @@protoc_insertion_point(message_implements:darcher.TxMsg)
       TxMsgOrBuilder {
@@ -1828,16 +1880,18 @@ public final class DappTestService {
       hash_ = "";
       from_ = "";
       to_ = "";
+      states_ = "";
+      events_ = "";
     }
 
-    @java.lang.Override
+    @Override
     @SuppressWarnings({"unused"})
-    protected java.lang.Object newInstance(
+    protected Object newInstance(
         UnusedPrivateParameter unused) {
       return new TxMsg();
     }
 
-    @java.lang.Override
+    @Override
     public final com.google.protobuf.UnknownFieldSet
     getUnknownFields() {
       return this.unknownFields;
@@ -1848,7 +1902,7 @@ public final class DappTestService {
         throws com.google.protobuf.InvalidProtocolBufferException {
       this();
       if (extensionRegistry == null) {
-        throw new java.lang.NullPointerException();
+        throw new NullPointerException();
       }
       com.google.protobuf.UnknownFieldSet.Builder unknownFields =
           com.google.protobuf.UnknownFieldSet.newBuilder();
@@ -1861,33 +1915,45 @@ public final class DappTestService {
               done = true;
               break;
             case 10: {
-              java.lang.String s = input.readStringRequireUtf8();
+              String s = input.readStringRequireUtf8();
 
               dappName_ = s;
               break;
             }
             case 18: {
-              java.lang.String s = input.readStringRequireUtf8();
+              String s = input.readStringRequireUtf8();
 
               instanceId_ = s;
               break;
             }
             case 26: {
-              java.lang.String s = input.readStringRequireUtf8();
+              String s = input.readStringRequireUtf8();
 
               hash_ = s;
               break;
             }
             case 34: {
-              java.lang.String s = input.readStringRequireUtf8();
+              String s = input.readStringRequireUtf8();
 
               from_ = s;
               break;
             }
             case 42: {
-              java.lang.String s = input.readStringRequireUtf8();
+              String s = input.readStringRequireUtf8();
 
               to_ = s;
+              break;
+            }
+            case 50: {
+              String s = input.readStringRequireUtf8();
+
+              states_ = s;
+              break;
+            }
+            case 58: {
+              String s = input.readStringRequireUtf8();
+
+              events_ = s;
               break;
             }
             default: {
@@ -1911,19 +1977,19 @@ public final class DappTestService {
     }
     public static final com.google.protobuf.Descriptors.Descriptor
         getDescriptor() {
-      return org.kristen.rpc.darcher.DappTestService.internal_static_darcher_TxMsg_descriptor;
+      return DappTestService.internal_static_darcher_TxMsg_descriptor;
     }
 
-    @java.lang.Override
-    protected com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
+    @Override
+    protected FieldAccessorTable
         internalGetFieldAccessorTable() {
-      return org.kristen.rpc.darcher.DappTestService.internal_static_darcher_TxMsg_fieldAccessorTable
+      return DappTestService.internal_static_darcher_TxMsg_fieldAccessorTable
           .ensureFieldAccessorsInitialized(
-              org.kristen.rpc.darcher.DappTestService.TxMsg.class, org.kristen.rpc.darcher.DappTestService.TxMsg.Builder.class);
+              TxMsg.class, Builder.class);
     }
 
     public static final int DAPP_NAME_FIELD_NUMBER = 1;
-    private volatile java.lang.Object dappName_;
+    private volatile Object dappName_;
     /**
      * <pre>
      * name of dapp, should keep consistent with that in TestStartMsg
@@ -1932,14 +1998,15 @@ public final class DappTestService {
      * <code>string dapp_name = 1;</code>
      * @return The dappName.
      */
-    public java.lang.String getDappName() {
-      java.lang.Object ref = dappName_;
-      if (ref instanceof java.lang.String) {
-        return (java.lang.String) ref;
+    @Override
+    public String getDappName() {
+      Object ref = dappName_;
+      if (ref instanceof String) {
+        return (String) ref;
       } else {
         com.google.protobuf.ByteString bs = 
             (com.google.protobuf.ByteString) ref;
-        java.lang.String s = bs.toStringUtf8();
+        String s = bs.toStringUtf8();
         dappName_ = s;
         return s;
       }
@@ -1952,13 +2019,14 @@ public final class DappTestService {
      * <code>string dapp_name = 1;</code>
      * @return The bytes for dappName.
      */
+    @Override
     public com.google.protobuf.ByteString
         getDappNameBytes() {
-      java.lang.Object ref = dappName_;
-      if (ref instanceof java.lang.String) {
+      Object ref = dappName_;
+      if (ref instanceof String) {
         com.google.protobuf.ByteString b = 
             com.google.protobuf.ByteString.copyFromUtf8(
-                (java.lang.String) ref);
+                (String) ref);
         dappName_ = b;
         return b;
       } else {
@@ -1967,7 +2035,7 @@ public final class DappTestService {
     }
 
     public static final int INSTANCE_ID_FIELD_NUMBER = 2;
-    private volatile java.lang.Object instanceId_;
+    private volatile Object instanceId_;
     /**
      * <pre>
      * id of the instance of the dapp. One dapp could have multiple instances (e.g. multiple websites)
@@ -1976,14 +2044,15 @@ public final class DappTestService {
      * <code>string instance_id = 2;</code>
      * @return The instanceId.
      */
-    public java.lang.String getInstanceId() {
-      java.lang.Object ref = instanceId_;
-      if (ref instanceof java.lang.String) {
-        return (java.lang.String) ref;
+    @Override
+    public String getInstanceId() {
+      Object ref = instanceId_;
+      if (ref instanceof String) {
+        return (String) ref;
       } else {
         com.google.protobuf.ByteString bs = 
             (com.google.protobuf.ByteString) ref;
-        java.lang.String s = bs.toStringUtf8();
+        String s = bs.toStringUtf8();
         instanceId_ = s;
         return s;
       }
@@ -1996,13 +2065,14 @@ public final class DappTestService {
      * <code>string instance_id = 2;</code>
      * @return The bytes for instanceId.
      */
+    @Override
     public com.google.protobuf.ByteString
         getInstanceIdBytes() {
-      java.lang.Object ref = instanceId_;
-      if (ref instanceof java.lang.String) {
+      Object ref = instanceId_;
+      if (ref instanceof String) {
         com.google.protobuf.ByteString b = 
             com.google.protobuf.ByteString.copyFromUtf8(
-                (java.lang.String) ref);
+                (String) ref);
         instanceId_ = b;
         return b;
       } else {
@@ -2011,7 +2081,7 @@ public final class DappTestService {
     }
 
     public static final int HASH_FIELD_NUMBER = 3;
-    private volatile java.lang.Object hash_;
+    private volatile Object hash_;
     /**
      * <pre>
      * hash of the transaction, in the form of hex string
@@ -2020,14 +2090,15 @@ public final class DappTestService {
      * <code>string hash = 3;</code>
      * @return The hash.
      */
-    public java.lang.String getHash() {
-      java.lang.Object ref = hash_;
-      if (ref instanceof java.lang.String) {
-        return (java.lang.String) ref;
+    @Override
+    public String getHash() {
+      Object ref = hash_;
+      if (ref instanceof String) {
+        return (String) ref;
       } else {
         com.google.protobuf.ByteString bs = 
             (com.google.protobuf.ByteString) ref;
-        java.lang.String s = bs.toStringUtf8();
+        String s = bs.toStringUtf8();
         hash_ = s;
         return s;
       }
@@ -2040,13 +2111,14 @@ public final class DappTestService {
      * <code>string hash = 3;</code>
      * @return The bytes for hash.
      */
+    @Override
     public com.google.protobuf.ByteString
         getHashBytes() {
-      java.lang.Object ref = hash_;
-      if (ref instanceof java.lang.String) {
+      Object ref = hash_;
+      if (ref instanceof String) {
         com.google.protobuf.ByteString b = 
             com.google.protobuf.ByteString.copyFromUtf8(
-                (java.lang.String) ref);
+                (String) ref);
         hash_ = b;
         return b;
       } else {
@@ -2055,7 +2127,7 @@ public final class DappTestService {
     }
 
     public static final int FROM_FIELD_NUMBER = 4;
-    private volatile java.lang.Object from_;
+    private volatile Object from_;
     /**
      * <pre>
      * transaction sender account, hex string
@@ -2064,14 +2136,15 @@ public final class DappTestService {
      * <code>string from = 4;</code>
      * @return The from.
      */
-    public java.lang.String getFrom() {
-      java.lang.Object ref = from_;
-      if (ref instanceof java.lang.String) {
-        return (java.lang.String) ref;
+    @Override
+    public String getFrom() {
+      Object ref = from_;
+      if (ref instanceof String) {
+        return (String) ref;
       } else {
         com.google.protobuf.ByteString bs = 
             (com.google.protobuf.ByteString) ref;
-        java.lang.String s = bs.toStringUtf8();
+        String s = bs.toStringUtf8();
         from_ = s;
         return s;
       }
@@ -2084,13 +2157,14 @@ public final class DappTestService {
      * <code>string from = 4;</code>
      * @return The bytes for from.
      */
+    @Override
     public com.google.protobuf.ByteString
         getFromBytes() {
-      java.lang.Object ref = from_;
-      if (ref instanceof java.lang.String) {
+      Object ref = from_;
+      if (ref instanceof String) {
         com.google.protobuf.ByteString b = 
             com.google.protobuf.ByteString.copyFromUtf8(
-                (java.lang.String) ref);
+                (String) ref);
         from_ = b;
         return b;
       } else {
@@ -2099,7 +2173,7 @@ public final class DappTestService {
     }
 
     public static final int TO_FIELD_NUMBER = 5;
-    private volatile java.lang.Object to_;
+    private volatile Object to_;
     /**
      * <pre>
      * transaction receiver account, hex string
@@ -2108,14 +2182,15 @@ public final class DappTestService {
      * <code>string to = 5;</code>
      * @return The to.
      */
-    public java.lang.String getTo() {
-      java.lang.Object ref = to_;
-      if (ref instanceof java.lang.String) {
-        return (java.lang.String) ref;
+    @Override
+    public String getTo() {
+      Object ref = to_;
+      if (ref instanceof String) {
+        return (String) ref;
       } else {
         com.google.protobuf.ByteString bs = 
             (com.google.protobuf.ByteString) ref;
-        java.lang.String s = bs.toStringUtf8();
+        String s = bs.toStringUtf8();
         to_ = s;
         return s;
       }
@@ -2128,13 +2203,14 @@ public final class DappTestService {
      * <code>string to = 5;</code>
      * @return The bytes for to.
      */
+    @Override
     public com.google.protobuf.ByteString
         getToBytes() {
-      java.lang.Object ref = to_;
-      if (ref instanceof java.lang.String) {
+      Object ref = to_;
+      if (ref instanceof String) {
         com.google.protobuf.ByteString b = 
             com.google.protobuf.ByteString.copyFromUtf8(
-                (java.lang.String) ref);
+                (String) ref);
         to_ = b;
         return b;
       } else {
@@ -2142,8 +2218,100 @@ public final class DappTestService {
       }
     }
 
+    public static final int STATES_FIELD_NUMBER = 6;
+    private volatile Object states_;
+    /**
+     * <pre>
+     * states (name and url) experienced on the dapp so far
+     * </pre>
+     *
+     * <code>string states = 6;</code>
+     * @return The states.
+     */
+    @Override
+    public String getStates() {
+      Object ref = states_;
+      if (ref instanceof String) {
+        return (String) ref;
+      } else {
+        com.google.protobuf.ByteString bs = 
+            (com.google.protobuf.ByteString) ref;
+        String s = bs.toStringUtf8();
+        states_ = s;
+        return s;
+      }
+    }
+    /**
+     * <pre>
+     * states (name and url) experienced on the dapp so far
+     * </pre>
+     *
+     * <code>string states = 6;</code>
+     * @return The bytes for states.
+     */
+    @Override
+    public com.google.protobuf.ByteString
+        getStatesBytes() {
+      Object ref = states_;
+      if (ref instanceof String) {
+        com.google.protobuf.ByteString b = 
+            com.google.protobuf.ByteString.copyFromUtf8(
+                (String) ref);
+        states_ = b;
+        return b;
+      } else {
+        return (com.google.protobuf.ByteString) ref;
+      }
+    }
+
+    public static final int EVENTS_FIELD_NUMBER = 7;
+    private volatile Object events_;
+    /**
+     * <pre>
+     * events (event type, identification of elements, tag, etc.) executed on the dapp so far
+     * </pre>
+     *
+     * <code>string events = 7;</code>
+     * @return The events.
+     */
+    @Override
+    public String getEvents() {
+      Object ref = events_;
+      if (ref instanceof String) {
+        return (String) ref;
+      } else {
+        com.google.protobuf.ByteString bs = 
+            (com.google.protobuf.ByteString) ref;
+        String s = bs.toStringUtf8();
+        events_ = s;
+        return s;
+      }
+    }
+    /**
+     * <pre>
+     * events (event type, identification of elements, tag, etc.) executed on the dapp so far
+     * </pre>
+     *
+     * <code>string events = 7;</code>
+     * @return The bytes for events.
+     */
+    @Override
+    public com.google.protobuf.ByteString
+        getEventsBytes() {
+      Object ref = events_;
+      if (ref instanceof String) {
+        com.google.protobuf.ByteString b = 
+            com.google.protobuf.ByteString.copyFromUtf8(
+                (String) ref);
+        events_ = b;
+        return b;
+      } else {
+        return (com.google.protobuf.ByteString) ref;
+      }
+    }
+
     private byte memoizedIsInitialized = -1;
-    @java.lang.Override
+    @Override
     public final boolean isInitialized() {
       byte isInitialized = memoizedIsInitialized;
       if (isInitialized == 1) return true;
@@ -2153,7 +2321,7 @@ public final class DappTestService {
       return true;
     }
 
-    @java.lang.Override
+    @Override
     public void writeTo(com.google.protobuf.CodedOutputStream output)
                         throws java.io.IOException {
       if (!getDappNameBytes().isEmpty()) {
@@ -2171,10 +2339,16 @@ public final class DappTestService {
       if (!getToBytes().isEmpty()) {
         com.google.protobuf.GeneratedMessageV3.writeString(output, 5, to_);
       }
+      if (!getStatesBytes().isEmpty()) {
+        com.google.protobuf.GeneratedMessageV3.writeString(output, 6, states_);
+      }
+      if (!getEventsBytes().isEmpty()) {
+        com.google.protobuf.GeneratedMessageV3.writeString(output, 7, events_);
+      }
       unknownFields.writeTo(output);
     }
 
-    @java.lang.Override
+    @Override
     public int getSerializedSize() {
       int size = memoizedSize;
       if (size != -1) return size;
@@ -2195,20 +2369,26 @@ public final class DappTestService {
       if (!getToBytes().isEmpty()) {
         size += com.google.protobuf.GeneratedMessageV3.computeStringSize(5, to_);
       }
+      if (!getStatesBytes().isEmpty()) {
+        size += com.google.protobuf.GeneratedMessageV3.computeStringSize(6, states_);
+      }
+      if (!getEventsBytes().isEmpty()) {
+        size += com.google.protobuf.GeneratedMessageV3.computeStringSize(7, events_);
+      }
       size += unknownFields.getSerializedSize();
       memoizedSize = size;
       return size;
     }
 
-    @java.lang.Override
-    public boolean equals(final java.lang.Object obj) {
+    @Override
+    public boolean equals(final Object obj) {
       if (obj == this) {
        return true;
       }
-      if (!(obj instanceof org.kristen.rpc.darcher.DappTestService.TxMsg)) {
+      if (!(obj instanceof TxMsg)) {
         return super.equals(obj);
       }
-      org.kristen.rpc.darcher.DappTestService.TxMsg other = (org.kristen.rpc.darcher.DappTestService.TxMsg) obj;
+      TxMsg other = (TxMsg) obj;
 
       if (!getDappName()
           .equals(other.getDappName())) return false;
@@ -2220,11 +2400,15 @@ public final class DappTestService {
           .equals(other.getFrom())) return false;
       if (!getTo()
           .equals(other.getTo())) return false;
+      if (!getStates()
+          .equals(other.getStates())) return false;
+      if (!getEvents()
+          .equals(other.getEvents())) return false;
       if (!unknownFields.equals(other.unknownFields)) return false;
       return true;
     }
 
-    @java.lang.Override
+    @Override
     public int hashCode() {
       if (memoizedHashCode != 0) {
         return memoizedHashCode;
@@ -2241,74 +2425,78 @@ public final class DappTestService {
       hash = (53 * hash) + getFrom().hashCode();
       hash = (37 * hash) + TO_FIELD_NUMBER;
       hash = (53 * hash) + getTo().hashCode();
+      hash = (37 * hash) + STATES_FIELD_NUMBER;
+      hash = (53 * hash) + getStates().hashCode();
+      hash = (37 * hash) + EVENTS_FIELD_NUMBER;
+      hash = (53 * hash) + getEvents().hashCode();
       hash = (29 * hash) + unknownFields.hashCode();
       memoizedHashCode = hash;
       return hash;
     }
 
-    public static org.kristen.rpc.darcher.DappTestService.TxMsg parseFrom(
+    public static TxMsg parseFrom(
         java.nio.ByteBuffer data)
         throws com.google.protobuf.InvalidProtocolBufferException {
       return PARSER.parseFrom(data);
     }
-    public static org.kristen.rpc.darcher.DappTestService.TxMsg parseFrom(
+    public static TxMsg parseFrom(
         java.nio.ByteBuffer data,
         com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws com.google.protobuf.InvalidProtocolBufferException {
       return PARSER.parseFrom(data, extensionRegistry);
     }
-    public static org.kristen.rpc.darcher.DappTestService.TxMsg parseFrom(
+    public static TxMsg parseFrom(
         com.google.protobuf.ByteString data)
         throws com.google.protobuf.InvalidProtocolBufferException {
       return PARSER.parseFrom(data);
     }
-    public static org.kristen.rpc.darcher.DappTestService.TxMsg parseFrom(
+    public static TxMsg parseFrom(
         com.google.protobuf.ByteString data,
         com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws com.google.protobuf.InvalidProtocolBufferException {
       return PARSER.parseFrom(data, extensionRegistry);
     }
-    public static org.kristen.rpc.darcher.DappTestService.TxMsg parseFrom(byte[] data)
+    public static TxMsg parseFrom(byte[] data)
         throws com.google.protobuf.InvalidProtocolBufferException {
       return PARSER.parseFrom(data);
     }
-    public static org.kristen.rpc.darcher.DappTestService.TxMsg parseFrom(
+    public static TxMsg parseFrom(
         byte[] data,
         com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws com.google.protobuf.InvalidProtocolBufferException {
       return PARSER.parseFrom(data, extensionRegistry);
     }
-    public static org.kristen.rpc.darcher.DappTestService.TxMsg parseFrom(java.io.InputStream input)
+    public static TxMsg parseFrom(java.io.InputStream input)
         throws java.io.IOException {
       return com.google.protobuf.GeneratedMessageV3
           .parseWithIOException(PARSER, input);
     }
-    public static org.kristen.rpc.darcher.DappTestService.TxMsg parseFrom(
+    public static TxMsg parseFrom(
         java.io.InputStream input,
         com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws java.io.IOException {
       return com.google.protobuf.GeneratedMessageV3
           .parseWithIOException(PARSER, input, extensionRegistry);
     }
-    public static org.kristen.rpc.darcher.DappTestService.TxMsg parseDelimitedFrom(java.io.InputStream input)
+    public static TxMsg parseDelimitedFrom(java.io.InputStream input)
         throws java.io.IOException {
       return com.google.protobuf.GeneratedMessageV3
           .parseDelimitedWithIOException(PARSER, input);
     }
-    public static org.kristen.rpc.darcher.DappTestService.TxMsg parseDelimitedFrom(
+    public static TxMsg parseDelimitedFrom(
         java.io.InputStream input,
         com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws java.io.IOException {
       return com.google.protobuf.GeneratedMessageV3
           .parseDelimitedWithIOException(PARSER, input, extensionRegistry);
     }
-    public static org.kristen.rpc.darcher.DappTestService.TxMsg parseFrom(
+    public static TxMsg parseFrom(
         com.google.protobuf.CodedInputStream input)
         throws java.io.IOException {
       return com.google.protobuf.GeneratedMessageV3
           .parseWithIOException(PARSER, input);
     }
-    public static org.kristen.rpc.darcher.DappTestService.TxMsg parseFrom(
+    public static TxMsg parseFrom(
         com.google.protobuf.CodedInputStream input,
         com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws java.io.IOException {
@@ -2316,23 +2504,23 @@ public final class DappTestService {
           .parseWithIOException(PARSER, input, extensionRegistry);
     }
 
-    @java.lang.Override
+    @Override
     public Builder newBuilderForType() { return newBuilder(); }
     public static Builder newBuilder() {
       return DEFAULT_INSTANCE.toBuilder();
     }
-    public static Builder newBuilder(org.kristen.rpc.darcher.DappTestService.TxMsg prototype) {
+    public static Builder newBuilder(TxMsg prototype) {
       return DEFAULT_INSTANCE.toBuilder().mergeFrom(prototype);
     }
-    @java.lang.Override
+    @Override
     public Builder toBuilder() {
       return this == DEFAULT_INSTANCE
           ? new Builder() : new Builder().mergeFrom(this);
     }
 
-    @java.lang.Override
+    @Override
     protected Builder newBuilderForType(
-        com.google.protobuf.GeneratedMessageV3.BuilderParent parent) {
+        BuilderParent parent) {
       Builder builder = new Builder(parent);
       return builder;
     }
@@ -2342,18 +2530,18 @@ public final class DappTestService {
     public static final class Builder extends
         com.google.protobuf.GeneratedMessageV3.Builder<Builder> implements
         // @@protoc_insertion_point(builder_implements:darcher.TxMsg)
-        org.kristen.rpc.darcher.DappTestService.TxMsgOrBuilder {
+        TxMsgOrBuilder {
       public static final com.google.protobuf.Descriptors.Descriptor
           getDescriptor() {
-        return org.kristen.rpc.darcher.DappTestService.internal_static_darcher_TxMsg_descriptor;
+        return DappTestService.internal_static_darcher_TxMsg_descriptor;
       }
 
-      @java.lang.Override
-      protected com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
+      @Override
+      protected FieldAccessorTable
           internalGetFieldAccessorTable() {
-        return org.kristen.rpc.darcher.DappTestService.internal_static_darcher_TxMsg_fieldAccessorTable
+        return DappTestService.internal_static_darcher_TxMsg_fieldAccessorTable
             .ensureFieldAccessorsInitialized(
-                org.kristen.rpc.darcher.DappTestService.TxMsg.class, org.kristen.rpc.darcher.DappTestService.TxMsg.Builder.class);
+                TxMsg.class, Builder.class);
       }
 
       // Construct using org.kristen.rpc.darcher.DappTestService.TxMsg.newBuilder()
@@ -2362,7 +2550,7 @@ public final class DappTestService {
       }
 
       private Builder(
-          com.google.protobuf.GeneratedMessageV3.BuilderParent parent) {
+          BuilderParent parent) {
         super(parent);
         maybeForceBuilderInitialization();
       }
@@ -2371,7 +2559,7 @@ public final class DappTestService {
                 .alwaysUseFieldBuilders) {
         }
       }
-      @java.lang.Override
+      @Override
       public Builder clear() {
         super.clear();
         dappName_ = "";
@@ -2384,85 +2572,91 @@ public final class DappTestService {
 
         to_ = "";
 
+        states_ = "";
+
+        events_ = "";
+
         return this;
       }
 
-      @java.lang.Override
+      @Override
       public com.google.protobuf.Descriptors.Descriptor
           getDescriptorForType() {
-        return org.kristen.rpc.darcher.DappTestService.internal_static_darcher_TxMsg_descriptor;
+        return DappTestService.internal_static_darcher_TxMsg_descriptor;
       }
 
-      @java.lang.Override
-      public org.kristen.rpc.darcher.DappTestService.TxMsg getDefaultInstanceForType() {
-        return org.kristen.rpc.darcher.DappTestService.TxMsg.getDefaultInstance();
+      @Override
+      public TxMsg getDefaultInstanceForType() {
+        return TxMsg.getDefaultInstance();
       }
 
-      @java.lang.Override
-      public org.kristen.rpc.darcher.DappTestService.TxMsg build() {
-        org.kristen.rpc.darcher.DappTestService.TxMsg result = buildPartial();
+      @Override
+      public TxMsg build() {
+        TxMsg result = buildPartial();
         if (!result.isInitialized()) {
           throw newUninitializedMessageException(result);
         }
         return result;
       }
 
-      @java.lang.Override
-      public org.kristen.rpc.darcher.DappTestService.TxMsg buildPartial() {
-        org.kristen.rpc.darcher.DappTestService.TxMsg result = new org.kristen.rpc.darcher.DappTestService.TxMsg(this);
+      @Override
+      public TxMsg buildPartial() {
+        TxMsg result = new TxMsg(this);
         result.dappName_ = dappName_;
         result.instanceId_ = instanceId_;
         result.hash_ = hash_;
         result.from_ = from_;
         result.to_ = to_;
+        result.states_ = states_;
+        result.events_ = events_;
         onBuilt();
         return result;
       }
 
-      @java.lang.Override
+      @Override
       public Builder clone() {
         return super.clone();
       }
-      @java.lang.Override
+      @Override
       public Builder setField(
           com.google.protobuf.Descriptors.FieldDescriptor field,
-          java.lang.Object value) {
+          Object value) {
         return super.setField(field, value);
       }
-      @java.lang.Override
+      @Override
       public Builder clearField(
           com.google.protobuf.Descriptors.FieldDescriptor field) {
         return super.clearField(field);
       }
-      @java.lang.Override
+      @Override
       public Builder clearOneof(
           com.google.protobuf.Descriptors.OneofDescriptor oneof) {
         return super.clearOneof(oneof);
       }
-      @java.lang.Override
+      @Override
       public Builder setRepeatedField(
           com.google.protobuf.Descriptors.FieldDescriptor field,
-          int index, java.lang.Object value) {
+          int index, Object value) {
         return super.setRepeatedField(field, index, value);
       }
-      @java.lang.Override
+      @Override
       public Builder addRepeatedField(
           com.google.protobuf.Descriptors.FieldDescriptor field,
-          java.lang.Object value) {
+          Object value) {
         return super.addRepeatedField(field, value);
       }
-      @java.lang.Override
+      @Override
       public Builder mergeFrom(com.google.protobuf.Message other) {
-        if (other instanceof org.kristen.rpc.darcher.DappTestService.TxMsg) {
-          return mergeFrom((org.kristen.rpc.darcher.DappTestService.TxMsg)other);
+        if (other instanceof TxMsg) {
+          return mergeFrom((TxMsg)other);
         } else {
           super.mergeFrom(other);
           return this;
         }
       }
 
-      public Builder mergeFrom(org.kristen.rpc.darcher.DappTestService.TxMsg other) {
-        if (other == org.kristen.rpc.darcher.DappTestService.TxMsg.getDefaultInstance()) return this;
+      public Builder mergeFrom(TxMsg other) {
+        if (other == TxMsg.getDefaultInstance()) return this;
         if (!other.getDappName().isEmpty()) {
           dappName_ = other.dappName_;
           onChanged();
@@ -2483,26 +2677,34 @@ public final class DappTestService {
           to_ = other.to_;
           onChanged();
         }
+        if (!other.getStates().isEmpty()) {
+          states_ = other.states_;
+          onChanged();
+        }
+        if (!other.getEvents().isEmpty()) {
+          events_ = other.events_;
+          onChanged();
+        }
         this.mergeUnknownFields(other.unknownFields);
         onChanged();
         return this;
       }
 
-      @java.lang.Override
+      @Override
       public final boolean isInitialized() {
         return true;
       }
 
-      @java.lang.Override
+      @Override
       public Builder mergeFrom(
           com.google.protobuf.CodedInputStream input,
           com.google.protobuf.ExtensionRegistryLite extensionRegistry)
           throws java.io.IOException {
-        org.kristen.rpc.darcher.DappTestService.TxMsg parsedMessage = null;
+        TxMsg parsedMessage = null;
         try {
           parsedMessage = PARSER.parsePartialFrom(input, extensionRegistry);
         } catch (com.google.protobuf.InvalidProtocolBufferException e) {
-          parsedMessage = (org.kristen.rpc.darcher.DappTestService.TxMsg) e.getUnfinishedMessage();
+          parsedMessage = (TxMsg) e.getUnfinishedMessage();
           throw e.unwrapIOException();
         } finally {
           if (parsedMessage != null) {
@@ -2512,7 +2714,7 @@ public final class DappTestService {
         return this;
       }
 
-      private java.lang.Object dappName_ = "";
+      private Object dappName_ = "";
       /**
        * <pre>
        * name of dapp, should keep consistent with that in TestStartMsg
@@ -2521,16 +2723,16 @@ public final class DappTestService {
        * <code>string dapp_name = 1;</code>
        * @return The dappName.
        */
-      public java.lang.String getDappName() {
-        java.lang.Object ref = dappName_;
-        if (!(ref instanceof java.lang.String)) {
+      public String getDappName() {
+        Object ref = dappName_;
+        if (!(ref instanceof String)) {
           com.google.protobuf.ByteString bs =
               (com.google.protobuf.ByteString) ref;
-          java.lang.String s = bs.toStringUtf8();
+          String s = bs.toStringUtf8();
           dappName_ = s;
           return s;
         } else {
-          return (java.lang.String) ref;
+          return (String) ref;
         }
       }
       /**
@@ -2543,11 +2745,11 @@ public final class DappTestService {
        */
       public com.google.protobuf.ByteString
           getDappNameBytes() {
-        java.lang.Object ref = dappName_;
+        Object ref = dappName_;
         if (ref instanceof String) {
           com.google.protobuf.ByteString b = 
               com.google.protobuf.ByteString.copyFromUtf8(
-                  (java.lang.String) ref);
+                  (String) ref);
           dappName_ = b;
           return b;
         } else {
@@ -2564,7 +2766,7 @@ public final class DappTestService {
        * @return This builder for chaining.
        */
       public Builder setDappName(
-          java.lang.String value) {
+          String value) {
         if (value == null) {
     throw new NullPointerException();
   }
@@ -2608,7 +2810,7 @@ public final class DappTestService {
         return this;
       }
 
-      private java.lang.Object instanceId_ = "";
+      private Object instanceId_ = "";
       /**
        * <pre>
        * id of the instance of the dapp. One dapp could have multiple instances (e.g. multiple websites)
@@ -2617,16 +2819,16 @@ public final class DappTestService {
        * <code>string instance_id = 2;</code>
        * @return The instanceId.
        */
-      public java.lang.String getInstanceId() {
-        java.lang.Object ref = instanceId_;
-        if (!(ref instanceof java.lang.String)) {
+      public String getInstanceId() {
+        Object ref = instanceId_;
+        if (!(ref instanceof String)) {
           com.google.protobuf.ByteString bs =
               (com.google.protobuf.ByteString) ref;
-          java.lang.String s = bs.toStringUtf8();
+          String s = bs.toStringUtf8();
           instanceId_ = s;
           return s;
         } else {
-          return (java.lang.String) ref;
+          return (String) ref;
         }
       }
       /**
@@ -2639,11 +2841,11 @@ public final class DappTestService {
        */
       public com.google.protobuf.ByteString
           getInstanceIdBytes() {
-        java.lang.Object ref = instanceId_;
+        Object ref = instanceId_;
         if (ref instanceof String) {
           com.google.protobuf.ByteString b = 
               com.google.protobuf.ByteString.copyFromUtf8(
-                  (java.lang.String) ref);
+                  (String) ref);
           instanceId_ = b;
           return b;
         } else {
@@ -2660,7 +2862,7 @@ public final class DappTestService {
        * @return This builder for chaining.
        */
       public Builder setInstanceId(
-          java.lang.String value) {
+          String value) {
         if (value == null) {
     throw new NullPointerException();
   }
@@ -2704,7 +2906,7 @@ public final class DappTestService {
         return this;
       }
 
-      private java.lang.Object hash_ = "";
+      private Object hash_ = "";
       /**
        * <pre>
        * hash of the transaction, in the form of hex string
@@ -2713,16 +2915,16 @@ public final class DappTestService {
        * <code>string hash = 3;</code>
        * @return The hash.
        */
-      public java.lang.String getHash() {
-        java.lang.Object ref = hash_;
-        if (!(ref instanceof java.lang.String)) {
+      public String getHash() {
+        Object ref = hash_;
+        if (!(ref instanceof String)) {
           com.google.protobuf.ByteString bs =
               (com.google.protobuf.ByteString) ref;
-          java.lang.String s = bs.toStringUtf8();
+          String s = bs.toStringUtf8();
           hash_ = s;
           return s;
         } else {
-          return (java.lang.String) ref;
+          return (String) ref;
         }
       }
       /**
@@ -2735,11 +2937,11 @@ public final class DappTestService {
        */
       public com.google.protobuf.ByteString
           getHashBytes() {
-        java.lang.Object ref = hash_;
+        Object ref = hash_;
         if (ref instanceof String) {
           com.google.protobuf.ByteString b = 
               com.google.protobuf.ByteString.copyFromUtf8(
-                  (java.lang.String) ref);
+                  (String) ref);
           hash_ = b;
           return b;
         } else {
@@ -2756,7 +2958,7 @@ public final class DappTestService {
        * @return This builder for chaining.
        */
       public Builder setHash(
-          java.lang.String value) {
+          String value) {
         if (value == null) {
     throw new NullPointerException();
   }
@@ -2800,7 +3002,7 @@ public final class DappTestService {
         return this;
       }
 
-      private java.lang.Object from_ = "";
+      private Object from_ = "";
       /**
        * <pre>
        * transaction sender account, hex string
@@ -2809,16 +3011,16 @@ public final class DappTestService {
        * <code>string from = 4;</code>
        * @return The from.
        */
-      public java.lang.String getFrom() {
-        java.lang.Object ref = from_;
-        if (!(ref instanceof java.lang.String)) {
+      public String getFrom() {
+        Object ref = from_;
+        if (!(ref instanceof String)) {
           com.google.protobuf.ByteString bs =
               (com.google.protobuf.ByteString) ref;
-          java.lang.String s = bs.toStringUtf8();
+          String s = bs.toStringUtf8();
           from_ = s;
           return s;
         } else {
-          return (java.lang.String) ref;
+          return (String) ref;
         }
       }
       /**
@@ -2831,11 +3033,11 @@ public final class DappTestService {
        */
       public com.google.protobuf.ByteString
           getFromBytes() {
-        java.lang.Object ref = from_;
+        Object ref = from_;
         if (ref instanceof String) {
           com.google.protobuf.ByteString b = 
               com.google.protobuf.ByteString.copyFromUtf8(
-                  (java.lang.String) ref);
+                  (String) ref);
           from_ = b;
           return b;
         } else {
@@ -2852,7 +3054,7 @@ public final class DappTestService {
        * @return This builder for chaining.
        */
       public Builder setFrom(
-          java.lang.String value) {
+          String value) {
         if (value == null) {
     throw new NullPointerException();
   }
@@ -2896,7 +3098,7 @@ public final class DappTestService {
         return this;
       }
 
-      private java.lang.Object to_ = "";
+      private Object to_ = "";
       /**
        * <pre>
        * transaction receiver account, hex string
@@ -2905,16 +3107,16 @@ public final class DappTestService {
        * <code>string to = 5;</code>
        * @return The to.
        */
-      public java.lang.String getTo() {
-        java.lang.Object ref = to_;
-        if (!(ref instanceof java.lang.String)) {
+      public String getTo() {
+        Object ref = to_;
+        if (!(ref instanceof String)) {
           com.google.protobuf.ByteString bs =
               (com.google.protobuf.ByteString) ref;
-          java.lang.String s = bs.toStringUtf8();
+          String s = bs.toStringUtf8();
           to_ = s;
           return s;
         } else {
-          return (java.lang.String) ref;
+          return (String) ref;
         }
       }
       /**
@@ -2927,11 +3129,11 @@ public final class DappTestService {
        */
       public com.google.protobuf.ByteString
           getToBytes() {
-        java.lang.Object ref = to_;
+        Object ref = to_;
         if (ref instanceof String) {
           com.google.protobuf.ByteString b = 
               com.google.protobuf.ByteString.copyFromUtf8(
-                  (java.lang.String) ref);
+                  (String) ref);
           to_ = b;
           return b;
         } else {
@@ -2948,7 +3150,7 @@ public final class DappTestService {
        * @return This builder for chaining.
        */
       public Builder setTo(
-          java.lang.String value) {
+          String value) {
         if (value == null) {
     throw new NullPointerException();
   }
@@ -2991,13 +3193,205 @@ public final class DappTestService {
         onChanged();
         return this;
       }
-      @java.lang.Override
+
+      private Object states_ = "";
+      /**
+       * <pre>
+       * states (name and url) experienced on the dapp so far
+       * </pre>
+       *
+       * <code>string states = 6;</code>
+       * @return The states.
+       */
+      public String getStates() {
+        Object ref = states_;
+        if (!(ref instanceof String)) {
+          com.google.protobuf.ByteString bs =
+              (com.google.protobuf.ByteString) ref;
+          String s = bs.toStringUtf8();
+          states_ = s;
+          return s;
+        } else {
+          return (String) ref;
+        }
+      }
+      /**
+       * <pre>
+       * states (name and url) experienced on the dapp so far
+       * </pre>
+       *
+       * <code>string states = 6;</code>
+       * @return The bytes for states.
+       */
+      public com.google.protobuf.ByteString
+          getStatesBytes() {
+        Object ref = states_;
+        if (ref instanceof String) {
+          com.google.protobuf.ByteString b = 
+              com.google.protobuf.ByteString.copyFromUtf8(
+                  (String) ref);
+          states_ = b;
+          return b;
+        } else {
+          return (com.google.protobuf.ByteString) ref;
+        }
+      }
+      /**
+       * <pre>
+       * states (name and url) experienced on the dapp so far
+       * </pre>
+       *
+       * <code>string states = 6;</code>
+       * @param value The states to set.
+       * @return This builder for chaining.
+       */
+      public Builder setStates(
+          String value) {
+        if (value == null) {
+    throw new NullPointerException();
+  }
+  
+        states_ = value;
+        onChanged();
+        return this;
+      }
+      /**
+       * <pre>
+       * states (name and url) experienced on the dapp so far
+       * </pre>
+       *
+       * <code>string states = 6;</code>
+       * @return This builder for chaining.
+       */
+      public Builder clearStates() {
+        
+        states_ = getDefaultInstance().getStates();
+        onChanged();
+        return this;
+      }
+      /**
+       * <pre>
+       * states (name and url) experienced on the dapp so far
+       * </pre>
+       *
+       * <code>string states = 6;</code>
+       * @param value The bytes for states to set.
+       * @return This builder for chaining.
+       */
+      public Builder setStatesBytes(
+          com.google.protobuf.ByteString value) {
+        if (value == null) {
+    throw new NullPointerException();
+  }
+  checkByteStringIsUtf8(value);
+        
+        states_ = value;
+        onChanged();
+        return this;
+      }
+
+      private Object events_ = "";
+      /**
+       * <pre>
+       * events (event type, identification of elements, tag, etc.) executed on the dapp so far
+       * </pre>
+       *
+       * <code>string events = 7;</code>
+       * @return The events.
+       */
+      public String getEvents() {
+        Object ref = events_;
+        if (!(ref instanceof String)) {
+          com.google.protobuf.ByteString bs =
+              (com.google.protobuf.ByteString) ref;
+          String s = bs.toStringUtf8();
+          events_ = s;
+          return s;
+        } else {
+          return (String) ref;
+        }
+      }
+      /**
+       * <pre>
+       * events (event type, identification of elements, tag, etc.) executed on the dapp so far
+       * </pre>
+       *
+       * <code>string events = 7;</code>
+       * @return The bytes for events.
+       */
+      public com.google.protobuf.ByteString
+          getEventsBytes() {
+        Object ref = events_;
+        if (ref instanceof String) {
+          com.google.protobuf.ByteString b = 
+              com.google.protobuf.ByteString.copyFromUtf8(
+                  (String) ref);
+          events_ = b;
+          return b;
+        } else {
+          return (com.google.protobuf.ByteString) ref;
+        }
+      }
+      /**
+       * <pre>
+       * events (event type, identification of elements, tag, etc.) executed on the dapp so far
+       * </pre>
+       *
+       * <code>string events = 7;</code>
+       * @param value The events to set.
+       * @return This builder for chaining.
+       */
+      public Builder setEvents(
+          String value) {
+        if (value == null) {
+    throw new NullPointerException();
+  }
+  
+        events_ = value;
+        onChanged();
+        return this;
+      }
+      /**
+       * <pre>
+       * events (event type, identification of elements, tag, etc.) executed on the dapp so far
+       * </pre>
+       *
+       * <code>string events = 7;</code>
+       * @return This builder for chaining.
+       */
+      public Builder clearEvents() {
+        
+        events_ = getDefaultInstance().getEvents();
+        onChanged();
+        return this;
+      }
+      /**
+       * <pre>
+       * events (event type, identification of elements, tag, etc.) executed on the dapp so far
+       * </pre>
+       *
+       * <code>string events = 7;</code>
+       * @param value The bytes for events to set.
+       * @return This builder for chaining.
+       */
+      public Builder setEventsBytes(
+          com.google.protobuf.ByteString value) {
+        if (value == null) {
+    throw new NullPointerException();
+  }
+  checkByteStringIsUtf8(value);
+        
+        events_ = value;
+        onChanged();
+        return this;
+      }
+      @Override
       public final Builder setUnknownFields(
           final com.google.protobuf.UnknownFieldSet unknownFields) {
         return super.setUnknownFields(unknownFields);
       }
 
-      @java.lang.Override
+      @Override
       public final Builder mergeUnknownFields(
           final com.google.protobuf.UnknownFieldSet unknownFields) {
         return super.mergeUnknownFields(unknownFields);
@@ -3008,18 +3402,18 @@ public final class DappTestService {
     }
 
     // @@protoc_insertion_point(class_scope:darcher.TxMsg)
-    private static final org.kristen.rpc.darcher.DappTestService.TxMsg DEFAULT_INSTANCE;
+    private static final TxMsg DEFAULT_INSTANCE;
     static {
-      DEFAULT_INSTANCE = new org.kristen.rpc.darcher.DappTestService.TxMsg();
+      DEFAULT_INSTANCE = new TxMsg();
     }
 
-    public static org.kristen.rpc.darcher.DappTestService.TxMsg getDefaultInstance() {
+    public static TxMsg getDefaultInstance() {
       return DEFAULT_INSTANCE;
     }
 
     private static final com.google.protobuf.Parser<TxMsg>
         PARSER = new com.google.protobuf.AbstractParser<TxMsg>() {
-      @java.lang.Override
+      @Override
       public TxMsg parsePartialFrom(
           com.google.protobuf.CodedInputStream input,
           com.google.protobuf.ExtensionRegistryLite extensionRegistry)
@@ -3032,13 +3426,13 @@ public final class DappTestService {
       return PARSER;
     }
 
-    @java.lang.Override
+    @Override
     public com.google.protobuf.Parser<TxMsg> getParserForType() {
       return PARSER;
     }
 
-    @java.lang.Override
-    public org.kristen.rpc.darcher.DappTestService.TxMsg getDefaultInstanceForType() {
+    @Override
+    public TxMsg getDefaultInstanceForType() {
       return DEFAULT_INSTANCE;
     }
 
@@ -3056,7 +3450,7 @@ public final class DappTestService {
      * <code>string dapp_name = 1;</code>
      * @return The dappName.
      */
-    java.lang.String getDappName();
+    String getDappName();
     /**
      * <pre>
      * name of dapp, should keep consistent with that in TestStartMsg
@@ -3076,7 +3470,7 @@ public final class DappTestService {
      * <code>string instance_id = 2;</code>
      * @return The instanceId.
      */
-    java.lang.String getInstanceId();
+    String getInstanceId();
     /**
      * <pre>
      * id of the instance of the dapp. One dapp could have multiple instances (e.g. multiple websites)
@@ -3096,7 +3490,7 @@ public final class DappTestService {
      * <code>string error_string = 3;</code>
      * @return The errorString.
      */
-    java.lang.String getErrorString();
+    String getErrorString();
     /**
      * <pre>
      * error string
@@ -3111,7 +3505,7 @@ public final class DappTestService {
   /**
    * Protobuf type {@code darcher.ConsoleErrorMsg}
    */
-  public  static final class ConsoleErrorMsg extends
+  public static final class ConsoleErrorMsg extends
       com.google.protobuf.GeneratedMessageV3 implements
       // @@protoc_insertion_point(message_implements:darcher.ConsoleErrorMsg)
       ConsoleErrorMsgOrBuilder {
@@ -3126,14 +3520,14 @@ public final class DappTestService {
       errorString_ = "";
     }
 
-    @java.lang.Override
+    @Override
     @SuppressWarnings({"unused"})
-    protected java.lang.Object newInstance(
+    protected Object newInstance(
         UnusedPrivateParameter unused) {
       return new ConsoleErrorMsg();
     }
 
-    @java.lang.Override
+    @Override
     public final com.google.protobuf.UnknownFieldSet
     getUnknownFields() {
       return this.unknownFields;
@@ -3144,7 +3538,7 @@ public final class DappTestService {
         throws com.google.protobuf.InvalidProtocolBufferException {
       this();
       if (extensionRegistry == null) {
-        throw new java.lang.NullPointerException();
+        throw new NullPointerException();
       }
       com.google.protobuf.UnknownFieldSet.Builder unknownFields =
           com.google.protobuf.UnknownFieldSet.newBuilder();
@@ -3157,19 +3551,19 @@ public final class DappTestService {
               done = true;
               break;
             case 10: {
-              java.lang.String s = input.readStringRequireUtf8();
+              String s = input.readStringRequireUtf8();
 
               dappName_ = s;
               break;
             }
             case 18: {
-              java.lang.String s = input.readStringRequireUtf8();
+              String s = input.readStringRequireUtf8();
 
               instanceId_ = s;
               break;
             }
             case 26: {
-              java.lang.String s = input.readStringRequireUtf8();
+              String s = input.readStringRequireUtf8();
 
               errorString_ = s;
               break;
@@ -3195,19 +3589,19 @@ public final class DappTestService {
     }
     public static final com.google.protobuf.Descriptors.Descriptor
         getDescriptor() {
-      return org.kristen.rpc.darcher.DappTestService.internal_static_darcher_ConsoleErrorMsg_descriptor;
+      return DappTestService.internal_static_darcher_ConsoleErrorMsg_descriptor;
     }
 
-    @java.lang.Override
-    protected com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
+    @Override
+    protected FieldAccessorTable
         internalGetFieldAccessorTable() {
-      return org.kristen.rpc.darcher.DappTestService.internal_static_darcher_ConsoleErrorMsg_fieldAccessorTable
+      return DappTestService.internal_static_darcher_ConsoleErrorMsg_fieldAccessorTable
           .ensureFieldAccessorsInitialized(
-              org.kristen.rpc.darcher.DappTestService.ConsoleErrorMsg.class, org.kristen.rpc.darcher.DappTestService.ConsoleErrorMsg.Builder.class);
+              ConsoleErrorMsg.class, Builder.class);
     }
 
     public static final int DAPP_NAME_FIELD_NUMBER = 1;
-    private volatile java.lang.Object dappName_;
+    private volatile Object dappName_;
     /**
      * <pre>
      * name of dapp, should keep consistent with that in TestStartMsg
@@ -3216,14 +3610,15 @@ public final class DappTestService {
      * <code>string dapp_name = 1;</code>
      * @return The dappName.
      */
-    public java.lang.String getDappName() {
-      java.lang.Object ref = dappName_;
-      if (ref instanceof java.lang.String) {
-        return (java.lang.String) ref;
+    @Override
+    public String getDappName() {
+      Object ref = dappName_;
+      if (ref instanceof String) {
+        return (String) ref;
       } else {
         com.google.protobuf.ByteString bs = 
             (com.google.protobuf.ByteString) ref;
-        java.lang.String s = bs.toStringUtf8();
+        String s = bs.toStringUtf8();
         dappName_ = s;
         return s;
       }
@@ -3236,13 +3631,14 @@ public final class DappTestService {
      * <code>string dapp_name = 1;</code>
      * @return The bytes for dappName.
      */
+    @Override
     public com.google.protobuf.ByteString
         getDappNameBytes() {
-      java.lang.Object ref = dappName_;
-      if (ref instanceof java.lang.String) {
+      Object ref = dappName_;
+      if (ref instanceof String) {
         com.google.protobuf.ByteString b = 
             com.google.protobuf.ByteString.copyFromUtf8(
-                (java.lang.String) ref);
+                (String) ref);
         dappName_ = b;
         return b;
       } else {
@@ -3251,7 +3647,7 @@ public final class DappTestService {
     }
 
     public static final int INSTANCE_ID_FIELD_NUMBER = 2;
-    private volatile java.lang.Object instanceId_;
+    private volatile Object instanceId_;
     /**
      * <pre>
      * id of the instance of the dapp. One dapp could have multiple instances (e.g. multiple websites)
@@ -3260,14 +3656,15 @@ public final class DappTestService {
      * <code>string instance_id = 2;</code>
      * @return The instanceId.
      */
-    public java.lang.String getInstanceId() {
-      java.lang.Object ref = instanceId_;
-      if (ref instanceof java.lang.String) {
-        return (java.lang.String) ref;
+    @Override
+    public String getInstanceId() {
+      Object ref = instanceId_;
+      if (ref instanceof String) {
+        return (String) ref;
       } else {
         com.google.protobuf.ByteString bs = 
             (com.google.protobuf.ByteString) ref;
-        java.lang.String s = bs.toStringUtf8();
+        String s = bs.toStringUtf8();
         instanceId_ = s;
         return s;
       }
@@ -3280,13 +3677,14 @@ public final class DappTestService {
      * <code>string instance_id = 2;</code>
      * @return The bytes for instanceId.
      */
+    @Override
     public com.google.protobuf.ByteString
         getInstanceIdBytes() {
-      java.lang.Object ref = instanceId_;
-      if (ref instanceof java.lang.String) {
+      Object ref = instanceId_;
+      if (ref instanceof String) {
         com.google.protobuf.ByteString b = 
             com.google.protobuf.ByteString.copyFromUtf8(
-                (java.lang.String) ref);
+                (String) ref);
         instanceId_ = b;
         return b;
       } else {
@@ -3295,7 +3693,7 @@ public final class DappTestService {
     }
 
     public static final int ERROR_STRING_FIELD_NUMBER = 3;
-    private volatile java.lang.Object errorString_;
+    private volatile Object errorString_;
     /**
      * <pre>
      * error string
@@ -3304,14 +3702,15 @@ public final class DappTestService {
      * <code>string error_string = 3;</code>
      * @return The errorString.
      */
-    public java.lang.String getErrorString() {
-      java.lang.Object ref = errorString_;
-      if (ref instanceof java.lang.String) {
-        return (java.lang.String) ref;
+    @Override
+    public String getErrorString() {
+      Object ref = errorString_;
+      if (ref instanceof String) {
+        return (String) ref;
       } else {
         com.google.protobuf.ByteString bs = 
             (com.google.protobuf.ByteString) ref;
-        java.lang.String s = bs.toStringUtf8();
+        String s = bs.toStringUtf8();
         errorString_ = s;
         return s;
       }
@@ -3324,13 +3723,14 @@ public final class DappTestService {
      * <code>string error_string = 3;</code>
      * @return The bytes for errorString.
      */
+    @Override
     public com.google.protobuf.ByteString
         getErrorStringBytes() {
-      java.lang.Object ref = errorString_;
-      if (ref instanceof java.lang.String) {
+      Object ref = errorString_;
+      if (ref instanceof String) {
         com.google.protobuf.ByteString b = 
             com.google.protobuf.ByteString.copyFromUtf8(
-                (java.lang.String) ref);
+                (String) ref);
         errorString_ = b;
         return b;
       } else {
@@ -3339,7 +3739,7 @@ public final class DappTestService {
     }
 
     private byte memoizedIsInitialized = -1;
-    @java.lang.Override
+    @Override
     public final boolean isInitialized() {
       byte isInitialized = memoizedIsInitialized;
       if (isInitialized == 1) return true;
@@ -3349,7 +3749,7 @@ public final class DappTestService {
       return true;
     }
 
-    @java.lang.Override
+    @Override
     public void writeTo(com.google.protobuf.CodedOutputStream output)
                         throws java.io.IOException {
       if (!getDappNameBytes().isEmpty()) {
@@ -3364,7 +3764,7 @@ public final class DappTestService {
       unknownFields.writeTo(output);
     }
 
-    @java.lang.Override
+    @Override
     public int getSerializedSize() {
       int size = memoizedSize;
       if (size != -1) return size;
@@ -3384,15 +3784,15 @@ public final class DappTestService {
       return size;
     }
 
-    @java.lang.Override
-    public boolean equals(final java.lang.Object obj) {
+    @Override
+    public boolean equals(final Object obj) {
       if (obj == this) {
        return true;
       }
-      if (!(obj instanceof org.kristen.rpc.darcher.DappTestService.ConsoleErrorMsg)) {
+      if (!(obj instanceof ConsoleErrorMsg)) {
         return super.equals(obj);
       }
-      org.kristen.rpc.darcher.DappTestService.ConsoleErrorMsg other = (org.kristen.rpc.darcher.DappTestService.ConsoleErrorMsg) obj;
+      ConsoleErrorMsg other = (ConsoleErrorMsg) obj;
 
       if (!getDappName()
           .equals(other.getDappName())) return false;
@@ -3404,7 +3804,7 @@ public final class DappTestService {
       return true;
     }
 
-    @java.lang.Override
+    @Override
     public int hashCode() {
       if (memoizedHashCode != 0) {
         return memoizedHashCode;
@@ -3422,69 +3822,69 @@ public final class DappTestService {
       return hash;
     }
 
-    public static org.kristen.rpc.darcher.DappTestService.ConsoleErrorMsg parseFrom(
+    public static ConsoleErrorMsg parseFrom(
         java.nio.ByteBuffer data)
         throws com.google.protobuf.InvalidProtocolBufferException {
       return PARSER.parseFrom(data);
     }
-    public static org.kristen.rpc.darcher.DappTestService.ConsoleErrorMsg parseFrom(
+    public static ConsoleErrorMsg parseFrom(
         java.nio.ByteBuffer data,
         com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws com.google.protobuf.InvalidProtocolBufferException {
       return PARSER.parseFrom(data, extensionRegistry);
     }
-    public static org.kristen.rpc.darcher.DappTestService.ConsoleErrorMsg parseFrom(
+    public static ConsoleErrorMsg parseFrom(
         com.google.protobuf.ByteString data)
         throws com.google.protobuf.InvalidProtocolBufferException {
       return PARSER.parseFrom(data);
     }
-    public static org.kristen.rpc.darcher.DappTestService.ConsoleErrorMsg parseFrom(
+    public static ConsoleErrorMsg parseFrom(
         com.google.protobuf.ByteString data,
         com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws com.google.protobuf.InvalidProtocolBufferException {
       return PARSER.parseFrom(data, extensionRegistry);
     }
-    public static org.kristen.rpc.darcher.DappTestService.ConsoleErrorMsg parseFrom(byte[] data)
+    public static ConsoleErrorMsg parseFrom(byte[] data)
         throws com.google.protobuf.InvalidProtocolBufferException {
       return PARSER.parseFrom(data);
     }
-    public static org.kristen.rpc.darcher.DappTestService.ConsoleErrorMsg parseFrom(
+    public static ConsoleErrorMsg parseFrom(
         byte[] data,
         com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws com.google.protobuf.InvalidProtocolBufferException {
       return PARSER.parseFrom(data, extensionRegistry);
     }
-    public static org.kristen.rpc.darcher.DappTestService.ConsoleErrorMsg parseFrom(java.io.InputStream input)
+    public static ConsoleErrorMsg parseFrom(java.io.InputStream input)
         throws java.io.IOException {
       return com.google.protobuf.GeneratedMessageV3
           .parseWithIOException(PARSER, input);
     }
-    public static org.kristen.rpc.darcher.DappTestService.ConsoleErrorMsg parseFrom(
+    public static ConsoleErrorMsg parseFrom(
         java.io.InputStream input,
         com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws java.io.IOException {
       return com.google.protobuf.GeneratedMessageV3
           .parseWithIOException(PARSER, input, extensionRegistry);
     }
-    public static org.kristen.rpc.darcher.DappTestService.ConsoleErrorMsg parseDelimitedFrom(java.io.InputStream input)
+    public static ConsoleErrorMsg parseDelimitedFrom(java.io.InputStream input)
         throws java.io.IOException {
       return com.google.protobuf.GeneratedMessageV3
           .parseDelimitedWithIOException(PARSER, input);
     }
-    public static org.kristen.rpc.darcher.DappTestService.ConsoleErrorMsg parseDelimitedFrom(
+    public static ConsoleErrorMsg parseDelimitedFrom(
         java.io.InputStream input,
         com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws java.io.IOException {
       return com.google.protobuf.GeneratedMessageV3
           .parseDelimitedWithIOException(PARSER, input, extensionRegistry);
     }
-    public static org.kristen.rpc.darcher.DappTestService.ConsoleErrorMsg parseFrom(
+    public static ConsoleErrorMsg parseFrom(
         com.google.protobuf.CodedInputStream input)
         throws java.io.IOException {
       return com.google.protobuf.GeneratedMessageV3
           .parseWithIOException(PARSER, input);
     }
-    public static org.kristen.rpc.darcher.DappTestService.ConsoleErrorMsg parseFrom(
+    public static ConsoleErrorMsg parseFrom(
         com.google.protobuf.CodedInputStream input,
         com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws java.io.IOException {
@@ -3492,23 +3892,23 @@ public final class DappTestService {
           .parseWithIOException(PARSER, input, extensionRegistry);
     }
 
-    @java.lang.Override
+    @Override
     public Builder newBuilderForType() { return newBuilder(); }
     public static Builder newBuilder() {
       return DEFAULT_INSTANCE.toBuilder();
     }
-    public static Builder newBuilder(org.kristen.rpc.darcher.DappTestService.ConsoleErrorMsg prototype) {
+    public static Builder newBuilder(ConsoleErrorMsg prototype) {
       return DEFAULT_INSTANCE.toBuilder().mergeFrom(prototype);
     }
-    @java.lang.Override
+    @Override
     public Builder toBuilder() {
       return this == DEFAULT_INSTANCE
           ? new Builder() : new Builder().mergeFrom(this);
     }
 
-    @java.lang.Override
+    @Override
     protected Builder newBuilderForType(
-        com.google.protobuf.GeneratedMessageV3.BuilderParent parent) {
+        BuilderParent parent) {
       Builder builder = new Builder(parent);
       return builder;
     }
@@ -3518,18 +3918,18 @@ public final class DappTestService {
     public static final class Builder extends
         com.google.protobuf.GeneratedMessageV3.Builder<Builder> implements
         // @@protoc_insertion_point(builder_implements:darcher.ConsoleErrorMsg)
-        org.kristen.rpc.darcher.DappTestService.ConsoleErrorMsgOrBuilder {
+        ConsoleErrorMsgOrBuilder {
       public static final com.google.protobuf.Descriptors.Descriptor
           getDescriptor() {
-        return org.kristen.rpc.darcher.DappTestService.internal_static_darcher_ConsoleErrorMsg_descriptor;
+        return DappTestService.internal_static_darcher_ConsoleErrorMsg_descriptor;
       }
 
-      @java.lang.Override
-      protected com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
+      @Override
+      protected FieldAccessorTable
           internalGetFieldAccessorTable() {
-        return org.kristen.rpc.darcher.DappTestService.internal_static_darcher_ConsoleErrorMsg_fieldAccessorTable
+        return DappTestService.internal_static_darcher_ConsoleErrorMsg_fieldAccessorTable
             .ensureFieldAccessorsInitialized(
-                org.kristen.rpc.darcher.DappTestService.ConsoleErrorMsg.class, org.kristen.rpc.darcher.DappTestService.ConsoleErrorMsg.Builder.class);
+                ConsoleErrorMsg.class, Builder.class);
       }
 
       // Construct using org.kristen.rpc.darcher.DappTestService.ConsoleErrorMsg.newBuilder()
@@ -3538,7 +3938,7 @@ public final class DappTestService {
       }
 
       private Builder(
-          com.google.protobuf.GeneratedMessageV3.BuilderParent parent) {
+          BuilderParent parent) {
         super(parent);
         maybeForceBuilderInitialization();
       }
@@ -3547,7 +3947,7 @@ public final class DappTestService {
                 .alwaysUseFieldBuilders) {
         }
       }
-      @java.lang.Override
+      @Override
       public Builder clear() {
         super.clear();
         dappName_ = "";
@@ -3559,29 +3959,29 @@ public final class DappTestService {
         return this;
       }
 
-      @java.lang.Override
+      @Override
       public com.google.protobuf.Descriptors.Descriptor
           getDescriptorForType() {
-        return org.kristen.rpc.darcher.DappTestService.internal_static_darcher_ConsoleErrorMsg_descriptor;
+        return DappTestService.internal_static_darcher_ConsoleErrorMsg_descriptor;
       }
 
-      @java.lang.Override
-      public org.kristen.rpc.darcher.DappTestService.ConsoleErrorMsg getDefaultInstanceForType() {
-        return org.kristen.rpc.darcher.DappTestService.ConsoleErrorMsg.getDefaultInstance();
+      @Override
+      public ConsoleErrorMsg getDefaultInstanceForType() {
+        return ConsoleErrorMsg.getDefaultInstance();
       }
 
-      @java.lang.Override
-      public org.kristen.rpc.darcher.DappTestService.ConsoleErrorMsg build() {
-        org.kristen.rpc.darcher.DappTestService.ConsoleErrorMsg result = buildPartial();
+      @Override
+      public ConsoleErrorMsg build() {
+        ConsoleErrorMsg result = buildPartial();
         if (!result.isInitialized()) {
           throw newUninitializedMessageException(result);
         }
         return result;
       }
 
-      @java.lang.Override
-      public org.kristen.rpc.darcher.DappTestService.ConsoleErrorMsg buildPartial() {
-        org.kristen.rpc.darcher.DappTestService.ConsoleErrorMsg result = new org.kristen.rpc.darcher.DappTestService.ConsoleErrorMsg(this);
+      @Override
+      public ConsoleErrorMsg buildPartial() {
+        ConsoleErrorMsg result = new ConsoleErrorMsg(this);
         result.dappName_ = dappName_;
         result.instanceId_ = instanceId_;
         result.errorString_ = errorString_;
@@ -3589,50 +3989,50 @@ public final class DappTestService {
         return result;
       }
 
-      @java.lang.Override
+      @Override
       public Builder clone() {
         return super.clone();
       }
-      @java.lang.Override
+      @Override
       public Builder setField(
           com.google.protobuf.Descriptors.FieldDescriptor field,
-          java.lang.Object value) {
+          Object value) {
         return super.setField(field, value);
       }
-      @java.lang.Override
+      @Override
       public Builder clearField(
           com.google.protobuf.Descriptors.FieldDescriptor field) {
         return super.clearField(field);
       }
-      @java.lang.Override
+      @Override
       public Builder clearOneof(
           com.google.protobuf.Descriptors.OneofDescriptor oneof) {
         return super.clearOneof(oneof);
       }
-      @java.lang.Override
+      @Override
       public Builder setRepeatedField(
           com.google.protobuf.Descriptors.FieldDescriptor field,
-          int index, java.lang.Object value) {
+          int index, Object value) {
         return super.setRepeatedField(field, index, value);
       }
-      @java.lang.Override
+      @Override
       public Builder addRepeatedField(
           com.google.protobuf.Descriptors.FieldDescriptor field,
-          java.lang.Object value) {
+          Object value) {
         return super.addRepeatedField(field, value);
       }
-      @java.lang.Override
+      @Override
       public Builder mergeFrom(com.google.protobuf.Message other) {
-        if (other instanceof org.kristen.rpc.darcher.DappTestService.ConsoleErrorMsg) {
-          return mergeFrom((org.kristen.rpc.darcher.DappTestService.ConsoleErrorMsg)other);
+        if (other instanceof ConsoleErrorMsg) {
+          return mergeFrom((ConsoleErrorMsg)other);
         } else {
           super.mergeFrom(other);
           return this;
         }
       }
 
-      public Builder mergeFrom(org.kristen.rpc.darcher.DappTestService.ConsoleErrorMsg other) {
-        if (other == org.kristen.rpc.darcher.DappTestService.ConsoleErrorMsg.getDefaultInstance()) return this;
+      public Builder mergeFrom(ConsoleErrorMsg other) {
+        if (other == ConsoleErrorMsg.getDefaultInstance()) return this;
         if (!other.getDappName().isEmpty()) {
           dappName_ = other.dappName_;
           onChanged();
@@ -3650,21 +4050,21 @@ public final class DappTestService {
         return this;
       }
 
-      @java.lang.Override
+      @Override
       public final boolean isInitialized() {
         return true;
       }
 
-      @java.lang.Override
+      @Override
       public Builder mergeFrom(
           com.google.protobuf.CodedInputStream input,
           com.google.protobuf.ExtensionRegistryLite extensionRegistry)
           throws java.io.IOException {
-        org.kristen.rpc.darcher.DappTestService.ConsoleErrorMsg parsedMessage = null;
+        ConsoleErrorMsg parsedMessage = null;
         try {
           parsedMessage = PARSER.parsePartialFrom(input, extensionRegistry);
         } catch (com.google.protobuf.InvalidProtocolBufferException e) {
-          parsedMessage = (org.kristen.rpc.darcher.DappTestService.ConsoleErrorMsg) e.getUnfinishedMessage();
+          parsedMessage = (ConsoleErrorMsg) e.getUnfinishedMessage();
           throw e.unwrapIOException();
         } finally {
           if (parsedMessage != null) {
@@ -3674,7 +4074,7 @@ public final class DappTestService {
         return this;
       }
 
-      private java.lang.Object dappName_ = "";
+      private Object dappName_ = "";
       /**
        * <pre>
        * name of dapp, should keep consistent with that in TestStartMsg
@@ -3683,16 +4083,16 @@ public final class DappTestService {
        * <code>string dapp_name = 1;</code>
        * @return The dappName.
        */
-      public java.lang.String getDappName() {
-        java.lang.Object ref = dappName_;
-        if (!(ref instanceof java.lang.String)) {
+      public String getDappName() {
+        Object ref = dappName_;
+        if (!(ref instanceof String)) {
           com.google.protobuf.ByteString bs =
               (com.google.protobuf.ByteString) ref;
-          java.lang.String s = bs.toStringUtf8();
+          String s = bs.toStringUtf8();
           dappName_ = s;
           return s;
         } else {
-          return (java.lang.String) ref;
+          return (String) ref;
         }
       }
       /**
@@ -3705,11 +4105,11 @@ public final class DappTestService {
        */
       public com.google.protobuf.ByteString
           getDappNameBytes() {
-        java.lang.Object ref = dappName_;
+        Object ref = dappName_;
         if (ref instanceof String) {
           com.google.protobuf.ByteString b = 
               com.google.protobuf.ByteString.copyFromUtf8(
-                  (java.lang.String) ref);
+                  (String) ref);
           dappName_ = b;
           return b;
         } else {
@@ -3726,7 +4126,7 @@ public final class DappTestService {
        * @return This builder for chaining.
        */
       public Builder setDappName(
-          java.lang.String value) {
+          String value) {
         if (value == null) {
     throw new NullPointerException();
   }
@@ -3770,7 +4170,7 @@ public final class DappTestService {
         return this;
       }
 
-      private java.lang.Object instanceId_ = "";
+      private Object instanceId_ = "";
       /**
        * <pre>
        * id of the instance of the dapp. One dapp could have multiple instances (e.g. multiple websites)
@@ -3779,16 +4179,16 @@ public final class DappTestService {
        * <code>string instance_id = 2;</code>
        * @return The instanceId.
        */
-      public java.lang.String getInstanceId() {
-        java.lang.Object ref = instanceId_;
-        if (!(ref instanceof java.lang.String)) {
+      public String getInstanceId() {
+        Object ref = instanceId_;
+        if (!(ref instanceof String)) {
           com.google.protobuf.ByteString bs =
               (com.google.protobuf.ByteString) ref;
-          java.lang.String s = bs.toStringUtf8();
+          String s = bs.toStringUtf8();
           instanceId_ = s;
           return s;
         } else {
-          return (java.lang.String) ref;
+          return (String) ref;
         }
       }
       /**
@@ -3801,11 +4201,11 @@ public final class DappTestService {
        */
       public com.google.protobuf.ByteString
           getInstanceIdBytes() {
-        java.lang.Object ref = instanceId_;
+        Object ref = instanceId_;
         if (ref instanceof String) {
           com.google.protobuf.ByteString b = 
               com.google.protobuf.ByteString.copyFromUtf8(
-                  (java.lang.String) ref);
+                  (String) ref);
           instanceId_ = b;
           return b;
         } else {
@@ -3822,7 +4222,7 @@ public final class DappTestService {
        * @return This builder for chaining.
        */
       public Builder setInstanceId(
-          java.lang.String value) {
+          String value) {
         if (value == null) {
     throw new NullPointerException();
   }
@@ -3866,7 +4266,7 @@ public final class DappTestService {
         return this;
       }
 
-      private java.lang.Object errorString_ = "";
+      private Object errorString_ = "";
       /**
        * <pre>
        * error string
@@ -3875,16 +4275,16 @@ public final class DappTestService {
        * <code>string error_string = 3;</code>
        * @return The errorString.
        */
-      public java.lang.String getErrorString() {
-        java.lang.Object ref = errorString_;
-        if (!(ref instanceof java.lang.String)) {
+      public String getErrorString() {
+        Object ref = errorString_;
+        if (!(ref instanceof String)) {
           com.google.protobuf.ByteString bs =
               (com.google.protobuf.ByteString) ref;
-          java.lang.String s = bs.toStringUtf8();
+          String s = bs.toStringUtf8();
           errorString_ = s;
           return s;
         } else {
-          return (java.lang.String) ref;
+          return (String) ref;
         }
       }
       /**
@@ -3897,11 +4297,11 @@ public final class DappTestService {
        */
       public com.google.protobuf.ByteString
           getErrorStringBytes() {
-        java.lang.Object ref = errorString_;
+        Object ref = errorString_;
         if (ref instanceof String) {
           com.google.protobuf.ByteString b = 
               com.google.protobuf.ByteString.copyFromUtf8(
-                  (java.lang.String) ref);
+                  (String) ref);
           errorString_ = b;
           return b;
         } else {
@@ -3918,7 +4318,7 @@ public final class DappTestService {
        * @return This builder for chaining.
        */
       public Builder setErrorString(
-          java.lang.String value) {
+          String value) {
         if (value == null) {
     throw new NullPointerException();
   }
@@ -3961,13 +4361,13 @@ public final class DappTestService {
         onChanged();
         return this;
       }
-      @java.lang.Override
+      @Override
       public final Builder setUnknownFields(
           final com.google.protobuf.UnknownFieldSet unknownFields) {
         return super.setUnknownFields(unknownFields);
       }
 
-      @java.lang.Override
+      @Override
       public final Builder mergeUnknownFields(
           final com.google.protobuf.UnknownFieldSet unknownFields) {
         return super.mergeUnknownFields(unknownFields);
@@ -3978,18 +4378,18 @@ public final class DappTestService {
     }
 
     // @@protoc_insertion_point(class_scope:darcher.ConsoleErrorMsg)
-    private static final org.kristen.rpc.darcher.DappTestService.ConsoleErrorMsg DEFAULT_INSTANCE;
+    private static final ConsoleErrorMsg DEFAULT_INSTANCE;
     static {
-      DEFAULT_INSTANCE = new org.kristen.rpc.darcher.DappTestService.ConsoleErrorMsg();
+      DEFAULT_INSTANCE = new ConsoleErrorMsg();
     }
 
-    public static org.kristen.rpc.darcher.DappTestService.ConsoleErrorMsg getDefaultInstance() {
+    public static ConsoleErrorMsg getDefaultInstance() {
       return DEFAULT_INSTANCE;
     }
 
     private static final com.google.protobuf.Parser<ConsoleErrorMsg>
         PARSER = new com.google.protobuf.AbstractParser<ConsoleErrorMsg>() {
-      @java.lang.Override
+      @Override
       public ConsoleErrorMsg parsePartialFrom(
           com.google.protobuf.CodedInputStream input,
           com.google.protobuf.ExtensionRegistryLite extensionRegistry)
@@ -4002,13 +4402,13 @@ public final class DappTestService {
       return PARSER;
     }
 
-    @java.lang.Override
+    @Override
     public com.google.protobuf.Parser<ConsoleErrorMsg> getParserForType() {
       return PARSER;
     }
 
-    @java.lang.Override
-    public org.kristen.rpc.darcher.DappTestService.ConsoleErrorMsg getDefaultInstanceForType() {
+    @Override
+    public ConsoleErrorMsg getDefaultInstanceForType() {
       return DEFAULT_INSTANCE;
     }
 
@@ -4035,7 +4435,7 @@ public final class DappTestService {
      * <code>.darcher.Role role = 1;</code>
      * @return The role.
      */
-    org.kristen.rpc.darcher.Common.Role getRole();
+    Common.Role getRole();
 
     /**
      * <pre>
@@ -4045,7 +4445,7 @@ public final class DappTestService {
      * <code>string id = 2;</code>
      * @return The id.
      */
-    java.lang.String getId();
+    String getId();
     /**
      * <pre>
      * id of one reverse rpc request, the corresponding response should keep this id.
@@ -4065,7 +4465,7 @@ public final class DappTestService {
      * <code>string dapp_name = 3;</code>
      * @return The dappName.
      */
-    java.lang.String getDappName();
+    String getDappName();
     /**
      * <pre>
      * name of dapp, should keep consistent with that in TestStartMsg
@@ -4085,7 +4485,7 @@ public final class DappTestService {
      * <code>string instance_id = 4;</code>
      * @return The instanceId.
      */
-    java.lang.String getInstanceId();
+    String getInstanceId();
     /**
      * <pre>
      * id of the instance of the dapp. One dapp could have multiple instances (e.g. multiple websites)
@@ -4106,12 +4506,12 @@ public final class DappTestService {
      * <code>.darcher.DAppDriverControlType control_type = 5;</code>
      * @return The controlType.
      */
-    org.kristen.rpc.darcher.DappTestService.DAppDriverControlType getControlType();
+    DAppDriverControlType getControlType();
   }
   /**
    * Protobuf type {@code darcher.DAppDriverControlMsg}
    */
-  public  static final class DAppDriverControlMsg extends
+  public static final class DAppDriverControlMsg extends
       com.google.protobuf.GeneratedMessageV3 implements
       // @@protoc_insertion_point(message_implements:darcher.DAppDriverControlMsg)
       DAppDriverControlMsgOrBuilder {
@@ -4128,14 +4528,14 @@ public final class DappTestService {
       controlType_ = 0;
     }
 
-    @java.lang.Override
+    @Override
     @SuppressWarnings({"unused"})
-    protected java.lang.Object newInstance(
+    protected Object newInstance(
         UnusedPrivateParameter unused) {
       return new DAppDriverControlMsg();
     }
 
-    @java.lang.Override
+    @Override
     public final com.google.protobuf.UnknownFieldSet
     getUnknownFields() {
       return this.unknownFields;
@@ -4146,7 +4546,7 @@ public final class DappTestService {
         throws com.google.protobuf.InvalidProtocolBufferException {
       this();
       if (extensionRegistry == null) {
-        throw new java.lang.NullPointerException();
+        throw new NullPointerException();
       }
       com.google.protobuf.UnknownFieldSet.Builder unknownFields =
           com.google.protobuf.UnknownFieldSet.newBuilder();
@@ -4165,19 +4565,19 @@ public final class DappTestService {
               break;
             }
             case 18: {
-              java.lang.String s = input.readStringRequireUtf8();
+              String s = input.readStringRequireUtf8();
 
               id_ = s;
               break;
             }
             case 26: {
-              java.lang.String s = input.readStringRequireUtf8();
+              String s = input.readStringRequireUtf8();
 
               dappName_ = s;
               break;
             }
             case 34: {
-              java.lang.String s = input.readStringRequireUtf8();
+              String s = input.readStringRequireUtf8();
 
               instanceId_ = s;
               break;
@@ -4209,15 +4609,15 @@ public final class DappTestService {
     }
     public static final com.google.protobuf.Descriptors.Descriptor
         getDescriptor() {
-      return org.kristen.rpc.darcher.DappTestService.internal_static_darcher_DAppDriverControlMsg_descriptor;
+      return DappTestService.internal_static_darcher_DAppDriverControlMsg_descriptor;
     }
 
-    @java.lang.Override
-    protected com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
+    @Override
+    protected FieldAccessorTable
         internalGetFieldAccessorTable() {
-      return org.kristen.rpc.darcher.DappTestService.internal_static_darcher_DAppDriverControlMsg_fieldAccessorTable
+      return DappTestService.internal_static_darcher_DAppDriverControlMsg_fieldAccessorTable
           .ensureFieldAccessorsInitialized(
-              org.kristen.rpc.darcher.DappTestService.DAppDriverControlMsg.class, org.kristen.rpc.darcher.DappTestService.DAppDriverControlMsg.Builder.class);
+              DAppDriverControlMsg.class, Builder.class);
     }
 
     public static final int ROLE_FIELD_NUMBER = 1;
@@ -4230,7 +4630,7 @@ public final class DappTestService {
      * <code>.darcher.Role role = 1;</code>
      * @return The enum numeric value on the wire for role.
      */
-    public int getRoleValue() {
+    @Override public int getRoleValue() {
       return role_;
     }
     /**
@@ -4241,14 +4641,14 @@ public final class DappTestService {
      * <code>.darcher.Role role = 1;</code>
      * @return The role.
      */
-    public org.kristen.rpc.darcher.Common.Role getRole() {
+    @Override public Common.Role getRole() {
       @SuppressWarnings("deprecation")
-      org.kristen.rpc.darcher.Common.Role result = org.kristen.rpc.darcher.Common.Role.valueOf(role_);
-      return result == null ? org.kristen.rpc.darcher.Common.Role.UNRECOGNIZED : result;
+      Common.Role result = Common.Role.valueOf(role_);
+      return result == null ? Common.Role.UNRECOGNIZED : result;
     }
 
     public static final int ID_FIELD_NUMBER = 2;
-    private volatile java.lang.Object id_;
+    private volatile Object id_;
     /**
      * <pre>
      * id of one reverse rpc request, the corresponding response should keep this id.
@@ -4257,14 +4657,15 @@ public final class DappTestService {
      * <code>string id = 2;</code>
      * @return The id.
      */
-    public java.lang.String getId() {
-      java.lang.Object ref = id_;
-      if (ref instanceof java.lang.String) {
-        return (java.lang.String) ref;
+    @Override
+    public String getId() {
+      Object ref = id_;
+      if (ref instanceof String) {
+        return (String) ref;
       } else {
         com.google.protobuf.ByteString bs = 
             (com.google.protobuf.ByteString) ref;
-        java.lang.String s = bs.toStringUtf8();
+        String s = bs.toStringUtf8();
         id_ = s;
         return s;
       }
@@ -4277,13 +4678,14 @@ public final class DappTestService {
      * <code>string id = 2;</code>
      * @return The bytes for id.
      */
+    @Override
     public com.google.protobuf.ByteString
         getIdBytes() {
-      java.lang.Object ref = id_;
-      if (ref instanceof java.lang.String) {
+      Object ref = id_;
+      if (ref instanceof String) {
         com.google.protobuf.ByteString b = 
             com.google.protobuf.ByteString.copyFromUtf8(
-                (java.lang.String) ref);
+                (String) ref);
         id_ = b;
         return b;
       } else {
@@ -4292,7 +4694,7 @@ public final class DappTestService {
     }
 
     public static final int DAPP_NAME_FIELD_NUMBER = 3;
-    private volatile java.lang.Object dappName_;
+    private volatile Object dappName_;
     /**
      * <pre>
      * name of dapp, should keep consistent with that in TestStartMsg
@@ -4301,14 +4703,15 @@ public final class DappTestService {
      * <code>string dapp_name = 3;</code>
      * @return The dappName.
      */
-    public java.lang.String getDappName() {
-      java.lang.Object ref = dappName_;
-      if (ref instanceof java.lang.String) {
-        return (java.lang.String) ref;
+    @Override
+    public String getDappName() {
+      Object ref = dappName_;
+      if (ref instanceof String) {
+        return (String) ref;
       } else {
         com.google.protobuf.ByteString bs = 
             (com.google.protobuf.ByteString) ref;
-        java.lang.String s = bs.toStringUtf8();
+        String s = bs.toStringUtf8();
         dappName_ = s;
         return s;
       }
@@ -4321,13 +4724,14 @@ public final class DappTestService {
      * <code>string dapp_name = 3;</code>
      * @return The bytes for dappName.
      */
+    @Override
     public com.google.protobuf.ByteString
         getDappNameBytes() {
-      java.lang.Object ref = dappName_;
-      if (ref instanceof java.lang.String) {
+      Object ref = dappName_;
+      if (ref instanceof String) {
         com.google.protobuf.ByteString b = 
             com.google.protobuf.ByteString.copyFromUtf8(
-                (java.lang.String) ref);
+                (String) ref);
         dappName_ = b;
         return b;
       } else {
@@ -4336,7 +4740,7 @@ public final class DappTestService {
     }
 
     public static final int INSTANCE_ID_FIELD_NUMBER = 4;
-    private volatile java.lang.Object instanceId_;
+    private volatile Object instanceId_;
     /**
      * <pre>
      * id of the instance of the dapp. One dapp could have multiple instances (e.g. multiple websites)
@@ -4345,14 +4749,15 @@ public final class DappTestService {
      * <code>string instance_id = 4;</code>
      * @return The instanceId.
      */
-    public java.lang.String getInstanceId() {
-      java.lang.Object ref = instanceId_;
-      if (ref instanceof java.lang.String) {
-        return (java.lang.String) ref;
+    @Override
+    public String getInstanceId() {
+      Object ref = instanceId_;
+      if (ref instanceof String) {
+        return (String) ref;
       } else {
         com.google.protobuf.ByteString bs = 
             (com.google.protobuf.ByteString) ref;
-        java.lang.String s = bs.toStringUtf8();
+        String s = bs.toStringUtf8();
         instanceId_ = s;
         return s;
       }
@@ -4365,13 +4770,14 @@ public final class DappTestService {
      * <code>string instance_id = 4;</code>
      * @return The bytes for instanceId.
      */
+    @Override
     public com.google.protobuf.ByteString
         getInstanceIdBytes() {
-      java.lang.Object ref = instanceId_;
-      if (ref instanceof java.lang.String) {
+      Object ref = instanceId_;
+      if (ref instanceof String) {
         com.google.protobuf.ByteString b = 
             com.google.protobuf.ByteString.copyFromUtf8(
-                (java.lang.String) ref);
+                (String) ref);
         instanceId_ = b;
         return b;
       } else {
@@ -4385,21 +4791,21 @@ public final class DappTestService {
      * <code>.darcher.DAppDriverControlType control_type = 5;</code>
      * @return The enum numeric value on the wire for controlType.
      */
-    public int getControlTypeValue() {
+    @Override public int getControlTypeValue() {
       return controlType_;
     }
     /**
      * <code>.darcher.DAppDriverControlType control_type = 5;</code>
      * @return The controlType.
      */
-    public org.kristen.rpc.darcher.DappTestService.DAppDriverControlType getControlType() {
+    @Override public DAppDriverControlType getControlType() {
       @SuppressWarnings("deprecation")
-      org.kristen.rpc.darcher.DappTestService.DAppDriverControlType result = org.kristen.rpc.darcher.DappTestService.DAppDriverControlType.valueOf(controlType_);
-      return result == null ? org.kristen.rpc.darcher.DappTestService.DAppDriverControlType.UNRECOGNIZED : result;
+      DAppDriverControlType result = DAppDriverControlType.valueOf(controlType_);
+      return result == null ? DAppDriverControlType.UNRECOGNIZED : result;
     }
 
     private byte memoizedIsInitialized = -1;
-    @java.lang.Override
+    @Override
     public final boolean isInitialized() {
       byte isInitialized = memoizedIsInitialized;
       if (isInitialized == 1) return true;
@@ -4409,10 +4815,10 @@ public final class DappTestService {
       return true;
     }
 
-    @java.lang.Override
+    @Override
     public void writeTo(com.google.protobuf.CodedOutputStream output)
                         throws java.io.IOException {
-      if (role_ != org.kristen.rpc.darcher.Common.Role.DOER.getNumber()) {
+      if (role_ != Common.Role.DOER.getNumber()) {
         output.writeEnum(1, role_);
       }
       if (!getIdBytes().isEmpty()) {
@@ -4424,19 +4830,19 @@ public final class DappTestService {
       if (!getInstanceIdBytes().isEmpty()) {
         com.google.protobuf.GeneratedMessageV3.writeString(output, 4, instanceId_);
       }
-      if (controlType_ != org.kristen.rpc.darcher.DappTestService.DAppDriverControlType.NilType.getNumber()) {
+      if (controlType_ != DAppDriverControlType.NilType.getNumber()) {
         output.writeEnum(5, controlType_);
       }
       unknownFields.writeTo(output);
     }
 
-    @java.lang.Override
+    @Override
     public int getSerializedSize() {
       int size = memoizedSize;
       if (size != -1) return size;
 
       size = 0;
-      if (role_ != org.kristen.rpc.darcher.Common.Role.DOER.getNumber()) {
+      if (role_ != Common.Role.DOER.getNumber()) {
         size += com.google.protobuf.CodedOutputStream
           .computeEnumSize(1, role_);
       }
@@ -4449,7 +4855,7 @@ public final class DappTestService {
       if (!getInstanceIdBytes().isEmpty()) {
         size += com.google.protobuf.GeneratedMessageV3.computeStringSize(4, instanceId_);
       }
-      if (controlType_ != org.kristen.rpc.darcher.DappTestService.DAppDriverControlType.NilType.getNumber()) {
+      if (controlType_ != DAppDriverControlType.NilType.getNumber()) {
         size += com.google.protobuf.CodedOutputStream
           .computeEnumSize(5, controlType_);
       }
@@ -4458,15 +4864,15 @@ public final class DappTestService {
       return size;
     }
 
-    @java.lang.Override
-    public boolean equals(final java.lang.Object obj) {
+    @Override
+    public boolean equals(final Object obj) {
       if (obj == this) {
        return true;
       }
-      if (!(obj instanceof org.kristen.rpc.darcher.DappTestService.DAppDriverControlMsg)) {
+      if (!(obj instanceof DAppDriverControlMsg)) {
         return super.equals(obj);
       }
-      org.kristen.rpc.darcher.DappTestService.DAppDriverControlMsg other = (org.kristen.rpc.darcher.DappTestService.DAppDriverControlMsg) obj;
+      DAppDriverControlMsg other = (DAppDriverControlMsg) obj;
 
       if (role_ != other.role_) return false;
       if (!getId()
@@ -4480,7 +4886,7 @@ public final class DappTestService {
       return true;
     }
 
-    @java.lang.Override
+    @Override
     public int hashCode() {
       if (memoizedHashCode != 0) {
         return memoizedHashCode;
@@ -4502,69 +4908,69 @@ public final class DappTestService {
       return hash;
     }
 
-    public static org.kristen.rpc.darcher.DappTestService.DAppDriverControlMsg parseFrom(
+    public static DAppDriverControlMsg parseFrom(
         java.nio.ByteBuffer data)
         throws com.google.protobuf.InvalidProtocolBufferException {
       return PARSER.parseFrom(data);
     }
-    public static org.kristen.rpc.darcher.DappTestService.DAppDriverControlMsg parseFrom(
+    public static DAppDriverControlMsg parseFrom(
         java.nio.ByteBuffer data,
         com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws com.google.protobuf.InvalidProtocolBufferException {
       return PARSER.parseFrom(data, extensionRegistry);
     }
-    public static org.kristen.rpc.darcher.DappTestService.DAppDriverControlMsg parseFrom(
+    public static DAppDriverControlMsg parseFrom(
         com.google.protobuf.ByteString data)
         throws com.google.protobuf.InvalidProtocolBufferException {
       return PARSER.parseFrom(data);
     }
-    public static org.kristen.rpc.darcher.DappTestService.DAppDriverControlMsg parseFrom(
+    public static DAppDriverControlMsg parseFrom(
         com.google.protobuf.ByteString data,
         com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws com.google.protobuf.InvalidProtocolBufferException {
       return PARSER.parseFrom(data, extensionRegistry);
     }
-    public static org.kristen.rpc.darcher.DappTestService.DAppDriverControlMsg parseFrom(byte[] data)
+    public static DAppDriverControlMsg parseFrom(byte[] data)
         throws com.google.protobuf.InvalidProtocolBufferException {
       return PARSER.parseFrom(data);
     }
-    public static org.kristen.rpc.darcher.DappTestService.DAppDriverControlMsg parseFrom(
+    public static DAppDriverControlMsg parseFrom(
         byte[] data,
         com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws com.google.protobuf.InvalidProtocolBufferException {
       return PARSER.parseFrom(data, extensionRegistry);
     }
-    public static org.kristen.rpc.darcher.DappTestService.DAppDriverControlMsg parseFrom(java.io.InputStream input)
+    public static DAppDriverControlMsg parseFrom(java.io.InputStream input)
         throws java.io.IOException {
       return com.google.protobuf.GeneratedMessageV3
           .parseWithIOException(PARSER, input);
     }
-    public static org.kristen.rpc.darcher.DappTestService.DAppDriverControlMsg parseFrom(
+    public static DAppDriverControlMsg parseFrom(
         java.io.InputStream input,
         com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws java.io.IOException {
       return com.google.protobuf.GeneratedMessageV3
           .parseWithIOException(PARSER, input, extensionRegistry);
     }
-    public static org.kristen.rpc.darcher.DappTestService.DAppDriverControlMsg parseDelimitedFrom(java.io.InputStream input)
+    public static DAppDriverControlMsg parseDelimitedFrom(java.io.InputStream input)
         throws java.io.IOException {
       return com.google.protobuf.GeneratedMessageV3
           .parseDelimitedWithIOException(PARSER, input);
     }
-    public static org.kristen.rpc.darcher.DappTestService.DAppDriverControlMsg parseDelimitedFrom(
+    public static DAppDriverControlMsg parseDelimitedFrom(
         java.io.InputStream input,
         com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws java.io.IOException {
       return com.google.protobuf.GeneratedMessageV3
           .parseDelimitedWithIOException(PARSER, input, extensionRegistry);
     }
-    public static org.kristen.rpc.darcher.DappTestService.DAppDriverControlMsg parseFrom(
+    public static DAppDriverControlMsg parseFrom(
         com.google.protobuf.CodedInputStream input)
         throws java.io.IOException {
       return com.google.protobuf.GeneratedMessageV3
           .parseWithIOException(PARSER, input);
     }
-    public static org.kristen.rpc.darcher.DappTestService.DAppDriverControlMsg parseFrom(
+    public static DAppDriverControlMsg parseFrom(
         com.google.protobuf.CodedInputStream input,
         com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws java.io.IOException {
@@ -4572,23 +4978,23 @@ public final class DappTestService {
           .parseWithIOException(PARSER, input, extensionRegistry);
     }
 
-    @java.lang.Override
+    @Override
     public Builder newBuilderForType() { return newBuilder(); }
     public static Builder newBuilder() {
       return DEFAULT_INSTANCE.toBuilder();
     }
-    public static Builder newBuilder(org.kristen.rpc.darcher.DappTestService.DAppDriverControlMsg prototype) {
+    public static Builder newBuilder(DAppDriverControlMsg prototype) {
       return DEFAULT_INSTANCE.toBuilder().mergeFrom(prototype);
     }
-    @java.lang.Override
+    @Override
     public Builder toBuilder() {
       return this == DEFAULT_INSTANCE
           ? new Builder() : new Builder().mergeFrom(this);
     }
 
-    @java.lang.Override
+    @Override
     protected Builder newBuilderForType(
-        com.google.protobuf.GeneratedMessageV3.BuilderParent parent) {
+        BuilderParent parent) {
       Builder builder = new Builder(parent);
       return builder;
     }
@@ -4598,18 +5004,18 @@ public final class DappTestService {
     public static final class Builder extends
         com.google.protobuf.GeneratedMessageV3.Builder<Builder> implements
         // @@protoc_insertion_point(builder_implements:darcher.DAppDriverControlMsg)
-        org.kristen.rpc.darcher.DappTestService.DAppDriverControlMsgOrBuilder {
+        DAppDriverControlMsgOrBuilder {
       public static final com.google.protobuf.Descriptors.Descriptor
           getDescriptor() {
-        return org.kristen.rpc.darcher.DappTestService.internal_static_darcher_DAppDriverControlMsg_descriptor;
+        return DappTestService.internal_static_darcher_DAppDriverControlMsg_descriptor;
       }
 
-      @java.lang.Override
-      protected com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
+      @Override
+      protected FieldAccessorTable
           internalGetFieldAccessorTable() {
-        return org.kristen.rpc.darcher.DappTestService.internal_static_darcher_DAppDriverControlMsg_fieldAccessorTable
+        return DappTestService.internal_static_darcher_DAppDriverControlMsg_fieldAccessorTable
             .ensureFieldAccessorsInitialized(
-                org.kristen.rpc.darcher.DappTestService.DAppDriverControlMsg.class, org.kristen.rpc.darcher.DappTestService.DAppDriverControlMsg.Builder.class);
+                DAppDriverControlMsg.class, Builder.class);
       }
 
       // Construct using org.kristen.rpc.darcher.DappTestService.DAppDriverControlMsg.newBuilder()
@@ -4618,7 +5024,7 @@ public final class DappTestService {
       }
 
       private Builder(
-          com.google.protobuf.GeneratedMessageV3.BuilderParent parent) {
+          BuilderParent parent) {
         super(parent);
         maybeForceBuilderInitialization();
       }
@@ -4627,7 +5033,7 @@ public final class DappTestService {
                 .alwaysUseFieldBuilders) {
         }
       }
-      @java.lang.Override
+      @Override
       public Builder clear() {
         super.clear();
         role_ = 0;
@@ -4643,29 +5049,29 @@ public final class DappTestService {
         return this;
       }
 
-      @java.lang.Override
+      @Override
       public com.google.protobuf.Descriptors.Descriptor
           getDescriptorForType() {
-        return org.kristen.rpc.darcher.DappTestService.internal_static_darcher_DAppDriverControlMsg_descriptor;
+        return DappTestService.internal_static_darcher_DAppDriverControlMsg_descriptor;
       }
 
-      @java.lang.Override
-      public org.kristen.rpc.darcher.DappTestService.DAppDriverControlMsg getDefaultInstanceForType() {
-        return org.kristen.rpc.darcher.DappTestService.DAppDriverControlMsg.getDefaultInstance();
+      @Override
+      public DAppDriverControlMsg getDefaultInstanceForType() {
+        return DAppDriverControlMsg.getDefaultInstance();
       }
 
-      @java.lang.Override
-      public org.kristen.rpc.darcher.DappTestService.DAppDriverControlMsg build() {
-        org.kristen.rpc.darcher.DappTestService.DAppDriverControlMsg result = buildPartial();
+      @Override
+      public DAppDriverControlMsg build() {
+        DAppDriverControlMsg result = buildPartial();
         if (!result.isInitialized()) {
           throw newUninitializedMessageException(result);
         }
         return result;
       }
 
-      @java.lang.Override
-      public org.kristen.rpc.darcher.DappTestService.DAppDriverControlMsg buildPartial() {
-        org.kristen.rpc.darcher.DappTestService.DAppDriverControlMsg result = new org.kristen.rpc.darcher.DappTestService.DAppDriverControlMsg(this);
+      @Override
+      public DAppDriverControlMsg buildPartial() {
+        DAppDriverControlMsg result = new DAppDriverControlMsg(this);
         result.role_ = role_;
         result.id_ = id_;
         result.dappName_ = dappName_;
@@ -4675,50 +5081,50 @@ public final class DappTestService {
         return result;
       }
 
-      @java.lang.Override
+      @Override
       public Builder clone() {
         return super.clone();
       }
-      @java.lang.Override
+      @Override
       public Builder setField(
           com.google.protobuf.Descriptors.FieldDescriptor field,
-          java.lang.Object value) {
+          Object value) {
         return super.setField(field, value);
       }
-      @java.lang.Override
+      @Override
       public Builder clearField(
           com.google.protobuf.Descriptors.FieldDescriptor field) {
         return super.clearField(field);
       }
-      @java.lang.Override
+      @Override
       public Builder clearOneof(
           com.google.protobuf.Descriptors.OneofDescriptor oneof) {
         return super.clearOneof(oneof);
       }
-      @java.lang.Override
+      @Override
       public Builder setRepeatedField(
           com.google.protobuf.Descriptors.FieldDescriptor field,
-          int index, java.lang.Object value) {
+          int index, Object value) {
         return super.setRepeatedField(field, index, value);
       }
-      @java.lang.Override
+      @Override
       public Builder addRepeatedField(
           com.google.protobuf.Descriptors.FieldDescriptor field,
-          java.lang.Object value) {
+          Object value) {
         return super.addRepeatedField(field, value);
       }
-      @java.lang.Override
+      @Override
       public Builder mergeFrom(com.google.protobuf.Message other) {
-        if (other instanceof org.kristen.rpc.darcher.DappTestService.DAppDriverControlMsg) {
-          return mergeFrom((org.kristen.rpc.darcher.DappTestService.DAppDriverControlMsg)other);
+        if (other instanceof DAppDriverControlMsg) {
+          return mergeFrom((DAppDriverControlMsg)other);
         } else {
           super.mergeFrom(other);
           return this;
         }
       }
 
-      public Builder mergeFrom(org.kristen.rpc.darcher.DappTestService.DAppDriverControlMsg other) {
-        if (other == org.kristen.rpc.darcher.DappTestService.DAppDriverControlMsg.getDefaultInstance()) return this;
+      public Builder mergeFrom(DAppDriverControlMsg other) {
+        if (other == DAppDriverControlMsg.getDefaultInstance()) return this;
         if (other.role_ != 0) {
           setRoleValue(other.getRoleValue());
         }
@@ -4742,21 +5148,21 @@ public final class DappTestService {
         return this;
       }
 
-      @java.lang.Override
+      @Override
       public final boolean isInitialized() {
         return true;
       }
 
-      @java.lang.Override
+      @Override
       public Builder mergeFrom(
           com.google.protobuf.CodedInputStream input,
           com.google.protobuf.ExtensionRegistryLite extensionRegistry)
           throws java.io.IOException {
-        org.kristen.rpc.darcher.DappTestService.DAppDriverControlMsg parsedMessage = null;
+        DAppDriverControlMsg parsedMessage = null;
         try {
           parsedMessage = PARSER.parsePartialFrom(input, extensionRegistry);
         } catch (com.google.protobuf.InvalidProtocolBufferException e) {
-          parsedMessage = (org.kristen.rpc.darcher.DappTestService.DAppDriverControlMsg) e.getUnfinishedMessage();
+          parsedMessage = (DAppDriverControlMsg) e.getUnfinishedMessage();
           throw e.unwrapIOException();
         } finally {
           if (parsedMessage != null) {
@@ -4775,7 +5181,7 @@ public final class DappTestService {
        * <code>.darcher.Role role = 1;</code>
        * @return The enum numeric value on the wire for role.
        */
-      public int getRoleValue() {
+      @Override public int getRoleValue() {
         return role_;
       }
       /**
@@ -4788,6 +5194,7 @@ public final class DappTestService {
        * @return This builder for chaining.
        */
       public Builder setRoleValue(int value) {
+        
         role_ = value;
         onChanged();
         return this;
@@ -4800,10 +5207,11 @@ public final class DappTestService {
        * <code>.darcher.Role role = 1;</code>
        * @return The role.
        */
-      public org.kristen.rpc.darcher.Common.Role getRole() {
+      @Override
+      public Common.Role getRole() {
         @SuppressWarnings("deprecation")
-        org.kristen.rpc.darcher.Common.Role result = org.kristen.rpc.darcher.Common.Role.valueOf(role_);
-        return result == null ? org.kristen.rpc.darcher.Common.Role.UNRECOGNIZED : result;
+        Common.Role result = Common.Role.valueOf(role_);
+        return result == null ? Common.Role.UNRECOGNIZED : result;
       }
       /**
        * <pre>
@@ -4814,7 +5222,7 @@ public final class DappTestService {
        * @param value The role to set.
        * @return This builder for chaining.
        */
-      public Builder setRole(org.kristen.rpc.darcher.Common.Role value) {
+      public Builder setRole(Common.Role value) {
         if (value == null) {
           throw new NullPointerException();
         }
@@ -4838,7 +5246,7 @@ public final class DappTestService {
         return this;
       }
 
-      private java.lang.Object id_ = "";
+      private Object id_ = "";
       /**
        * <pre>
        * id of one reverse rpc request, the corresponding response should keep this id.
@@ -4847,16 +5255,16 @@ public final class DappTestService {
        * <code>string id = 2;</code>
        * @return The id.
        */
-      public java.lang.String getId() {
-        java.lang.Object ref = id_;
-        if (!(ref instanceof java.lang.String)) {
+      public String getId() {
+        Object ref = id_;
+        if (!(ref instanceof String)) {
           com.google.protobuf.ByteString bs =
               (com.google.protobuf.ByteString) ref;
-          java.lang.String s = bs.toStringUtf8();
+          String s = bs.toStringUtf8();
           id_ = s;
           return s;
         } else {
-          return (java.lang.String) ref;
+          return (String) ref;
         }
       }
       /**
@@ -4869,11 +5277,11 @@ public final class DappTestService {
        */
       public com.google.protobuf.ByteString
           getIdBytes() {
-        java.lang.Object ref = id_;
+        Object ref = id_;
         if (ref instanceof String) {
           com.google.protobuf.ByteString b = 
               com.google.protobuf.ByteString.copyFromUtf8(
-                  (java.lang.String) ref);
+                  (String) ref);
           id_ = b;
           return b;
         } else {
@@ -4890,7 +5298,7 @@ public final class DappTestService {
        * @return This builder for chaining.
        */
       public Builder setId(
-          java.lang.String value) {
+          String value) {
         if (value == null) {
     throw new NullPointerException();
   }
@@ -4934,7 +5342,7 @@ public final class DappTestService {
         return this;
       }
 
-      private java.lang.Object dappName_ = "";
+      private Object dappName_ = "";
       /**
        * <pre>
        * name of dapp, should keep consistent with that in TestStartMsg
@@ -4943,16 +5351,16 @@ public final class DappTestService {
        * <code>string dapp_name = 3;</code>
        * @return The dappName.
        */
-      public java.lang.String getDappName() {
-        java.lang.Object ref = dappName_;
-        if (!(ref instanceof java.lang.String)) {
+      public String getDappName() {
+        Object ref = dappName_;
+        if (!(ref instanceof String)) {
           com.google.protobuf.ByteString bs =
               (com.google.protobuf.ByteString) ref;
-          java.lang.String s = bs.toStringUtf8();
+          String s = bs.toStringUtf8();
           dappName_ = s;
           return s;
         } else {
-          return (java.lang.String) ref;
+          return (String) ref;
         }
       }
       /**
@@ -4965,11 +5373,11 @@ public final class DappTestService {
        */
       public com.google.protobuf.ByteString
           getDappNameBytes() {
-        java.lang.Object ref = dappName_;
+        Object ref = dappName_;
         if (ref instanceof String) {
           com.google.protobuf.ByteString b = 
               com.google.protobuf.ByteString.copyFromUtf8(
-                  (java.lang.String) ref);
+                  (String) ref);
           dappName_ = b;
           return b;
         } else {
@@ -4986,7 +5394,7 @@ public final class DappTestService {
        * @return This builder for chaining.
        */
       public Builder setDappName(
-          java.lang.String value) {
+          String value) {
         if (value == null) {
     throw new NullPointerException();
   }
@@ -5030,7 +5438,7 @@ public final class DappTestService {
         return this;
       }
 
-      private java.lang.Object instanceId_ = "";
+      private Object instanceId_ = "";
       /**
        * <pre>
        * id of the instance of the dapp. One dapp could have multiple instances (e.g. multiple websites)
@@ -5039,16 +5447,16 @@ public final class DappTestService {
        * <code>string instance_id = 4;</code>
        * @return The instanceId.
        */
-      public java.lang.String getInstanceId() {
-        java.lang.Object ref = instanceId_;
-        if (!(ref instanceof java.lang.String)) {
+      public String getInstanceId() {
+        Object ref = instanceId_;
+        if (!(ref instanceof String)) {
           com.google.protobuf.ByteString bs =
               (com.google.protobuf.ByteString) ref;
-          java.lang.String s = bs.toStringUtf8();
+          String s = bs.toStringUtf8();
           instanceId_ = s;
           return s;
         } else {
-          return (java.lang.String) ref;
+          return (String) ref;
         }
       }
       /**
@@ -5061,11 +5469,11 @@ public final class DappTestService {
        */
       public com.google.protobuf.ByteString
           getInstanceIdBytes() {
-        java.lang.Object ref = instanceId_;
+        Object ref = instanceId_;
         if (ref instanceof String) {
           com.google.protobuf.ByteString b = 
               com.google.protobuf.ByteString.copyFromUtf8(
-                  (java.lang.String) ref);
+                  (String) ref);
           instanceId_ = b;
           return b;
         } else {
@@ -5082,7 +5490,7 @@ public final class DappTestService {
        * @return This builder for chaining.
        */
       public Builder setInstanceId(
-          java.lang.String value) {
+          String value) {
         if (value == null) {
     throw new NullPointerException();
   }
@@ -5131,7 +5539,7 @@ public final class DappTestService {
        * <code>.darcher.DAppDriverControlType control_type = 5;</code>
        * @return The enum numeric value on the wire for controlType.
        */
-      public int getControlTypeValue() {
+      @Override public int getControlTypeValue() {
         return controlType_;
       }
       /**
@@ -5140,6 +5548,7 @@ public final class DappTestService {
        * @return This builder for chaining.
        */
       public Builder setControlTypeValue(int value) {
+        
         controlType_ = value;
         onChanged();
         return this;
@@ -5148,17 +5557,18 @@ public final class DappTestService {
        * <code>.darcher.DAppDriverControlType control_type = 5;</code>
        * @return The controlType.
        */
-      public org.kristen.rpc.darcher.DappTestService.DAppDriverControlType getControlType() {
+      @Override
+      public DAppDriverControlType getControlType() {
         @SuppressWarnings("deprecation")
-        org.kristen.rpc.darcher.DappTestService.DAppDriverControlType result = org.kristen.rpc.darcher.DappTestService.DAppDriverControlType.valueOf(controlType_);
-        return result == null ? org.kristen.rpc.darcher.DappTestService.DAppDriverControlType.UNRECOGNIZED : result;
+        DAppDriverControlType result = DAppDriverControlType.valueOf(controlType_);
+        return result == null ? DAppDriverControlType.UNRECOGNIZED : result;
       }
       /**
        * <code>.darcher.DAppDriverControlType control_type = 5;</code>
        * @param value The controlType to set.
        * @return This builder for chaining.
        */
-      public Builder setControlType(org.kristen.rpc.darcher.DappTestService.DAppDriverControlType value) {
+      public Builder setControlType(DAppDriverControlType value) {
         if (value == null) {
           throw new NullPointerException();
         }
@@ -5177,13 +5587,13 @@ public final class DappTestService {
         onChanged();
         return this;
       }
-      @java.lang.Override
+      @Override
       public final Builder setUnknownFields(
           final com.google.protobuf.UnknownFieldSet unknownFields) {
         return super.setUnknownFields(unknownFields);
       }
 
-      @java.lang.Override
+      @Override
       public final Builder mergeUnknownFields(
           final com.google.protobuf.UnknownFieldSet unknownFields) {
         return super.mergeUnknownFields(unknownFields);
@@ -5194,18 +5604,18 @@ public final class DappTestService {
     }
 
     // @@protoc_insertion_point(class_scope:darcher.DAppDriverControlMsg)
-    private static final org.kristen.rpc.darcher.DappTestService.DAppDriverControlMsg DEFAULT_INSTANCE;
+    private static final DAppDriverControlMsg DEFAULT_INSTANCE;
     static {
-      DEFAULT_INSTANCE = new org.kristen.rpc.darcher.DappTestService.DAppDriverControlMsg();
+      DEFAULT_INSTANCE = new DAppDriverControlMsg();
     }
 
-    public static org.kristen.rpc.darcher.DappTestService.DAppDriverControlMsg getDefaultInstance() {
+    public static DAppDriverControlMsg getDefaultInstance() {
       return DEFAULT_INSTANCE;
     }
 
     private static final com.google.protobuf.Parser<DAppDriverControlMsg>
         PARSER = new com.google.protobuf.AbstractParser<DAppDriverControlMsg>() {
-      @java.lang.Override
+      @Override
       public DAppDriverControlMsg parsePartialFrom(
           com.google.protobuf.CodedInputStream input,
           com.google.protobuf.ExtensionRegistryLite extensionRegistry)
@@ -5218,13 +5628,13 @@ public final class DappTestService {
       return PARSER;
     }
 
-    @java.lang.Override
+    @Override
     public com.google.protobuf.Parser<DAppDriverControlMsg> getParserForType() {
       return PARSER;
     }
 
-    @java.lang.Override
-    public org.kristen.rpc.darcher.DappTestService.DAppDriverControlMsg getDefaultInstanceForType() {
+    @Override
+    public DAppDriverControlMsg getDefaultInstanceForType() {
       return DEFAULT_INSTANCE;
     }
 
@@ -5263,71 +5673,72 @@ public final class DappTestService {
   private static  com.google.protobuf.Descriptors.FileDescriptor
       descriptor;
   static {
-    java.lang.String[] descriptorData = {
+    String[] descriptorData = {
       "\n\027dapp_test_service.proto\022\007darcher\032\033goog" +
       "le/protobuf/empty.proto\032\014common.proto\"6\n" +
       "\014TestStartMsg\022\021\n\tdapp_name\030\001 \001(\t\022\023\n\013inst" +
       "ance_id\030\002 \001(\t\"4\n\nTestEndMsg\022\021\n\tdapp_name" +
-      "\030\001 \001(\t\022\023\n\013instance_id\030\002 \001(\t\"W\n\005TxMsg\022\021\n\t" +
+      "\030\001 \001(\t\022\023\n\013instance_id\030\002 \001(\t\"w\n\005TxMsg\022\021\n\t" +
       "dapp_name\030\001 \001(\t\022\023\n\013instance_id\030\002 \001(\t\022\014\n\004" +
-      "hash\030\003 \001(\t\022\014\n\004from\030\004 \001(\t\022\n\n\002to\030\005 \001(\t\"O\n\017" +
-      "ConsoleErrorMsg\022\021\n\tdapp_name\030\001 \001(\t\022\023\n\013in" +
-      "stance_id\030\002 \001(\t\022\024\n\014error_string\030\003 \001(\t\"\235\001" +
-      "\n\024DAppDriverControlMsg\022\033\n\004role\030\001 \001(\0162\r.d" +
-      "archer.Role\022\n\n\002id\030\002 \001(\t\022\021\n\tdapp_name\030\003 \001" +
-      "(\t\022\023\n\013instance_id\030\004 \001(\t\0224\n\014control_type\030" +
-      "\005 \001(\0162\036.darcher.DAppDriverControlType*1\n" +
-      "\025DAppDriverControlType\022\013\n\007NilType\020\000\022\013\n\007R" +
-      "efresh\020\0012\374\002\n\025DAppTestDriverService\022B\n\017no" +
-      "tifyTestStart\022\025.darcher.TestStartMsg\032\026.g" +
-      "oogle.protobuf.Empty\"\000\022>\n\rnotifyTestEnd\022" +
-      "\023.darcher.TestEndMsg\032\026.google.protobuf.E" +
-      "mpty\"\000\022<\n\020waitForTxProcess\022\016.darcher.TxM" +
-      "sg\032\026.google.protobuf.Empty\"\000\022W\n\021dappDriv" +
-      "erControl\022\035.darcher.DAppDriverControlMsg" +
-      "\032\035.darcher.DAppDriverControlMsg\"\000(\0010\001\022H\n" +
-      "\022notifyConsoleError\022\030.darcher.ConsoleErr" +
-      "orMsg\032\026.google.protobuf.Empty\"\000B\031\n\027org.k" +
-      "risten.rpc.darcherb\006proto3"
+      "hash\030\003 \001(\t\022\014\n\004from\030\004 \001(\t\022\n\n\002to\030\005 \001(\t\022\016\n\006" +
+      "states\030\006 \001(\t\022\016\n\006events\030\007 \001(\t\"O\n\017ConsoleE" +
+      "rrorMsg\022\021\n\tdapp_name\030\001 \001(\t\022\023\n\013instance_i" +
+      "d\030\002 \001(\t\022\024\n\014error_string\030\003 \001(\t\"\235\001\n\024DAppDr" +
+      "iverControlMsg\022\033\n\004role\030\001 \001(\0162\r.darcher.R" +
+      "ole\022\n\n\002id\030\002 \001(\t\022\021\n\tdapp_name\030\003 \001(\t\022\023\n\013in" +
+      "stance_id\030\004 \001(\t\0224\n\014control_type\030\005 \001(\0162\036." +
+      "darcher.DAppDriverControlType*1\n\025DAppDri" +
+      "verControlType\022\013\n\007NilType\020\000\022\013\n\007Refresh\020\001" +
+      "2\374\002\n\025DAppTestDriverService\022B\n\017notifyTest" +
+      "Start\022\025.darcher.TestStartMsg\032\026.google.pr" +
+      "otobuf.Empty\"\000\022>\n\rnotifyTestEnd\022\023.darche" +
+      "r.TestEndMsg\032\026.google.protobuf.Empty\"\000\022<" +
+      "\n\020waitForTxProcess\022\016.darcher.TxMsg\032\026.goo" +
+      "gle.protobuf.Empty\"\000\022W\n\021dappDriverContro" +
+      "l\022\035.darcher.DAppDriverControlMsg\032\035.darch" +
+      "er.DAppDriverControlMsg\"\000(\0010\001\022H\n\022notifyC" +
+      "onsoleError\022\030.darcher.ConsoleErrorMsg\032\026." +
+      "google.protobuf.Empty\"\000B\031\n\027org.kristen.r" +
+      "pc.darcherb\006proto3"
     };
     descriptor = com.google.protobuf.Descriptors.FileDescriptor
       .internalBuildGeneratedFileFrom(descriptorData,
         new com.google.protobuf.Descriptors.FileDescriptor[] {
           com.google.protobuf.EmptyProto.getDescriptor(),
-          org.kristen.rpc.darcher.Common.getDescriptor(),
+          Common.getDescriptor(),
         });
     internal_static_darcher_TestStartMsg_descriptor =
       getDescriptor().getMessageTypes().get(0);
     internal_static_darcher_TestStartMsg_fieldAccessorTable = new
       com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
         internal_static_darcher_TestStartMsg_descriptor,
-        new java.lang.String[] { "DappName", "InstanceId", });
+        new String[] { "DappName", "InstanceId", });
     internal_static_darcher_TestEndMsg_descriptor =
       getDescriptor().getMessageTypes().get(1);
     internal_static_darcher_TestEndMsg_fieldAccessorTable = new
       com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
         internal_static_darcher_TestEndMsg_descriptor,
-        new java.lang.String[] { "DappName", "InstanceId", });
+        new String[] { "DappName", "InstanceId", });
     internal_static_darcher_TxMsg_descriptor =
       getDescriptor().getMessageTypes().get(2);
     internal_static_darcher_TxMsg_fieldAccessorTable = new
       com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
         internal_static_darcher_TxMsg_descriptor,
-        new java.lang.String[] { "DappName", "InstanceId", "Hash", "From", "To", });
+        new String[] { "DappName", "InstanceId", "Hash", "From", "To", "States", "Events", });
     internal_static_darcher_ConsoleErrorMsg_descriptor =
       getDescriptor().getMessageTypes().get(3);
     internal_static_darcher_ConsoleErrorMsg_fieldAccessorTable = new
       com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
         internal_static_darcher_ConsoleErrorMsg_descriptor,
-        new java.lang.String[] { "DappName", "InstanceId", "ErrorString", });
+        new String[] { "DappName", "InstanceId", "ErrorString", });
     internal_static_darcher_DAppDriverControlMsg_descriptor =
       getDescriptor().getMessageTypes().get(4);
     internal_static_darcher_DAppDriverControlMsg_fieldAccessorTable = new
       com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
         internal_static_darcher_DAppDriverControlMsg_descriptor,
-        new java.lang.String[] { "Role", "Id", "DappName", "InstanceId", "ControlType", });
+        new String[] { "Role", "Id", "DappName", "InstanceId", "ControlType", });
     com.google.protobuf.EmptyProto.getDescriptor();
-    org.kristen.rpc.darcher.Common.getDescriptor();
+    Common.getDescriptor();
   }
 
   // @@protoc_insertion_point(outer_class_scope)

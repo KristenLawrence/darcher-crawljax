@@ -12,14 +12,19 @@ import org.openqa.selenium.chrome.ChromeOptions;
 import org.openqa.selenium.firefox.FirefoxDriver;
 import org.openqa.selenium.firefox.FirefoxOptions;
 import org.openqa.selenium.firefox.FirefoxProfile;
+import org.openqa.selenium.logging.LogType;
+import org.openqa.selenium.logging.LoggingPreferences;
 import org.openqa.selenium.phantomjs.PhantomJSDriver;
 import org.openqa.selenium.phantomjs.PhantomJSDriverService;
+import org.openqa.selenium.remote.CapabilityType;
+import org.openqa.selenium.remote.RemoteWebDriver;
 import org.openqa.selenium.remote.DesiredCapabilities;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import javax.inject.Inject;
 import javax.inject.Provider;
+import java.util.logging.Level;
 
 /**
  * Default implementation of the EmbeddedBrowserBuilder based on Selenium WebDriver API.
@@ -176,6 +181,12 @@ public class WebDriverBrowserBuilder implements Provider<EmbeddedBrowser> {
 							+ ":" + configuration.getProxyConfiguration().getPort());
 
 		}
+
+		// Kristen modified part BEGIN
+		LoggingPreferences logPrefs = new LoggingPreferences();
+		logPrefs.enable(LogType.BROWSER, Level.SEVERE);
+		optionsChrome.setCapability("goog:loggingPrefs", logPrefs);
+		// Kristen modified part END
 
 		ChromeDriver driverChrome = new ChromeDriver(optionsChrome);
 		return WebDriverBackedEmbeddedBrowser.withDriver(driverChrome, filterAttributes,

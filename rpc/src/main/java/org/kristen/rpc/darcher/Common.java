@@ -58,7 +58,7 @@ public final class Common {
 
     public final int getNumber() {
       if (this == UNRECOGNIZED) {
-        throw new java.lang.IllegalArgumentException(
+        throw new IllegalArgumentException(
             "Can't get the number of an unknown enum value.");
       }
       return value;
@@ -69,7 +69,7 @@ public final class Common {
      * @return The enum associated with the given numeric wire value.
      * @deprecated Use {@link #forNumber(int)} instead.
      */
-    @java.lang.Deprecated
+    @Deprecated
     public static Role valueOf(int value) {
       return forNumber(value);
     }
@@ -102,6 +102,10 @@ public final class Common {
 
     public final com.google.protobuf.Descriptors.EnumValueDescriptor
         getValueDescriptor() {
+      if (this == UNRECOGNIZED) {
+        throw new IllegalStateException(
+            "Can't get the descriptor of an unrecognized enum value.");
+      }
       return getDescriptor().getValues().get(ordinal());
     }
     public final com.google.protobuf.Descriptors.EnumDescriptor
@@ -110,7 +114,7 @@ public final class Common {
     }
     public static final com.google.protobuf.Descriptors.EnumDescriptor
         getDescriptor() {
-      return org.kristen.rpc.darcher.Common.getDescriptor().getEnumTypes().get(0);
+      return Common.getDescriptor().getEnumTypes().get(0);
     }
 
     private static final Role[] VALUES = values();
@@ -118,7 +122,7 @@ public final class Common {
     public static Role valueOf(
         com.google.protobuf.Descriptors.EnumValueDescriptor desc) {
       if (desc.getType() != getDescriptor()) {
-        throw new java.lang.IllegalArgumentException(
+        throw new IllegalArgumentException(
           "EnumValueDescriptor is not for this type.");
       }
       if (desc.getIndex() == -1) {
@@ -180,7 +184,7 @@ public final class Common {
 
     public final int getNumber() {
       if (this == UNRECOGNIZED) {
-        throw new java.lang.IllegalArgumentException(
+        throw new IllegalArgumentException(
             "Can't get the number of an unknown enum value.");
       }
       return value;
@@ -191,7 +195,7 @@ public final class Common {
      * @return The enum associated with the given numeric wire value.
      * @deprecated Use {@link #forNumber(int)} instead.
      */
-    @java.lang.Deprecated
+    @Deprecated
     public static Error valueOf(int value) {
       return forNumber(value);
     }
@@ -224,6 +228,10 @@ public final class Common {
 
     public final com.google.protobuf.Descriptors.EnumValueDescriptor
         getValueDescriptor() {
+      if (this == UNRECOGNIZED) {
+        throw new IllegalStateException(
+            "Can't get the descriptor of an unrecognized enum value.");
+      }
       return getDescriptor().getValues().get(ordinal());
     }
     public final com.google.protobuf.Descriptors.EnumDescriptor
@@ -232,7 +240,7 @@ public final class Common {
     }
     public static final com.google.protobuf.Descriptors.EnumDescriptor
         getDescriptor() {
-      return org.kristen.rpc.darcher.Common.getDescriptor().getEnumTypes().get(1);
+      return Common.getDescriptor().getEnumTypes().get(1);
     }
 
     private static final Error[] VALUES = values();
@@ -240,7 +248,7 @@ public final class Common {
     public static Error valueOf(
         com.google.protobuf.Descriptors.EnumValueDescriptor desc) {
       if (desc.getType() != getDescriptor()) {
-        throw new java.lang.IllegalArgumentException(
+        throw new IllegalArgumentException(
           "EnumValueDescriptor is not for this type.");
       }
       if (desc.getIndex() == -1) {
@@ -310,7 +318,7 @@ public final class Common {
 
     public final int getNumber() {
       if (this == UNRECOGNIZED) {
-        throw new java.lang.IllegalArgumentException(
+        throw new IllegalArgumentException(
             "Can't get the number of an unknown enum value.");
       }
       return value;
@@ -321,7 +329,7 @@ public final class Common {
      * @return The enum associated with the given numeric wire value.
      * @deprecated Use {@link #forNumber(int)} instead.
      */
-    @java.lang.Deprecated
+    @Deprecated
     public static TxState valueOf(int value) {
       return forNumber(value);
     }
@@ -355,6 +363,10 @@ public final class Common {
 
     public final com.google.protobuf.Descriptors.EnumValueDescriptor
         getValueDescriptor() {
+      if (this == UNRECOGNIZED) {
+        throw new IllegalStateException(
+            "Can't get the descriptor of an unrecognized enum value.");
+      }
       return getDescriptor().getValues().get(ordinal());
     }
     public final com.google.protobuf.Descriptors.EnumDescriptor
@@ -363,7 +375,7 @@ public final class Common {
     }
     public static final com.google.protobuf.Descriptors.EnumDescriptor
         getDescriptor() {
-      return org.kristen.rpc.darcher.Common.getDescriptor().getEnumTypes().get(2);
+      return Common.getDescriptor().getEnumTypes().get(2);
     }
 
     private static final TxState[] VALUES = values();
@@ -371,7 +383,7 @@ public final class Common {
     public static TxState valueOf(
         com.google.protobuf.Descriptors.EnumValueDescriptor desc) {
       if (desc.getType() != getDescriptor()) {
-        throw new java.lang.IllegalArgumentException(
+        throw new IllegalArgumentException(
           "EnumValueDescriptor is not for this type.");
       }
       if (desc.getIndex() == -1) {
@@ -454,7 +466,7 @@ public final class Common {
 
     public final int getNumber() {
       if (this == UNRECOGNIZED) {
-        throw new java.lang.IllegalArgumentException(
+        throw new IllegalArgumentException(
             "Can't get the number of an unknown enum value.");
       }
       return value;
@@ -465,7 +477,7 @@ public final class Common {
      * @return The enum associated with the given numeric wire value.
      * @deprecated Use {@link #forNumber(int)} instead.
      */
-    @java.lang.Deprecated
+    @Deprecated
     public static TxErrorType valueOf(int value) {
       return forNumber(value);
     }
@@ -497,6 +509,10 @@ public final class Common {
 
     public final com.google.protobuf.Descriptors.EnumValueDescriptor
         getValueDescriptor() {
+      if (this == UNRECOGNIZED) {
+        throw new IllegalStateException(
+            "Can't get the descriptor of an unrecognized enum value.");
+      }
       return getDescriptor().getValues().get(ordinal());
     }
     public final com.google.protobuf.Descriptors.EnumDescriptor
@@ -505,7 +521,7 @@ public final class Common {
     }
     public static final com.google.protobuf.Descriptors.EnumDescriptor
         getDescriptor() {
-      return org.kristen.rpc.darcher.Common.getDescriptor().getEnumTypes().get(3);
+      return Common.getDescriptor().getEnumTypes().get(3);
     }
 
     private static final TxErrorType[] VALUES = values();
@@ -513,7 +529,7 @@ public final class Common {
     public static TxErrorType valueOf(
         com.google.protobuf.Descriptors.EnumValueDescriptor desc) {
       if (desc.getType() != getDescriptor()) {
-        throw new java.lang.IllegalArgumentException(
+        throw new IllegalArgumentException(
           "EnumValueDescriptor is not for this type.");
       }
       if (desc.getIndex() == -1) {
@@ -539,7 +555,7 @@ public final class Common {
      * <code>string hash = 1;</code>
      * @return The hash.
      */
-    java.lang.String getHash();
+    String getHash();
     /**
      * <code>string hash = 1;</code>
      * @return The bytes for hash.
@@ -556,13 +572,13 @@ public final class Common {
      * <code>.darcher.TxErrorType type = 2;</code>
      * @return The type.
      */
-    org.kristen.rpc.darcher.Common.TxErrorType getType();
+    TxErrorType getType();
 
     /**
      * <code>string description = 3;</code>
      * @return The description.
      */
-    java.lang.String getDescription();
+    String getDescription();
     /**
      * <code>string description = 3;</code>
      * @return The bytes for description.
@@ -573,7 +589,7 @@ public final class Common {
   /**
    * Protobuf type {@code darcher.TxErrorMsg}
    */
-  public  static final class TxErrorMsg extends
+  public static final class TxErrorMsg extends
       com.google.protobuf.GeneratedMessageV3 implements
       // @@protoc_insertion_point(message_implements:darcher.TxErrorMsg)
       TxErrorMsgOrBuilder {
@@ -588,14 +604,14 @@ public final class Common {
       description_ = "";
     }
 
-    @java.lang.Override
+    @Override
     @SuppressWarnings({"unused"})
-    protected java.lang.Object newInstance(
+    protected Object newInstance(
         UnusedPrivateParameter unused) {
       return new TxErrorMsg();
     }
 
-    @java.lang.Override
+    @Override
     public final com.google.protobuf.UnknownFieldSet
     getUnknownFields() {
       return this.unknownFields;
@@ -606,7 +622,7 @@ public final class Common {
         throws com.google.protobuf.InvalidProtocolBufferException {
       this();
       if (extensionRegistry == null) {
-        throw new java.lang.NullPointerException();
+        throw new NullPointerException();
       }
       com.google.protobuf.UnknownFieldSet.Builder unknownFields =
           com.google.protobuf.UnknownFieldSet.newBuilder();
@@ -619,7 +635,7 @@ public final class Common {
               done = true;
               break;
             case 10: {
-              java.lang.String s = input.readStringRequireUtf8();
+              String s = input.readStringRequireUtf8();
 
               hash_ = s;
               break;
@@ -631,7 +647,7 @@ public final class Common {
               break;
             }
             case 26: {
-              java.lang.String s = input.readStringRequireUtf8();
+              String s = input.readStringRequireUtf8();
 
               description_ = s;
               break;
@@ -657,31 +673,32 @@ public final class Common {
     }
     public static final com.google.protobuf.Descriptors.Descriptor
         getDescriptor() {
-      return org.kristen.rpc.darcher.Common.internal_static_darcher_TxErrorMsg_descriptor;
+      return Common.internal_static_darcher_TxErrorMsg_descriptor;
     }
 
-    @java.lang.Override
-    protected com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
+    @Override
+    protected FieldAccessorTable
         internalGetFieldAccessorTable() {
-      return org.kristen.rpc.darcher.Common.internal_static_darcher_TxErrorMsg_fieldAccessorTable
+      return Common.internal_static_darcher_TxErrorMsg_fieldAccessorTable
           .ensureFieldAccessorsInitialized(
-              org.kristen.rpc.darcher.Common.TxErrorMsg.class, org.kristen.rpc.darcher.Common.TxErrorMsg.Builder.class);
+              TxErrorMsg.class, Builder.class);
     }
 
     public static final int HASH_FIELD_NUMBER = 1;
-    private volatile java.lang.Object hash_;
+    private volatile Object hash_;
     /**
      * <code>string hash = 1;</code>
      * @return The hash.
      */
-    public java.lang.String getHash() {
-      java.lang.Object ref = hash_;
-      if (ref instanceof java.lang.String) {
-        return (java.lang.String) ref;
+    @Override
+    public String getHash() {
+      Object ref = hash_;
+      if (ref instanceof String) {
+        return (String) ref;
       } else {
         com.google.protobuf.ByteString bs = 
             (com.google.protobuf.ByteString) ref;
-        java.lang.String s = bs.toStringUtf8();
+        String s = bs.toStringUtf8();
         hash_ = s;
         return s;
       }
@@ -690,13 +707,14 @@ public final class Common {
      * <code>string hash = 1;</code>
      * @return The bytes for hash.
      */
+    @Override
     public com.google.protobuf.ByteString
         getHashBytes() {
-      java.lang.Object ref = hash_;
-      if (ref instanceof java.lang.String) {
+      Object ref = hash_;
+      if (ref instanceof String) {
         com.google.protobuf.ByteString b = 
             com.google.protobuf.ByteString.copyFromUtf8(
-                (java.lang.String) ref);
+                (String) ref);
         hash_ = b;
         return b;
       } else {
@@ -710,33 +728,34 @@ public final class Common {
      * <code>.darcher.TxErrorType type = 2;</code>
      * @return The enum numeric value on the wire for type.
      */
-    public int getTypeValue() {
+    @Override public int getTypeValue() {
       return type_;
     }
     /**
      * <code>.darcher.TxErrorType type = 2;</code>
      * @return The type.
      */
-    public org.kristen.rpc.darcher.Common.TxErrorType getType() {
+    @Override public TxErrorType getType() {
       @SuppressWarnings("deprecation")
-      org.kristen.rpc.darcher.Common.TxErrorType result = org.kristen.rpc.darcher.Common.TxErrorType.valueOf(type_);
-      return result == null ? org.kristen.rpc.darcher.Common.TxErrorType.UNRECOGNIZED : result;
+      TxErrorType result = TxErrorType.valueOf(type_);
+      return result == null ? TxErrorType.UNRECOGNIZED : result;
     }
 
     public static final int DESCRIPTION_FIELD_NUMBER = 3;
-    private volatile java.lang.Object description_;
+    private volatile Object description_;
     /**
      * <code>string description = 3;</code>
      * @return The description.
      */
-    public java.lang.String getDescription() {
-      java.lang.Object ref = description_;
-      if (ref instanceof java.lang.String) {
-        return (java.lang.String) ref;
+    @Override
+    public String getDescription() {
+      Object ref = description_;
+      if (ref instanceof String) {
+        return (String) ref;
       } else {
         com.google.protobuf.ByteString bs = 
             (com.google.protobuf.ByteString) ref;
-        java.lang.String s = bs.toStringUtf8();
+        String s = bs.toStringUtf8();
         description_ = s;
         return s;
       }
@@ -745,13 +764,14 @@ public final class Common {
      * <code>string description = 3;</code>
      * @return The bytes for description.
      */
+    @Override
     public com.google.protobuf.ByteString
         getDescriptionBytes() {
-      java.lang.Object ref = description_;
-      if (ref instanceof java.lang.String) {
+      Object ref = description_;
+      if (ref instanceof String) {
         com.google.protobuf.ByteString b = 
             com.google.protobuf.ByteString.copyFromUtf8(
-                (java.lang.String) ref);
+                (String) ref);
         description_ = b;
         return b;
       } else {
@@ -760,7 +780,7 @@ public final class Common {
     }
 
     private byte memoizedIsInitialized = -1;
-    @java.lang.Override
+    @Override
     public final boolean isInitialized() {
       byte isInitialized = memoizedIsInitialized;
       if (isInitialized == 1) return true;
@@ -770,13 +790,13 @@ public final class Common {
       return true;
     }
 
-    @java.lang.Override
+    @Override
     public void writeTo(com.google.protobuf.CodedOutputStream output)
                         throws java.io.IOException {
       if (!getHashBytes().isEmpty()) {
         com.google.protobuf.GeneratedMessageV3.writeString(output, 1, hash_);
       }
-      if (type_ != org.kristen.rpc.darcher.Common.TxErrorType.NIL_TxErr.getNumber()) {
+      if (type_ != TxErrorType.NIL_TxErr.getNumber()) {
         output.writeEnum(2, type_);
       }
       if (!getDescriptionBytes().isEmpty()) {
@@ -785,7 +805,7 @@ public final class Common {
       unknownFields.writeTo(output);
     }
 
-    @java.lang.Override
+    @Override
     public int getSerializedSize() {
       int size = memoizedSize;
       if (size != -1) return size;
@@ -794,7 +814,7 @@ public final class Common {
       if (!getHashBytes().isEmpty()) {
         size += com.google.protobuf.GeneratedMessageV3.computeStringSize(1, hash_);
       }
-      if (type_ != org.kristen.rpc.darcher.Common.TxErrorType.NIL_TxErr.getNumber()) {
+      if (type_ != TxErrorType.NIL_TxErr.getNumber()) {
         size += com.google.protobuf.CodedOutputStream
           .computeEnumSize(2, type_);
       }
@@ -806,15 +826,15 @@ public final class Common {
       return size;
     }
 
-    @java.lang.Override
-    public boolean equals(final java.lang.Object obj) {
+    @Override
+    public boolean equals(final Object obj) {
       if (obj == this) {
        return true;
       }
-      if (!(obj instanceof org.kristen.rpc.darcher.Common.TxErrorMsg)) {
+      if (!(obj instanceof TxErrorMsg)) {
         return super.equals(obj);
       }
-      org.kristen.rpc.darcher.Common.TxErrorMsg other = (org.kristen.rpc.darcher.Common.TxErrorMsg) obj;
+      TxErrorMsg other = (TxErrorMsg) obj;
 
       if (!getHash()
           .equals(other.getHash())) return false;
@@ -825,7 +845,7 @@ public final class Common {
       return true;
     }
 
-    @java.lang.Override
+    @Override
     public int hashCode() {
       if (memoizedHashCode != 0) {
         return memoizedHashCode;
@@ -843,69 +863,69 @@ public final class Common {
       return hash;
     }
 
-    public static org.kristen.rpc.darcher.Common.TxErrorMsg parseFrom(
+    public static TxErrorMsg parseFrom(
         java.nio.ByteBuffer data)
         throws com.google.protobuf.InvalidProtocolBufferException {
       return PARSER.parseFrom(data);
     }
-    public static org.kristen.rpc.darcher.Common.TxErrorMsg parseFrom(
+    public static TxErrorMsg parseFrom(
         java.nio.ByteBuffer data,
         com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws com.google.protobuf.InvalidProtocolBufferException {
       return PARSER.parseFrom(data, extensionRegistry);
     }
-    public static org.kristen.rpc.darcher.Common.TxErrorMsg parseFrom(
+    public static TxErrorMsg parseFrom(
         com.google.protobuf.ByteString data)
         throws com.google.protobuf.InvalidProtocolBufferException {
       return PARSER.parseFrom(data);
     }
-    public static org.kristen.rpc.darcher.Common.TxErrorMsg parseFrom(
+    public static TxErrorMsg parseFrom(
         com.google.protobuf.ByteString data,
         com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws com.google.protobuf.InvalidProtocolBufferException {
       return PARSER.parseFrom(data, extensionRegistry);
     }
-    public static org.kristen.rpc.darcher.Common.TxErrorMsg parseFrom(byte[] data)
+    public static TxErrorMsg parseFrom(byte[] data)
         throws com.google.protobuf.InvalidProtocolBufferException {
       return PARSER.parseFrom(data);
     }
-    public static org.kristen.rpc.darcher.Common.TxErrorMsg parseFrom(
+    public static TxErrorMsg parseFrom(
         byte[] data,
         com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws com.google.protobuf.InvalidProtocolBufferException {
       return PARSER.parseFrom(data, extensionRegistry);
     }
-    public static org.kristen.rpc.darcher.Common.TxErrorMsg parseFrom(java.io.InputStream input)
+    public static TxErrorMsg parseFrom(java.io.InputStream input)
         throws java.io.IOException {
       return com.google.protobuf.GeneratedMessageV3
           .parseWithIOException(PARSER, input);
     }
-    public static org.kristen.rpc.darcher.Common.TxErrorMsg parseFrom(
+    public static TxErrorMsg parseFrom(
         java.io.InputStream input,
         com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws java.io.IOException {
       return com.google.protobuf.GeneratedMessageV3
           .parseWithIOException(PARSER, input, extensionRegistry);
     }
-    public static org.kristen.rpc.darcher.Common.TxErrorMsg parseDelimitedFrom(java.io.InputStream input)
+    public static TxErrorMsg parseDelimitedFrom(java.io.InputStream input)
         throws java.io.IOException {
       return com.google.protobuf.GeneratedMessageV3
           .parseDelimitedWithIOException(PARSER, input);
     }
-    public static org.kristen.rpc.darcher.Common.TxErrorMsg parseDelimitedFrom(
+    public static TxErrorMsg parseDelimitedFrom(
         java.io.InputStream input,
         com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws java.io.IOException {
       return com.google.protobuf.GeneratedMessageV3
           .parseDelimitedWithIOException(PARSER, input, extensionRegistry);
     }
-    public static org.kristen.rpc.darcher.Common.TxErrorMsg parseFrom(
+    public static TxErrorMsg parseFrom(
         com.google.protobuf.CodedInputStream input)
         throws java.io.IOException {
       return com.google.protobuf.GeneratedMessageV3
           .parseWithIOException(PARSER, input);
     }
-    public static org.kristen.rpc.darcher.Common.TxErrorMsg parseFrom(
+    public static TxErrorMsg parseFrom(
         com.google.protobuf.CodedInputStream input,
         com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws java.io.IOException {
@@ -913,23 +933,23 @@ public final class Common {
           .parseWithIOException(PARSER, input, extensionRegistry);
     }
 
-    @java.lang.Override
+    @Override
     public Builder newBuilderForType() { return newBuilder(); }
     public static Builder newBuilder() {
       return DEFAULT_INSTANCE.toBuilder();
     }
-    public static Builder newBuilder(org.kristen.rpc.darcher.Common.TxErrorMsg prototype) {
+    public static Builder newBuilder(TxErrorMsg prototype) {
       return DEFAULT_INSTANCE.toBuilder().mergeFrom(prototype);
     }
-    @java.lang.Override
+    @Override
     public Builder toBuilder() {
       return this == DEFAULT_INSTANCE
           ? new Builder() : new Builder().mergeFrom(this);
     }
 
-    @java.lang.Override
+    @Override
     protected Builder newBuilderForType(
-        com.google.protobuf.GeneratedMessageV3.BuilderParent parent) {
+        BuilderParent parent) {
       Builder builder = new Builder(parent);
       return builder;
     }
@@ -939,18 +959,18 @@ public final class Common {
     public static final class Builder extends
         com.google.protobuf.GeneratedMessageV3.Builder<Builder> implements
         // @@protoc_insertion_point(builder_implements:darcher.TxErrorMsg)
-        org.kristen.rpc.darcher.Common.TxErrorMsgOrBuilder {
+        TxErrorMsgOrBuilder {
       public static final com.google.protobuf.Descriptors.Descriptor
           getDescriptor() {
-        return org.kristen.rpc.darcher.Common.internal_static_darcher_TxErrorMsg_descriptor;
+        return Common.internal_static_darcher_TxErrorMsg_descriptor;
       }
 
-      @java.lang.Override
-      protected com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
+      @Override
+      protected FieldAccessorTable
           internalGetFieldAccessorTable() {
-        return org.kristen.rpc.darcher.Common.internal_static_darcher_TxErrorMsg_fieldAccessorTable
+        return Common.internal_static_darcher_TxErrorMsg_fieldAccessorTable
             .ensureFieldAccessorsInitialized(
-                org.kristen.rpc.darcher.Common.TxErrorMsg.class, org.kristen.rpc.darcher.Common.TxErrorMsg.Builder.class);
+                TxErrorMsg.class, Builder.class);
       }
 
       // Construct using org.kristen.rpc.darcher.Common.TxErrorMsg.newBuilder()
@@ -959,7 +979,7 @@ public final class Common {
       }
 
       private Builder(
-          com.google.protobuf.GeneratedMessageV3.BuilderParent parent) {
+          BuilderParent parent) {
         super(parent);
         maybeForceBuilderInitialization();
       }
@@ -968,7 +988,7 @@ public final class Common {
                 .alwaysUseFieldBuilders) {
         }
       }
-      @java.lang.Override
+      @Override
       public Builder clear() {
         super.clear();
         hash_ = "";
@@ -980,29 +1000,29 @@ public final class Common {
         return this;
       }
 
-      @java.lang.Override
+      @Override
       public com.google.protobuf.Descriptors.Descriptor
           getDescriptorForType() {
-        return org.kristen.rpc.darcher.Common.internal_static_darcher_TxErrorMsg_descriptor;
+        return Common.internal_static_darcher_TxErrorMsg_descriptor;
       }
 
-      @java.lang.Override
-      public org.kristen.rpc.darcher.Common.TxErrorMsg getDefaultInstanceForType() {
-        return org.kristen.rpc.darcher.Common.TxErrorMsg.getDefaultInstance();
+      @Override
+      public TxErrorMsg getDefaultInstanceForType() {
+        return TxErrorMsg.getDefaultInstance();
       }
 
-      @java.lang.Override
-      public org.kristen.rpc.darcher.Common.TxErrorMsg build() {
-        org.kristen.rpc.darcher.Common.TxErrorMsg result = buildPartial();
+      @Override
+      public TxErrorMsg build() {
+        TxErrorMsg result = buildPartial();
         if (!result.isInitialized()) {
           throw newUninitializedMessageException(result);
         }
         return result;
       }
 
-      @java.lang.Override
-      public org.kristen.rpc.darcher.Common.TxErrorMsg buildPartial() {
-        org.kristen.rpc.darcher.Common.TxErrorMsg result = new org.kristen.rpc.darcher.Common.TxErrorMsg(this);
+      @Override
+      public TxErrorMsg buildPartial() {
+        TxErrorMsg result = new TxErrorMsg(this);
         result.hash_ = hash_;
         result.type_ = type_;
         result.description_ = description_;
@@ -1010,50 +1030,50 @@ public final class Common {
         return result;
       }
 
-      @java.lang.Override
+      @Override
       public Builder clone() {
         return super.clone();
       }
-      @java.lang.Override
+      @Override
       public Builder setField(
           com.google.protobuf.Descriptors.FieldDescriptor field,
-          java.lang.Object value) {
+          Object value) {
         return super.setField(field, value);
       }
-      @java.lang.Override
+      @Override
       public Builder clearField(
           com.google.protobuf.Descriptors.FieldDescriptor field) {
         return super.clearField(field);
       }
-      @java.lang.Override
+      @Override
       public Builder clearOneof(
           com.google.protobuf.Descriptors.OneofDescriptor oneof) {
         return super.clearOneof(oneof);
       }
-      @java.lang.Override
+      @Override
       public Builder setRepeatedField(
           com.google.protobuf.Descriptors.FieldDescriptor field,
-          int index, java.lang.Object value) {
+          int index, Object value) {
         return super.setRepeatedField(field, index, value);
       }
-      @java.lang.Override
+      @Override
       public Builder addRepeatedField(
           com.google.protobuf.Descriptors.FieldDescriptor field,
-          java.lang.Object value) {
+          Object value) {
         return super.addRepeatedField(field, value);
       }
-      @java.lang.Override
+      @Override
       public Builder mergeFrom(com.google.protobuf.Message other) {
-        if (other instanceof org.kristen.rpc.darcher.Common.TxErrorMsg) {
-          return mergeFrom((org.kristen.rpc.darcher.Common.TxErrorMsg)other);
+        if (other instanceof TxErrorMsg) {
+          return mergeFrom((TxErrorMsg)other);
         } else {
           super.mergeFrom(other);
           return this;
         }
       }
 
-      public Builder mergeFrom(org.kristen.rpc.darcher.Common.TxErrorMsg other) {
-        if (other == org.kristen.rpc.darcher.Common.TxErrorMsg.getDefaultInstance()) return this;
+      public Builder mergeFrom(TxErrorMsg other) {
+        if (other == TxErrorMsg.getDefaultInstance()) return this;
         if (!other.getHash().isEmpty()) {
           hash_ = other.hash_;
           onChanged();
@@ -1070,21 +1090,21 @@ public final class Common {
         return this;
       }
 
-      @java.lang.Override
+      @Override
       public final boolean isInitialized() {
         return true;
       }
 
-      @java.lang.Override
+      @Override
       public Builder mergeFrom(
           com.google.protobuf.CodedInputStream input,
           com.google.protobuf.ExtensionRegistryLite extensionRegistry)
           throws java.io.IOException {
-        org.kristen.rpc.darcher.Common.TxErrorMsg parsedMessage = null;
+        TxErrorMsg parsedMessage = null;
         try {
           parsedMessage = PARSER.parsePartialFrom(input, extensionRegistry);
         } catch (com.google.protobuf.InvalidProtocolBufferException e) {
-          parsedMessage = (org.kristen.rpc.darcher.Common.TxErrorMsg) e.getUnfinishedMessage();
+          parsedMessage = (TxErrorMsg) e.getUnfinishedMessage();
           throw e.unwrapIOException();
         } finally {
           if (parsedMessage != null) {
@@ -1094,21 +1114,21 @@ public final class Common {
         return this;
       }
 
-      private java.lang.Object hash_ = "";
+      private Object hash_ = "";
       /**
        * <code>string hash = 1;</code>
        * @return The hash.
        */
-      public java.lang.String getHash() {
-        java.lang.Object ref = hash_;
-        if (!(ref instanceof java.lang.String)) {
+      public String getHash() {
+        Object ref = hash_;
+        if (!(ref instanceof String)) {
           com.google.protobuf.ByteString bs =
               (com.google.protobuf.ByteString) ref;
-          java.lang.String s = bs.toStringUtf8();
+          String s = bs.toStringUtf8();
           hash_ = s;
           return s;
         } else {
-          return (java.lang.String) ref;
+          return (String) ref;
         }
       }
       /**
@@ -1117,11 +1137,11 @@ public final class Common {
        */
       public com.google.protobuf.ByteString
           getHashBytes() {
-        java.lang.Object ref = hash_;
+        Object ref = hash_;
         if (ref instanceof String) {
           com.google.protobuf.ByteString b = 
               com.google.protobuf.ByteString.copyFromUtf8(
-                  (java.lang.String) ref);
+                  (String) ref);
           hash_ = b;
           return b;
         } else {
@@ -1134,7 +1154,7 @@ public final class Common {
        * @return This builder for chaining.
        */
       public Builder setHash(
-          java.lang.String value) {
+          String value) {
         if (value == null) {
     throw new NullPointerException();
   }
@@ -1175,7 +1195,7 @@ public final class Common {
        * <code>.darcher.TxErrorType type = 2;</code>
        * @return The enum numeric value on the wire for type.
        */
-      public int getTypeValue() {
+      @Override public int getTypeValue() {
         return type_;
       }
       /**
@@ -1184,6 +1204,7 @@ public final class Common {
        * @return This builder for chaining.
        */
       public Builder setTypeValue(int value) {
+        
         type_ = value;
         onChanged();
         return this;
@@ -1192,17 +1213,18 @@ public final class Common {
        * <code>.darcher.TxErrorType type = 2;</code>
        * @return The type.
        */
-      public org.kristen.rpc.darcher.Common.TxErrorType getType() {
+      @Override
+      public TxErrorType getType() {
         @SuppressWarnings("deprecation")
-        org.kristen.rpc.darcher.Common.TxErrorType result = org.kristen.rpc.darcher.Common.TxErrorType.valueOf(type_);
-        return result == null ? org.kristen.rpc.darcher.Common.TxErrorType.UNRECOGNIZED : result;
+        TxErrorType result = TxErrorType.valueOf(type_);
+        return result == null ? TxErrorType.UNRECOGNIZED : result;
       }
       /**
        * <code>.darcher.TxErrorType type = 2;</code>
        * @param value The type to set.
        * @return This builder for chaining.
        */
-      public Builder setType(org.kristen.rpc.darcher.Common.TxErrorType value) {
+      public Builder setType(TxErrorType value) {
         if (value == null) {
           throw new NullPointerException();
         }
@@ -1222,21 +1244,21 @@ public final class Common {
         return this;
       }
 
-      private java.lang.Object description_ = "";
+      private Object description_ = "";
       /**
        * <code>string description = 3;</code>
        * @return The description.
        */
-      public java.lang.String getDescription() {
-        java.lang.Object ref = description_;
-        if (!(ref instanceof java.lang.String)) {
+      public String getDescription() {
+        Object ref = description_;
+        if (!(ref instanceof String)) {
           com.google.protobuf.ByteString bs =
               (com.google.protobuf.ByteString) ref;
-          java.lang.String s = bs.toStringUtf8();
+          String s = bs.toStringUtf8();
           description_ = s;
           return s;
         } else {
-          return (java.lang.String) ref;
+          return (String) ref;
         }
       }
       /**
@@ -1245,11 +1267,11 @@ public final class Common {
        */
       public com.google.protobuf.ByteString
           getDescriptionBytes() {
-        java.lang.Object ref = description_;
+        Object ref = description_;
         if (ref instanceof String) {
           com.google.protobuf.ByteString b = 
               com.google.protobuf.ByteString.copyFromUtf8(
-                  (java.lang.String) ref);
+                  (String) ref);
           description_ = b;
           return b;
         } else {
@@ -1262,7 +1284,7 @@ public final class Common {
        * @return This builder for chaining.
        */
       public Builder setDescription(
-          java.lang.String value) {
+          String value) {
         if (value == null) {
     throw new NullPointerException();
   }
@@ -1297,13 +1319,13 @@ public final class Common {
         onChanged();
         return this;
       }
-      @java.lang.Override
+      @Override
       public final Builder setUnknownFields(
           final com.google.protobuf.UnknownFieldSet unknownFields) {
         return super.setUnknownFields(unknownFields);
       }
 
-      @java.lang.Override
+      @Override
       public final Builder mergeUnknownFields(
           final com.google.protobuf.UnknownFieldSet unknownFields) {
         return super.mergeUnknownFields(unknownFields);
@@ -1314,18 +1336,18 @@ public final class Common {
     }
 
     // @@protoc_insertion_point(class_scope:darcher.TxErrorMsg)
-    private static final org.kristen.rpc.darcher.Common.TxErrorMsg DEFAULT_INSTANCE;
+    private static final TxErrorMsg DEFAULT_INSTANCE;
     static {
-      DEFAULT_INSTANCE = new org.kristen.rpc.darcher.Common.TxErrorMsg();
+      DEFAULT_INSTANCE = new TxErrorMsg();
     }
 
-    public static org.kristen.rpc.darcher.Common.TxErrorMsg getDefaultInstance() {
+    public static TxErrorMsg getDefaultInstance() {
       return DEFAULT_INSTANCE;
     }
 
     private static final com.google.protobuf.Parser<TxErrorMsg>
         PARSER = new com.google.protobuf.AbstractParser<TxErrorMsg>() {
-      @java.lang.Override
+      @Override
       public TxErrorMsg parsePartialFrom(
           com.google.protobuf.CodedInputStream input,
           com.google.protobuf.ExtensionRegistryLite extensionRegistry)
@@ -1338,13 +1360,13 @@ public final class Common {
       return PARSER;
     }
 
-    @java.lang.Override
+    @Override
     public com.google.protobuf.Parser<TxErrorMsg> getParserForType() {
       return PARSER;
     }
 
-    @java.lang.Override
-    public org.kristen.rpc.darcher.Common.TxErrorMsg getDefaultInstanceForType() {
+    @Override
+    public TxErrorMsg getDefaultInstanceForType() {
       return DEFAULT_INSTANCE;
     }
 
@@ -1363,7 +1385,7 @@ public final class Common {
   private static  com.google.protobuf.Descriptors.FileDescriptor
       descriptor;
   static {
-    java.lang.String[] descriptorData = {
+    String[] descriptorData = {
       "\n\014common.proto\022\007darcher\"S\n\nTxErrorMsg\022\014\n" +
       "\004hash\030\001 \001(\t\022\"\n\004type\030\002 \001(\0162\024.darcher.TxEr" +
       "rorType\022\023\n\013description\030\003 \001(\t*5\n\004Role\022\010\n\004" +
@@ -1386,7 +1408,7 @@ public final class Common {
     internal_static_darcher_TxErrorMsg_fieldAccessorTable = new
       com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
         internal_static_darcher_TxErrorMsg_descriptor,
-        new java.lang.String[] { "Hash", "Type", "Description", });
+        new String[] { "Hash", "Type", "Description", });
   }
 
   // @@protoc_insertion_point(outer_class_scope)

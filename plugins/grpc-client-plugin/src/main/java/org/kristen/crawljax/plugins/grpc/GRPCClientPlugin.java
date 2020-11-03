@@ -8,8 +8,10 @@ import com.crawljax.browser.EmbeddedBrowser;
 import com.crawljax.core.*;
 import com.crawljax.core.configuration.CrawljaxConfiguration;
 import com.crawljax.core.plugin.*;
+import com.crawljax.core.state.CrawlPath;
 import com.crawljax.core.state.Eventable;
 import com.crawljax.core.state.Identification;
+import com.crawljax.core.state.*;
 
 import io.grpc.stub.StreamObserver;
 import io.grpc.ManagedChannel;
@@ -18,6 +20,9 @@ import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import lombok.extern.slf4j.Slf4j;
+import org.openqa.selenium.logging.LogEntries;
+import org.openqa.selenium.logging.LogEntry;
+import org.openqa.selenium.logging.LogType;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -55,7 +60,10 @@ public class GRPCClientPlugin implements PreCrawlingPlugin, PostCrawlingPlugin, 
     private String fromAddress;
     private String toAddress;
     private String txHash;
+    private String events;
+    private String states;
     public ControlMsgHandlerThread controlMsgHandlerThread;
+    public HandleBrowserConsoleErrorThread handleBrowserConsoleErrorThread;
     public EmbeddedBrowser dappBrowser;
 
     public GRPCClientPlugin(String dappName, int instanceId, String metamaskUrl, String dappUrl, String metamaskPassword) {
@@ -212,6 +220,11 @@ public class GRPCClientPlugin implements PreCrawlingPlugin, PostCrawlingPlugin, 
         logger.info("Finish creating the browser");
         this.dappBrowser = newBrowser;
 
+        this.handleBrowserConsoleErrorThread = new HandleBrowserConsoleErrorThread(this.dappName, this.instanceId);
+        Thread consoleErrorThread = new Thread(this.handleBrowserConsoleErrorThread);
+        consoleErrorThread.start();
+        logger.info("Start the browser console error handler thread, dappName={}, instanceId={}", dappName, instanceId);
+
         try {
             newBrowser.goToUrl(new URI(METAMASK_POPUP_URL));
         } catch (URISyntaxException e) {
@@ -222,9 +235,9 @@ public class GRPCClientPlugin implements PreCrawlingPlugin, PostCrawlingPlugin, 
         }
 
         // TODO: just for test, need to be removed
-        if (isMetaMaskProcessPage(newBrowser)) {
-            processMetamaskPopup(newBrowser);
-        }
+//        if (isMetaMaskProcessPage(newBrowser)) {
+//            processMetamaskPopup(newBrowser);
+//        }
 
         // TODO: handle other scenarios (specific)
         try {
@@ -262,12 +275,13 @@ public class GRPCClientPlugin implements PreCrawlingPlugin, PostCrawlingPlugin, 
     /**
      * Clicks the primary button in the MetaMask pop-up window.
      *
-     * @param browser the browser instance
+     * @param context the crawler context
      */
-    private void processMetamaskPopup(EmbeddedBrowser browser) {
+    private void processMetamaskPopup(CrawlerContext context) {
         logger.debug("Enter processMetamaskPopup function, begin to process");
 
         // Open a new tab in the browser and visit Metamask pop-up page
+        EmbeddedBrowser browser = context.getBrowser();
         WebDriver driver = browser.getWebDriver();
         String currentHandle = driver.getWindowHandle();
         ((JavascriptExecutor) driver).executeScript("window.open()");
@@ -321,6 +335,29 @@ public class GRPCClientPlugin implements PreCrawlingPlugin, PostCrawlingPlugin, 
             }
 
             getTxInfo(browser);
+
+            // Get reproduction
+//            System.out.println("########################################################################");
+            events = "";
+//        for (StackTraceElement s: context.getCrawlPath().asStackTrace()) {
+//            System.out.println(s);
+//        }
+            for (List<Eventable> l: context.getSession().getCrawlPaths()) {
+                for (Eventable e: l) {
+                    events += e.toString() + "\n";
+//                    System.out.println(e);
+                }
+            }
+//            System.out.println("########################################################################");
+
+//            System.out.println("************************************************************************");
+            states = "";
+            for (StateVertex s: context.getSession().getStateFlowGraph().getAllStates()) {
+                states += s.toString() + "\n";
+//                System.out.println(s.getName() + "         " + s.getUrl());
+            }
+//            System.out.println("************************************************************************");
+
             logger.info("Send out a transaction, send txMsg to the server, dappName={}, instanceId={}, txHash={}, fromAddress={}, toAddress={}", dappName, instanceId, txHash, fromAddress, toAddress);
             DappTestService.TxMsg txMsg = DappTestService.TxMsg.newBuilder()
                     .setDappName(this.dappName)
@@ -328,10 +365,13 @@ public class GRPCClientPlugin implements PreCrawlingPlugin, PostCrawlingPlugin, 
                     .setHash(this.txHash)
                     .setFrom(this.fromAddress)
                     .setTo(this.toAddress)
+                    .setStates(this.states)
+                    .setEvents(this.events)
                     .build();
             logger.debug("Begin to send txMsg and wait for tx being processed, dappName={}, instanceId={}, txHash={}, fromAddress={}, toAddress={}", dappName, instanceId, txHash, fromAddress, toAddress);
             blockingStub.waitForTxProcess(txMsg);
             logger.debug("Finish sending txMsg and processing tx, dappName={}, instanceId={}, txHash={}, fromAddress={}, toAddress={}", dappName, instanceId, txHash, fromAddress, toAddress);
+            System.out.println();
         }
 
         // Close current tab, return to the original testing tab
@@ -372,8 +412,7 @@ public class GRPCClientPlugin implements PreCrawlingPlugin, PostCrawlingPlugin, 
     @Override
     public void onFireEventSucceeded(CrawlerContext context, Eventable eventable, List<Eventable> pathToFailure) {
         logger.info("One event is fired successfully");
-        EmbeddedBrowser browser = context.getBrowser();
-        processMetamaskPopup(browser);
+        processMetamaskPopup(context);
     }
 
 
@@ -455,4 +494,40 @@ public class GRPCClientPlugin implements PreCrawlingPlugin, PostCrawlingPlugin, 
 //            }
         }
     }
+
+
+    public class HandleBrowserConsoleErrorThread implements Runnable {
+        private String dappName;
+        private int instanceId;
+        private String errorString;
+        public DappTestService.ConsoleErrorMsg consoleErrorMsg;
+
+        public HandleBrowserConsoleErrorThread (String dappName, int instanceId) {
+            logger.debug("Init the HandleBrowserConsoleErrorThread");
+            this.dappName = dappName;
+            this.instanceId = instanceId;
+        }
+
+        @Override
+        public void run() {
+            while (true) {
+                LogEntries logEntries = dappBrowser.getWebDriver().manage().logs().get(LogType.BROWSER);
+                if (!logEntries.getAll().isEmpty()) {
+                    errorString = "";
+                    for (LogEntry entry : logEntries) {
+                        errorString += entry.toString() + "\n";
+                        System.out.println(entry.toString());
+                    }
+                    consoleErrorMsg = DappTestService.ConsoleErrorMsg
+                            .newBuilder()
+                            .setDappName(dappName)
+                            .setInstanceId(Integer.toString(instanceId))
+                            .setErrorString(errorString)
+                            .build();
+                    blockingStub.notifyConsoleError(consoleErrorMsg);
+                }
+            }
+        }
+    }
+
 }
