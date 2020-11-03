@@ -3,7 +3,6 @@ package com.crawljax.examples;
 import java.io.IOException;
 import java.util.concurrent.TimeUnit;
 
-import org.slf4j.LoggerFactory;
 
 import com.crawljax.browser.EmbeddedBrowser.BrowserType;
 import com.crawljax.core.CrawljaxRunner;
@@ -12,8 +11,6 @@ import com.crawljax.core.configuration.CrawlRules.FormFillMode;
 import com.crawljax.core.configuration.CrawljaxConfiguration;
 import com.crawljax.core.configuration.CrawljaxConfiguration.CrawljaxConfigurationBuilder;
 import com.crawljax.plugins.crawloverview.CrawlOverview;
-
-import ch.qos.logback.classic.Logger;
 
 /**
  * Example of running Crawljax with the CrawlOverview plugin on a single-page web app. The crawl
