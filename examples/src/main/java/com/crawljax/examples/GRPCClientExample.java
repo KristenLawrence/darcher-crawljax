@@ -18,12 +18,12 @@ import java.util.concurrent.TimeUnit;
 public class GRPCClientExample {
     private static final long WAIT_TIME_AFTER_EVENT = 500;
     private static final long WAIT_TIME_AFTER_RELOAD = 500;
-    private static final String DAPP_URL = "chrome-extension://nkbihfbeogaeaoehlefnkodbefgpgknn/home.html";
+    private static final String DAPP_URL = "chrome-extension://jbppcachblnkaogkgacckpgohjbpcekf/home.html";
     private static final String DAPP_NAME = "Metamask";
     private static int instanceId = 1;
-    private static final String METAMASK_POPUP_URL = "chrome-extension://nkbihfbeogaeaoehlefnkodbefgpgknn/home.html";
-    private static final String METAMASK_PASSWORD = "gRP'b~jz|zz;DA7~[[P9";
-    private static final String BROWSER_PROFILE_PATH = "/Users/shuqing/Documents/application";
+    private static final String METAMASK_POPUP_URL = "chrome-extension://jbppcachblnkaogkgacckpgohjbpcekf/home.html";
+    private static final String METAMASK_PASSWORD = "T20ub1or";
+    private static final String BROWSER_PROFILE_PATH = "/Users/troublor/workspace/darcher_mics/browsers/Chrome/UserData";
 
 
     /**
@@ -68,29 +68,29 @@ public class GRPCClientExample {
         builder.crawlRules().waitAfterReloadUrl(WAIT_TIME_AFTER_RELOAD, TimeUnit.MILLISECONDS);
         builder.crawlRules().waitAfterEvent(WAIT_TIME_AFTER_EVENT, TimeUnit.MILLISECONDS);
 
-//        // click "Transfer between my accounts"
-//        builder.crawlRules().click("A").withText("Transfer between my accounts");
-//        // click the transfer recipient accounts from the list of "My Accounts"
-//        builder.crawlRules().click("DIV").withAttribute("class", "send__select-recipient-wrapper__group-item");
-//        // click to change the asset when transferring, make it possible to transfer ERC20 token
-//        builder.crawlRules().click("DIV").withAttribute("class", "send-v2__asset-dropdown");
-//        builder.crawlRules().click("DIV").withAttribute("class", "send-v2__asset-dropdown__input-wrapper");
-//        builder.crawlRules().click("DIV").withAttribute("class", "send-v2__asset-dropdown__asset");
-//        // click home page asset tab
-//        builder.crawlRules().click("LI").withAttribute("data-testid", "home__asset-tab");
-//        builder.crawlRules().click("BUTTON").withText("Send WETH");
+        // click "Transfer between my accounts"
+        builder.crawlRules().click("A").withText("Transfer between my accounts");
+        // click the transfer recipient accounts from the list of "My Accounts"
+        builder.crawlRules().click("DIV").withAttribute("class", "send__select-recipient-wrapper__group-item");
+        // click to change the asset when transferring, make it possible to transfer ERC20 token
+        builder.crawlRules().click("DIV").withAttribute("class", "send-v2__asset-dropdown");
+        builder.crawlRules().click("DIV").withAttribute("class", "send-v2__asset-dropdown__input-wrapper");
+        builder.crawlRules().click("DIV").withAttribute("class", "send-v2__asset-dropdown__asset");
+        // click home page asset tab
+        builder.crawlRules().click("LI").withAttribute("data-testid", "home__asset-tab");
+        builder.crawlRules().click("BUTTON").withText("Send WETH");
 //        //TODO
 //        builder.crawlRules().dontClick("BUTTON").withAttribute("data-testid", "page-container-footer-next");
-//        // prevent removing an account
-//        builder.crawlRules().dontClick("BUTTON").withAttribute("data-testid", "account-options-menu__remove-account");
-//        // don't bother buy ether
-//        builder.crawlRules().dontClick("BUTTON").withText("Buy");
-//        // don't change network
-//        builder.crawlRules().dontClick("DIV").withAttribute("class", "network-component pointer");
+        // prevent removing an account
+        builder.crawlRules().dontClick("BUTTON").withAttribute("data-testid", "account-options-menu__remove-account");
+        // don't bother buy ether
+        builder.crawlRules().dontClick("BUTTON").withText("Buy");
+        // don't change network
+        builder.crawlRules().dontClick("DIV").withAttribute("class", "network-component pointer");
 //        // don't select ETH again when sending assets
 //        builder.crawlRules().dontClick("DIV").withText("ETH");
-//        // don't change account
-//        builder.crawlRules().dontClick("DIV").withAttribute("class", "account-menu__icon");
+        // don't change account
+        builder.crawlRules().dontClick("DIV").withAttribute("class", "account-menu__icon");
 //        // don't send to my self
 //        builder.crawlRules().dontClick("DIV").underXPath("//DIV[@class='send__select-recipient-wrapper__group']/DIV[2" +
 //                "]");
