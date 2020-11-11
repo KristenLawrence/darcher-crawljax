@@ -91,7 +91,7 @@ public class GRPCClientPlugin implements PreCrawlingPlugin, PostCrawlingPlugin, 
     public void handleControlMsg(DappTestService.DAppDriverControlMsg dAppDriverControlMsg) {
         DappTestService.DAppDriverControlType controlType = dAppDriverControlMsg.getControlType();
         logger.debug("Enter the msg handler, begin to handle {} msg", controlType);
-        switch(controlType) {
+        switch (controlType) {
             case Refresh:
                 WebDriver driver = dappBrowser.getWebDriver();
                 driver.navigate().refresh();
@@ -119,21 +119,34 @@ public class GRPCClientPlugin implements PreCrawlingPlugin, PostCrawlingPlugin, 
         // Xpath identification for the elements which contain necessary information.
         Identification activityPaneId = new Identification(Identification.How.xpath,
                 "/html/body/div[1]/div/div[4]/div/div/div/div[3]/ul/li[2]");
+        Identification txStatusId = new Identification(Identification.How.xpath,
+                "/html/body/div[1]/div/div[4]/div/div/div/div[3]/div/div/div/div[1]/div[2]/div[3]/h3/div");
         Identification txBoxId = new Identification(Identification.How.xpath,
                 "/html/body/div[1]/div/div[4]/div/div/div/div[3]/div/div/div/div/div[1]");
+        Identification alternativeTxBoxId = new Identification(Identification.How.xpath,
+                "/html/body/div[1]/div/div[4]/div/div/div/div[3]/div/div/div/div[1]/div[2]");
         Identification copyFromId = new Identification(Identification.How.xpath,
                 "/html/body/div[2]/div/div/section/div/div/div[2]/div[1]/div/div[1]/div/div/div");
         Identification copyToId = new Identification(Identification.How.xpath,
                 "/html/body/div[2]/div/div/section/div/div/div[2]/div[1]/div/div[3]/div/div/div");
         Identification copyTxHashId = new Identification(Identification.How.xpath,
-                "/html/body/div[2]/div/div/section/div/div/div[1]/div[2]/button[1]");
+                "/html/body/div[2]/div/div/section/div/div/div[1]/div[2]/div[1]/div/button");
 
         // Click the elements step by step to get pop-up window for tx information.
         if (browser.elementExists(activityPaneId)) {
             WebElement activityPane = browser.getWebElement(activityPaneId);
             activityPane.click();
         }
-        if (browser.elementExists(txBoxId)) {
+        if (browser.elementExists(txStatusId)) {
+            WebElement status = browser.getWebElement(txStatusId);
+            if (status.getText().contains("Pending")) {
+                WebElement txBox = browser.getWebElement(alternativeTxBoxId);
+                txBox.click();
+            } else {
+                WebElement txBox = browser.getWebElement(txBoxId);
+                txBox.click();
+            }
+        } else {
             WebElement txBox = browser.getWebElement(txBoxId);
             txBox.click();
         }
@@ -312,7 +325,7 @@ public class GRPCClientPlugin implements PreCrawlingPlugin, PostCrawlingPlugin, 
             } else if (browser.elementExists(secondaryBtnId)) {
                 WebElement secondaryBtn = browser.getWebElement(secondaryBtnId);
                 secondaryBtn.click();
-              } else if (browser.elementExists(defaultBtnId)) {
+            } else if (browser.elementExists(defaultBtnId)) {
                 WebElement defaultBtn = browser.getWebElement(defaultBtnId);
                 defaultBtn.click();
             } else {
@@ -342,8 +355,8 @@ public class GRPCClientPlugin implements PreCrawlingPlugin, PostCrawlingPlugin, 
 //        for (StackTraceElement s: context.getCrawlPath().asStackTrace()) {
 //            System.out.println(s);
 //        }
-            for (List<Eventable> l: context.getSession().getCrawlPaths()) {
-                for (Eventable e: l) {
+            for (List<Eventable> l : context.getSession().getCrawlPaths()) {
+                for (Eventable e : l) {
                     events += e.toString() + "\n";
 //                    System.out.println(e);
                 }
@@ -352,7 +365,7 @@ public class GRPCClientPlugin implements PreCrawlingPlugin, PostCrawlingPlugin, 
 
 //            System.out.println("************************************************************************");
             states = "";
-            for (StateVertex s: context.getSession().getStateFlowGraph().getAllStates()) {
+            for (StateVertex s : context.getSession().getStateFlowGraph().getAllStates()) {
                 states += s.toString() + "\n";
 //                System.out.println(s.getName() + "         " + s.getUrl());
             }
@@ -502,7 +515,7 @@ public class GRPCClientPlugin implements PreCrawlingPlugin, PostCrawlingPlugin, 
         private String errorString;
         public DappTestService.ConsoleErrorMsg consoleErrorMsg;
 
-        public HandleBrowserConsoleErrorThread (String dappName, int instanceId) {
+        public HandleBrowserConsoleErrorThread(String dappName, int instanceId) {
             logger.debug("Init the HandleBrowserConsoleErrorThread");
             this.dappName = dappName;
             this.instanceId = instanceId;
