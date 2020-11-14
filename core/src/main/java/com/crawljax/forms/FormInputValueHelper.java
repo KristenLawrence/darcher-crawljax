@@ -27,10 +27,7 @@ import javax.xml.xpath.XPathExpressionException;
 import java.io.File;
 import java.io.IOException;
 import java.nio.charset.Charset;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 
 /**
  * Singleton helper class for FormHandler.
@@ -291,6 +288,20 @@ public final class FormInputValueHelper {
         return null;
 
     }
+
+    /**
+     * TODO troublor modify starts: get all form inputs with {@link InputType#CUSTOMIZE}
+     */
+    public Collection<FormInput> getCustomizeFormInputs() {
+        Set<FormInput> formInputs = new HashSet<>();
+        for (Map.Entry<Identification, FormInput> entry : this.formInputs.entrySet()) {
+            if (entry.getValue().getType() == InputType.CUSTOMIZE) {
+                formInputs.add(entry.getValue());
+            }
+        }
+        return formInputs;
+    }
+    // troublor modify ends
 
     /**
      * return the list of FormInputs that match this element

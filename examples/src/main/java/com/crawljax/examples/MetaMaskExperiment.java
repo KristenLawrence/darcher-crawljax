@@ -7,15 +7,12 @@ import com.crawljax.core.configuration.*;
 import com.crawljax.core.state.Identification;
 import com.crawljax.forms.FormInput;
 import com.crawljax.plugins.crawloverview.CrawlOverview;
-import xyz.troublor.crawljax.plugins.metamask.MetaMaskSupportPlugin;
 import org.kristen.crawljax.plugins.grpc.GRPCClientPlugin;
 
 import java.io.IOException;
-import java.util.Arrays;
-import java.util.List;
 import java.util.concurrent.TimeUnit;
 
-public class GRPCClientExample {
+public class MetaMaskExperiment {
     private static final long WAIT_TIME_AFTER_EVENT = 500;
     private static final long WAIT_TIME_AFTER_RELOAD = 500;
     private static final String DAPP_URL = "chrome-extension://jbppcachblnkaogkgacckpgohjbpcekf/home.html";
@@ -39,7 +36,6 @@ public class GRPCClientExample {
         // we use normal mode to avoid randomly fill forms and only allow predefined form inputs
         builder.crawlRules().setFormFillMode(CrawlRules.FormFillMode.NORMAL);
         builder.crawlRules().clickOnce(false);
-        builder.crawlRules().setCrawlPriorityMode(CrawlRules.CrawlPriorityMode.RANDOM);
         // click these elements
 //        builder.crawlRules().clickDefaultElements();
 //        CrawljaxConfiguration crawler = new CrawljaxConfiguration();
@@ -63,7 +59,7 @@ public class GRPCClientExample {
 
         //builder.setMaximumStates(10);
         //builder.setMaximumDepth(3);
-        builder.crawlRules().clickElementsInRandomOrder(false);
+        builder.crawlRules().clickElementsInRandomOrder(true);
 
         // Set timeouts
         builder.crawlRules().waitAfterReloadUrl(WAIT_TIME_AFTER_RELOAD, TimeUnit.MILLISECONDS);
