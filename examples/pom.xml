@@ -36,12 +36,12 @@
             <scope>compile</scope>
         </dependency>
 		<dependency>
-			<groupId>com.crawljax</groupId>
+			<groupId>com.crawljax.plugins</groupId>
 			<artifactId>grpc-client-plugin</artifactId>
-			<version>${project.version}</version>
+			<version>4.2-SNAPSHOT</version>
 			<scope>compile</scope>
 		</dependency>
-    </dependencies>
+	</dependencies>
 
 	<build>
 		<plugins>
