@@ -82,13 +82,19 @@ public final class FormInputValueHelper {
         // add the free-floating inputs (without Forms)
         this.formInputs = inputSpecification.getFormInputs();
 
+        // TODO troublor modify starts: forms will be associate with CrawlElements no need to add here.
+        //  In addition put latter input in this.formInputs can override previous inputs
+        /*
+        // troublor modify ends
         // add the inputs defined inside Forms too
         for (Form form : inputSpecification.getForms()) {
             for (FormInput input : form.getFormInputs()) {
                 this.formInputs.put(input.getIdentification(), input);
             }
         }
-
+        // TODO troublor modify starts:
+        */
+        // troublor modify ends
     }
 
     private int getMaxNumberOfValues(List<FormInput> fieldNames) {
@@ -132,7 +138,18 @@ public final class FormInputValueHelper {
                         Element element = (Element) getBelongingNode(input, dom);
                         if (element != null) {
                             FormInput formInput =
+                                    // TODO troublor modify starts: get formInput for the candidateElement directly
+                                    //  from eventableCondition. I know getFormInputWithIndexValue tries to generate
+                                    //  a new formInput which values in the "index" of previous FormInput.
+                                    //  But it seems the Crawljax author didn't appropriately implement that
+                                    /*
+                                    // troublor modify ends
+
                                     getFormInputWithIndexValue(browser, dom, element, curValueIndex);
+                                    // TODO troublor modify starts:
+                                     */
+                                    input;
+                                    // troublor modify ends
                             formInputsForCurrentIndex.add(formInput);
                         } else {
                             LOGGER.warn("Could not find input element for: " + input);

@@ -362,6 +362,17 @@ public class CandidateElementExtractor {
 				LOG.debug("Found new candidate element: {} with eventableCondition {}",
 						candidateElement.getUniqueString(), eventableCondition);
 				candidateElement.setEventableCondition(eventableCondition);
+
+				// TODO troublor modify starts: check if there is already a candidate element in the results that
+				//  doesn't have FormInputs (this is usually the case that we have global BUTTON crawlElement but
+				//  later specify a Form on some BUTTON)
+                // FormInputs are only appended in candidate.getUniqueString()
+                // so if
+                results.removeIf(candidate ->
+                        candidate.getGeneralString().equals(candidateElement.getGeneralString()) &&
+                        candidate.getFormInputs().size() == 0);
+				// troublor modify ends
+
 				results.add(candidateElement);
 				/*
 				 * TODO add element to checkedElements after the event is fired! also add string

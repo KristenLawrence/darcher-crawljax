@@ -9,6 +9,7 @@ import com.crawljax.forms.FormInput;
 import com.crawljax.forms.InputValue;
 import com.crawljax.plugins.crawloverview.CrawlOverview;
 import org.kristen.crawljax.plugins.grpc.GRPCClientPlugin;
+import org.w3c.dom.Node;
 
 import java.io.IOException;
 import java.util.concurrent.TimeUnit;
@@ -17,7 +18,7 @@ import java.util.concurrent.atomic.AtomicInteger;
 public class GivethForeignExperiment {
     private static final long WAIT_TIME_AFTER_EVENT = 500;
     private static final long WAIT_TIME_AFTER_RELOAD = 500;
-    private static final String DAPP_URL = "http://localhost:3010/";
+    private static final String DAPP_URL = "http://localhost:3010/my-campaigns";
     private static final String DAPP_NAME = "Giveth Foreign";
     private static int instanceId = 1;
     private static final String METAMASK_POPUP_URL = "chrome-extension://jbppcachblnkaogkgacckpgohjbpcekf/home.html";
@@ -43,7 +44,7 @@ public class GivethForeignExperiment {
         builder.crawlRules().setFormFillMode(CrawlRules.FormFillMode.NORMAL);
         builder.crawlRules().clickOnce(true);
         // click these elements
-        builder.crawlRules().click("A");
+//        builder.crawlRules().click("A");
         builder.crawlRules().click("BUTTON");
 
         builder.crawlRules().crawlHiddenAnchors(true);
@@ -70,7 +71,7 @@ public class GivethForeignExperiment {
         builder.crawlRules().dontClick("A").withAttribute("id", "navbarDropdownYou");
 
         // form input specifications
-        InputSpecification input = new InputSpecification();
+        InputSpecification inputSpec = new InputSpecification();
 
         /* don't click editor tool bar */
         builder.crawlRules().dontClick("BUTTON").underXPath("//*[@id=\"quill-formsy\"]/DIV[2]/DIV[3]");
@@ -78,6 +79,21 @@ public class GivethForeignExperiment {
         // don't click hidden things
         builder.crawlRules().dontClick("BUTTON").underXPath("//*[@id=\"quill-formsy\"]/DIV[1]");
         builder.crawlRules().dontClick("A").underXPath("//*[@id=\"quill-formsy\"]/DIV[1]");
+
+        /* Create DAC form */
+        Form createDACForm = new Form();
+        AtomicInteger dacCount = new AtomicInteger(0);
+        // campaign name
+        createDACForm.inputField(FormInput.InputType.DYNAMIC, new Identification(Identification.How.id, "title-input"))
+                .setInputGenerator((webElement, nodeElement) -> new InputValue("DAC" + dacCount.getAndIncrement()));
+        // campaign description
+        createDACForm.inputField(FormInput.InputType.CUSTOMIZE, new Identification(Identification.How.xpath, "//*[@id=\"quill-formsy\"]/DIV[2]/DIV[1]"))
+                .setInputFiller((webElement, nodeElement) -> webElement.sendKeys("Several descriptions here..."));
+        // campaign picture
+        createDACForm.inputField(FormInput.InputType.TEXT, new Identification(Identification.How.name, "picture"))
+                .inputValues("/Users/troublor/workspace/darcher/packages/darcher-examples/giveth/misc/picture.jpg");
+        // attach create campaign form at BUTTON[@text='Create DAC']
+        inputSpec.setValuesInForm(createDACForm).beforeClickElement("BUTTON").withText("Create DAC");
 
         /* new create Campaign form */
         Form createCampaignForm = new Form();
@@ -95,29 +111,14 @@ public class GivethForeignExperiment {
         createCampaignForm.inputField(FormInput.InputType.SELECT, new Identification(Identification.How.name, "reviewerAddress"))
                 .inputValues(ETHEREUM_ADDRESS); // select Giveth0 account as reviewer always
         // attach create campaign form at BUTTON[@text='Create Campaign']
-        input.setValuesInForm(createCampaignForm).beforeClickElement("BUTTON").withText("Create Campaign");
-
-        /* Create DAC form */
-        Form createDACForm = new Form();
-        AtomicInteger dacCount = new AtomicInteger(0);
-        // campaign name
-        createDACForm.inputField(FormInput.InputType.DYNAMIC, new Identification(Identification.How.id, "title-input"))
-                .setInputGenerator((webElement, nodeElement) -> new InputValue("DAC" + dacCount.getAndIncrement()));
-        // campaign description
-        createDACForm.inputField(FormInput.InputType.CUSTOMIZE, new Identification(Identification.How.xpath, "//*[@id=\"quill-formsy\"]/DIV[2]/DIV[1]"))
-                .setInputFiller((webElement, nodeElement) -> webElement.sendKeys("Several descriptions here..."));
-        // campaign picture
-        createDACForm.inputField(FormInput.InputType.TEXT, new Identification(Identification.How.name, "picture"))
-                .inputValues("/Users/troublor/workspace/darcher/packages/darcher-examples/giveth/misc/picture.jpg");
-        // attach create campaign form at BUTTON[@text='Create DAC']
-        input.setValuesInForm(createCampaignForm).beforeClickElement("BUTTON").withText("Create DAC");
+        inputSpec.setValuesInForm(createCampaignForm).beforeClickElement("BUTTON").withText("Create Campaign");
 
         /* Create Milestone form */
         Form createMileStoneForm = new Form();
         AtomicInteger milestoneCount = new AtomicInteger(0);
         // campaign name
         createMileStoneForm.inputField(FormInput.InputType.DYNAMIC, new Identification(Identification.How.id, "title-input"))
-                .setInputGenerator((webElement, nodeElement) -> new InputValue("DAC" + milestoneCount.getAndIncrement()));
+                .setInputGenerator((webElement, nodeElement) -> new InputValue("Milestone" + milestoneCount.getAndIncrement()));
         // campaign description
         createMileStoneForm.inputField(FormInput.InputType.CUSTOMIZE, new Identification(Identification.How.xpath, "//*[@id=\"quill-formsy\"]/DIV[2]/DIV[1]"))
                 .setInputFiller((webElement, nodeElement) -> {
@@ -130,26 +131,30 @@ public class GivethForeignExperiment {
         createMileStoneForm.inputField(FormInput.InputType.SELECT, new Identification(Identification.How.name, "reviewerAddress"))
                 .inputValues(ETHEREUM_ADDRESS); // select Giveth0 account as reviewer always
         // select money destination after completion
-        createCampaignForm.inputField(FormInput.InputType.TEXT, new Identification(Identification.How.name, "recipientAddress"))
+        createMileStoneForm.inputField(FormInput.InputType.TEXT, new Identification(Identification.How.name, "recipientAddress"))
                 .inputValues(ETHEREUM_ADDRESS);
         // no need to click "Use My Address" anymore
         builder.crawlRules().dontClick("BUTTON").withText("Use My Address");
         // set maximum amount
-        createCampaignForm.inputField(FormInput.InputType.NUMBER, new Identification(Identification.How.name, "fiatAmount"))
+        createMileStoneForm.inputField(FormInput.InputType.NUMBER, new Identification(Identification.How.name, "fiatAmount"))
                 .inputValues("1");
         // attach create campaign form at BUTTON[@text='Create Milestone']
-        input.setValuesInForm(createCampaignForm).beforeClickElement("BUTTON").withText("Create Milestone");
+        inputSpec.setValuesInForm(createMileStoneForm).beforeClickElement("BUTTON").withText("Create Milestone");
 
         /* cancel campaign confirmation input */
-        input.inputField(FormInput.InputType.DYNAMIC, new Identification(Identification.How.xpath, "/HTML/BODY/DIV/DIV/DIV[4]/DIV/INPUT"))
+        inputSpec.inputField(FormInput.InputType.DYNAMIC, new Identification(Identification.How.xpath, "/HTML/BODY/DIV/DIV/DIV[4]/DIV/INPUT"))
                 .setInputGenerator((webElement, nodeElement) -> {
                     // fill the confirmation input by copy the answer from previous sibling node
-                    String answer = nodeElement.getPreviousSibling().getTextContent();
+                    Node node = nodeElement;
+                    while (!node.getNodeName().toUpperCase().equals("B")) {
+                        node = node.getPreviousSibling();
+                    }
+                    String answer = node.getTextContent().substring(0,5);
                     return new InputValue(answer);
                 });
 
         /* Change Milestone Recipient */
-        input.inputField(FormInput.InputType.DYNAMIC,
+        inputSpec.inputField(FormInput.InputType.DYNAMIC,
                 new Identification(Identification.How.xpath, "//INPUT[@class='swal-content__input']"))
                 .setInputGenerator((webElement, nodeElement) -> {
                     if (nodeElement.getAttribute("placeholder").contains("recipient address")) {
@@ -167,26 +172,27 @@ public class GivethForeignExperiment {
                 .inputValues("1");
         // click source
         builder.crawlRules().click("DIV").withAttribute("class", "ReactTokenInput__option");
-        input.setValuesInForm(delegateDonationForm).beforeClickElement("BUTTON").withText("Delegate here");
+        inputSpec.setValuesInForm(delegateDonationForm).beforeClickElement("BUTTON").withText("Delegate here");
 
         /* Cancel Milestone Form */
         Form cancelMilestoneForm = new Form();
         cancelMilestoneForm.inputField(FormInput.InputType.CUSTOMIZE,
                 new Identification(Identification.How.xpath, "//*[@id=\"quill-formsy\"]/DIV[2]/DIV[1]"))
                 .setInputFiller((webElement, nodeElement) -> webElement.sendKeys("Cancel milestone"));
-        input.setValuesInForm(cancelMilestoneForm).beforeClickElement("BUTTON").withText("Cancel Milestone");
+        inputSpec.setValuesInForm(cancelMilestoneForm).beforeClickElement("BUTTON").withText("Cancel Milestone");
 
         /* Change ownership form */
         Form changeOwnershipForm = new Form();
         changeOwnershipForm.inputField(FormInput.InputType.SELECT,
                 new Identification(Identification.How.name, "ownerAddress"))
                 .inputValues(OTHER_ADDRESS);
+        inputSpec.setValuesInForm(changeOwnershipForm).beforeClickElement("BUTTON").withText("Change ownership");
 
         /* Don't download CSV */
         builder.crawlRules().dontClick("BUTTON").withText("Download CSV");
 
 
-        builder.crawlRules().setInputSpec(input);
+        builder.crawlRules().setInputSpec(inputSpec);
         builder.setBrowserConfig(
                 new BrowserConfiguration(EmbeddedBrowser.BrowserType.CHROME, 1,
                         new BrowserOptions(BROWSER_PROFILE_PATH)));
