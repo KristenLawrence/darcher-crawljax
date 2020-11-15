@@ -6,8 +6,14 @@ import com.google.common.annotations.VisibleForTesting;
 import com.google.common.base.MoreObjects;
 import com.google.common.base.Objects;
 import com.google.common.collect.ImmutableList;
+import org.w3c.dom.Attr;
 import org.w3c.dom.Document;
+import org.w3c.dom.Node;
+import org.xmlunit.builder.DiffBuilder;
+import org.xmlunit.builder.Input;
+import org.xmlunit.diff.*;
 
+import java.io.File;
 import java.io.IOException;
 import java.util.LinkedList;
 
@@ -40,7 +46,8 @@ public class StateVertexImpl implements StateVertex {
 	 * @param name the name of the state
 	 * @param dom  the current DOM tree of the browser
 	 */
-	@VisibleForTesting StateVertexImpl(int id, String name, String dom) {
+	@VisibleForTesting
+	StateVertexImpl(int id, String name, String dom) {
 		this(id, null, name, dom, dom);
 	}
 
@@ -90,10 +97,37 @@ public class StateVertexImpl implements StateVertex {
 	public boolean equals(Object object) {
 		if (object instanceof StateVertex) {
 			StateVertex that = (StateVertex) object;
+			// TODO troublor modify starts: use isSimilar()
+			return this.isSimilar(that);
+			/*
+			// troublor modify ends
 			return Objects.equal(this.strippedDom, that.getStrippedDom());
+			// TODO troublor modify starts: use isSimilar()
+			 */
+			// troublor modify ends
 		}
 		return false;
 	}
+
+	// TODO troublor modify starts: implement isSimilar()
+	@Override
+	public boolean isSimilar(StateVertex that) {
+		try {
+			Diff diff = DiffBuilder.compare(Input.fromDocument(DomUtils.asDocument(this.strippedDom)))
+					.withTest(Input.fromDocument(DomUtils.asDocument(that.getStrippedDom())))
+					.checkForSimilar()
+					.ignoreComments()
+					.ignoreWhitespace()
+					.normalizeWhitespace()
+					.withComparisonController(ComparisonControllers.StopWhenDifferent)
+					.withDifferenceEvaluator(new TolerateAttributeEvaluator())
+					.build();
+			return !diff.hasDifferences();
+		} catch (IOException e) {
+			return false;
+		}
+	}
+	// troublor modify ends
 
 	@Override
 	public String toString() {
@@ -164,5 +198,29 @@ public class StateVertexImpl implements StateVertex {
 	public double getDist(StateVertex vertexOfGraph) {
 		// Return proper value when implemented
 		return -1;
+	}
+
+	static class TolerateAttributeEvaluator implements DifferenceEvaluator {
+		String[] canonicalKeywords = new String[]{
+				"data",
+				"value",
+				"content",
+				"id"
+		};
+
+		public ComparisonResult evaluate(Comparison comparison, ComparisonResult comparisonResult) {
+			if (comparisonResult == ComparisonResult.EQUAL) return comparisonResult;
+			Node node = comparison.getControlDetails().getTarget();
+			if (node instanceof Attr) {
+				Attr attr = (Attr) node;
+				for (String kw : canonicalKeywords) {
+					if (attr.getName().toLowerCase().contains(kw.toLowerCase())) {
+						return ComparisonResult.DIFFERENT;
+					}
+				}
+				return ComparisonResult.SIMILAR;
+			}
+			return comparisonResult;
+		}
 	}
 }
