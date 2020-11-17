@@ -100,6 +100,10 @@ public final class DappTestService {
 
     public final com.google.protobuf.Descriptors.EnumValueDescriptor
         getValueDescriptor() {
+      if (this == UNRECOGNIZED) {
+        throw new java.lang.IllegalStateException(
+            "Can't get the descriptor of an unrecognized enum value.");
+      }
       return getDescriptor().getValues().get(ordinal());
     }
     public final com.google.protobuf.Descriptors.EnumDescriptor
@@ -181,7 +185,7 @@ public final class DappTestService {
   /**
    * Protobuf type {@code darcher.TestStartMsg}
    */
-  public  static final class TestStartMsg extends
+  public static final class TestStartMsg extends
       com.google.protobuf.GeneratedMessageV3 implements
       // @@protoc_insertion_point(message_implements:darcher.TestStartMsg)
       TestStartMsgOrBuilder {
@@ -279,6 +283,7 @@ public final class DappTestService {
      * <code>string dapp_name = 1;</code>
      * @return The dappName.
      */
+    @java.lang.Override
     public java.lang.String getDappName() {
       java.lang.Object ref = dappName_;
       if (ref instanceof java.lang.String) {
@@ -299,6 +304,7 @@ public final class DappTestService {
      * <code>string dapp_name = 1;</code>
      * @return The bytes for dappName.
      */
+    @java.lang.Override
     public com.google.protobuf.ByteString
         getDappNameBytes() {
       java.lang.Object ref = dappName_;
@@ -323,6 +329,7 @@ public final class DappTestService {
      * <code>string instance_id = 2;</code>
      * @return The instanceId.
      */
+    @java.lang.Override
     public java.lang.String getInstanceId() {
       java.lang.Object ref = instanceId_;
       if (ref instanceof java.lang.String) {
@@ -343,6 +350,7 @@ public final class DappTestService {
      * <code>string instance_id = 2;</code>
      * @return The bytes for instanceId.
      */
+    @java.lang.Override
     public com.google.protobuf.ByteString
         getInstanceIdBytes() {
       java.lang.Object ref = instanceId_;
@@ -967,7 +975,7 @@ public final class DappTestService {
   /**
    * Protobuf type {@code darcher.TestEndMsg}
    */
-  public  static final class TestEndMsg extends
+  public static final class TestEndMsg extends
       com.google.protobuf.GeneratedMessageV3 implements
       // @@protoc_insertion_point(message_implements:darcher.TestEndMsg)
       TestEndMsgOrBuilder {
@@ -1065,6 +1073,7 @@ public final class DappTestService {
      * <code>string dapp_name = 1;</code>
      * @return The dappName.
      */
+    @java.lang.Override
     public java.lang.String getDappName() {
       java.lang.Object ref = dappName_;
       if (ref instanceof java.lang.String) {
@@ -1085,6 +1094,7 @@ public final class DappTestService {
      * <code>string dapp_name = 1;</code>
      * @return The bytes for dappName.
      */
+    @java.lang.Override
     public com.google.protobuf.ByteString
         getDappNameBytes() {
       java.lang.Object ref = dappName_;
@@ -1109,6 +1119,7 @@ public final class DappTestService {
      * <code>string instance_id = 2;</code>
      * @return The instanceId.
      */
+    @java.lang.Override
     public java.lang.String getInstanceId() {
       java.lang.Object ref = instanceId_;
       if (ref instanceof java.lang.String) {
@@ -1129,6 +1140,7 @@ public final class DappTestService {
      * <code>string instance_id = 2;</code>
      * @return The bytes for instanceId.
      */
+    @java.lang.Override
     public com.google.protobuf.ByteString
         getInstanceIdBytes() {
       java.lang.Object ref = instanceId_;
@@ -1853,7 +1865,7 @@ public final class DappTestService {
   /**
    * Protobuf type {@code darcher.TxMsg}
    */
-  public  static final class TxMsg extends
+  public static final class TxMsg extends
       com.google.protobuf.GeneratedMessageV3 implements
       // @@protoc_insertion_point(message_implements:darcher.TxMsg)
       TxMsgOrBuilder {
@@ -1986,6 +1998,7 @@ public final class DappTestService {
      * <code>string dapp_name = 1;</code>
      * @return The dappName.
      */
+    @java.lang.Override
     public java.lang.String getDappName() {
       java.lang.Object ref = dappName_;
       if (ref instanceof java.lang.String) {
@@ -2006,6 +2019,7 @@ public final class DappTestService {
      * <code>string dapp_name = 1;</code>
      * @return The bytes for dappName.
      */
+    @java.lang.Override
     public com.google.protobuf.ByteString
         getDappNameBytes() {
       java.lang.Object ref = dappName_;
@@ -2030,6 +2044,7 @@ public final class DappTestService {
      * <code>string instance_id = 2;</code>
      * @return The instanceId.
      */
+    @java.lang.Override
     public java.lang.String getInstanceId() {
       java.lang.Object ref = instanceId_;
       if (ref instanceof java.lang.String) {
@@ -2050,6 +2065,7 @@ public final class DappTestService {
      * <code>string instance_id = 2;</code>
      * @return The bytes for instanceId.
      */
+    @java.lang.Override
     public com.google.protobuf.ByteString
         getInstanceIdBytes() {
       java.lang.Object ref = instanceId_;
@@ -2074,6 +2090,7 @@ public final class DappTestService {
      * <code>string hash = 3;</code>
      * @return The hash.
      */
+    @java.lang.Override
     public java.lang.String getHash() {
       java.lang.Object ref = hash_;
       if (ref instanceof java.lang.String) {
@@ -2094,6 +2111,7 @@ public final class DappTestService {
      * <code>string hash = 3;</code>
      * @return The bytes for hash.
      */
+    @java.lang.Override
     public com.google.protobuf.ByteString
         getHashBytes() {
       java.lang.Object ref = hash_;
@@ -2118,6 +2136,7 @@ public final class DappTestService {
      * <code>string from = 4;</code>
      * @return The from.
      */
+    @java.lang.Override
     public java.lang.String getFrom() {
       java.lang.Object ref = from_;
       if (ref instanceof java.lang.String) {
@@ -2138,6 +2157,7 @@ public final class DappTestService {
      * <code>string from = 4;</code>
      * @return The bytes for from.
      */
+    @java.lang.Override
     public com.google.protobuf.ByteString
         getFromBytes() {
       java.lang.Object ref = from_;
@@ -2162,6 +2182,7 @@ public final class DappTestService {
      * <code>string to = 5;</code>
      * @return The to.
      */
+    @java.lang.Override
     public java.lang.String getTo() {
       java.lang.Object ref = to_;
       if (ref instanceof java.lang.String) {
@@ -2182,6 +2203,7 @@ public final class DappTestService {
      * <code>string to = 5;</code>
      * @return The bytes for to.
      */
+    @java.lang.Override
     public com.google.protobuf.ByteString
         getToBytes() {
       java.lang.Object ref = to_;
@@ -2206,6 +2228,7 @@ public final class DappTestService {
      * <code>string states = 6;</code>
      * @return The states.
      */
+    @java.lang.Override
     public java.lang.String getStates() {
       java.lang.Object ref = states_;
       if (ref instanceof java.lang.String) {
@@ -2226,6 +2249,7 @@ public final class DappTestService {
      * <code>string states = 6;</code>
      * @return The bytes for states.
      */
+    @java.lang.Override
     public com.google.protobuf.ByteString
         getStatesBytes() {
       java.lang.Object ref = states_;
@@ -2250,6 +2274,7 @@ public final class DappTestService {
      * <code>string events = 7;</code>
      * @return The events.
      */
+    @java.lang.Override
     public java.lang.String getEvents() {
       java.lang.Object ref = events_;
       if (ref instanceof java.lang.String) {
@@ -2270,6 +2295,7 @@ public final class DappTestService {
      * <code>string events = 7;</code>
      * @return The bytes for events.
      */
+    @java.lang.Override
     public com.google.protobuf.ByteString
         getEventsBytes() {
       java.lang.Object ref = events_;
@@ -3479,7 +3505,7 @@ public final class DappTestService {
   /**
    * Protobuf type {@code darcher.ConsoleErrorMsg}
    */
-  public  static final class ConsoleErrorMsg extends
+  public static final class ConsoleErrorMsg extends
       com.google.protobuf.GeneratedMessageV3 implements
       // @@protoc_insertion_point(message_implements:darcher.ConsoleErrorMsg)
       ConsoleErrorMsgOrBuilder {
@@ -3584,6 +3610,7 @@ public final class DappTestService {
      * <code>string dapp_name = 1;</code>
      * @return The dappName.
      */
+    @java.lang.Override
     public java.lang.String getDappName() {
       java.lang.Object ref = dappName_;
       if (ref instanceof java.lang.String) {
@@ -3604,6 +3631,7 @@ public final class DappTestService {
      * <code>string dapp_name = 1;</code>
      * @return The bytes for dappName.
      */
+    @java.lang.Override
     public com.google.protobuf.ByteString
         getDappNameBytes() {
       java.lang.Object ref = dappName_;
@@ -3628,6 +3656,7 @@ public final class DappTestService {
      * <code>string instance_id = 2;</code>
      * @return The instanceId.
      */
+    @java.lang.Override
     public java.lang.String getInstanceId() {
       java.lang.Object ref = instanceId_;
       if (ref instanceof java.lang.String) {
@@ -3648,6 +3677,7 @@ public final class DappTestService {
      * <code>string instance_id = 2;</code>
      * @return The bytes for instanceId.
      */
+    @java.lang.Override
     public com.google.protobuf.ByteString
         getInstanceIdBytes() {
       java.lang.Object ref = instanceId_;
@@ -3672,6 +3702,7 @@ public final class DappTestService {
      * <code>string error_string = 3;</code>
      * @return The errorString.
      */
+    @java.lang.Override
     public java.lang.String getErrorString() {
       java.lang.Object ref = errorString_;
       if (ref instanceof java.lang.String) {
@@ -3692,6 +3723,7 @@ public final class DappTestService {
      * <code>string error_string = 3;</code>
      * @return The bytes for errorString.
      */
+    @java.lang.Override
     public com.google.protobuf.ByteString
         getErrorStringBytes() {
       java.lang.Object ref = errorString_;
@@ -4479,7 +4511,7 @@ public final class DappTestService {
   /**
    * Protobuf type {@code darcher.DAppDriverControlMsg}
    */
-  public  static final class DAppDriverControlMsg extends
+  public static final class DAppDriverControlMsg extends
       com.google.protobuf.GeneratedMessageV3 implements
       // @@protoc_insertion_point(message_implements:darcher.DAppDriverControlMsg)
       DAppDriverControlMsgOrBuilder {
@@ -4598,7 +4630,7 @@ public final class DappTestService {
      * <code>.darcher.Role role = 1;</code>
      * @return The enum numeric value on the wire for role.
      */
-    public int getRoleValue() {
+    @java.lang.Override public int getRoleValue() {
       return role_;
     }
     /**
@@ -4609,7 +4641,7 @@ public final class DappTestService {
      * <code>.darcher.Role role = 1;</code>
      * @return The role.
      */
-    public org.kristen.rpc.darcher.Common.Role getRole() {
+    @java.lang.Override public org.kristen.rpc.darcher.Common.Role getRole() {
       @SuppressWarnings("deprecation")
       org.kristen.rpc.darcher.Common.Role result = org.kristen.rpc.darcher.Common.Role.valueOf(role_);
       return result == null ? org.kristen.rpc.darcher.Common.Role.UNRECOGNIZED : result;
@@ -4625,6 +4657,7 @@ public final class DappTestService {
      * <code>string id = 2;</code>
      * @return The id.
      */
+    @java.lang.Override
     public java.lang.String getId() {
       java.lang.Object ref = id_;
       if (ref instanceof java.lang.String) {
@@ -4645,6 +4678,7 @@ public final class DappTestService {
      * <code>string id = 2;</code>
      * @return The bytes for id.
      */
+    @java.lang.Override
     public com.google.protobuf.ByteString
         getIdBytes() {
       java.lang.Object ref = id_;
@@ -4669,6 +4703,7 @@ public final class DappTestService {
      * <code>string dapp_name = 3;</code>
      * @return The dappName.
      */
+    @java.lang.Override
     public java.lang.String getDappName() {
       java.lang.Object ref = dappName_;
       if (ref instanceof java.lang.String) {
@@ -4689,6 +4724,7 @@ public final class DappTestService {
      * <code>string dapp_name = 3;</code>
      * @return The bytes for dappName.
      */
+    @java.lang.Override
     public com.google.protobuf.ByteString
         getDappNameBytes() {
       java.lang.Object ref = dappName_;
@@ -4713,6 +4749,7 @@ public final class DappTestService {
      * <code>string instance_id = 4;</code>
      * @return The instanceId.
      */
+    @java.lang.Override
     public java.lang.String getInstanceId() {
       java.lang.Object ref = instanceId_;
       if (ref instanceof java.lang.String) {
@@ -4733,6 +4770,7 @@ public final class DappTestService {
      * <code>string instance_id = 4;</code>
      * @return The bytes for instanceId.
      */
+    @java.lang.Override
     public com.google.protobuf.ByteString
         getInstanceIdBytes() {
       java.lang.Object ref = instanceId_;
@@ -4753,14 +4791,14 @@ public final class DappTestService {
      * <code>.darcher.DAppDriverControlType control_type = 5;</code>
      * @return The enum numeric value on the wire for controlType.
      */
-    public int getControlTypeValue() {
+    @java.lang.Override public int getControlTypeValue() {
       return controlType_;
     }
     /**
      * <code>.darcher.DAppDriverControlType control_type = 5;</code>
      * @return The controlType.
      */
-    public org.kristen.rpc.darcher.DappTestService.DAppDriverControlType getControlType() {
+    @java.lang.Override public org.kristen.rpc.darcher.DappTestService.DAppDriverControlType getControlType() {
       @SuppressWarnings("deprecation")
       org.kristen.rpc.darcher.DappTestService.DAppDriverControlType result = org.kristen.rpc.darcher.DappTestService.DAppDriverControlType.valueOf(controlType_);
       return result == null ? org.kristen.rpc.darcher.DappTestService.DAppDriverControlType.UNRECOGNIZED : result;
@@ -5143,7 +5181,7 @@ public final class DappTestService {
        * <code>.darcher.Role role = 1;</code>
        * @return The enum numeric value on the wire for role.
        */
-      public int getRoleValue() {
+      @java.lang.Override public int getRoleValue() {
         return role_;
       }
       /**
@@ -5156,6 +5194,7 @@ public final class DappTestService {
        * @return This builder for chaining.
        */
       public Builder setRoleValue(int value) {
+        
         role_ = value;
         onChanged();
         return this;
@@ -5168,6 +5207,7 @@ public final class DappTestService {
        * <code>.darcher.Role role = 1;</code>
        * @return The role.
        */
+      @java.lang.Override
       public org.kristen.rpc.darcher.Common.Role getRole() {
         @SuppressWarnings("deprecation")
         org.kristen.rpc.darcher.Common.Role result = org.kristen.rpc.darcher.Common.Role.valueOf(role_);
@@ -5499,7 +5539,7 @@ public final class DappTestService {
        * <code>.darcher.DAppDriverControlType control_type = 5;</code>
        * @return The enum numeric value on the wire for controlType.
        */
-      public int getControlTypeValue() {
+      @java.lang.Override public int getControlTypeValue() {
         return controlType_;
       }
       /**
@@ -5508,6 +5548,7 @@ public final class DappTestService {
        * @return This builder for chaining.
        */
       public Builder setControlTypeValue(int value) {
+        
         controlType_ = value;
         onChanged();
         return this;
@@ -5516,6 +5557,7 @@ public final class DappTestService {
        * <code>.darcher.DAppDriverControlType control_type = 5;</code>
        * @return The controlType.
        */
+      @java.lang.Override
       public org.kristen.rpc.darcher.DappTestService.DAppDriverControlType getControlType() {
         @SuppressWarnings("deprecation")
         org.kristen.rpc.darcher.DappTestService.DAppDriverControlType result = org.kristen.rpc.darcher.DappTestService.DAppDriverControlType.valueOf(controlType_);
