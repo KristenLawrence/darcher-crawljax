@@ -36,11 +36,10 @@ import java.io.IOException;
 import java.net.InetSocketAddress;
 import java.net.URI;
 import java.net.URISyntaxException;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.ArrayBlockingQueue;
 import java.util.concurrent.BlockingQueue;
-import java.util.concurrent.Semaphore;
+import java.util.concurrent.TimeUnit;
 
 import org.kristen.rpc.darcher.*;
 
@@ -49,8 +48,7 @@ public class GRPCClientPlugin implements
         PostCrawlingPlugin,
         OnBrowserCreatedPlugin,
         OnUrlFirstLoadPlugin,
-        OnFireEventSucceededPlugin,
-        PreStateCrawlingPlugin {
+        OnFireEventSucceededPlugin {
     private String METAMASK_PASSWORD;
     private String METAMASK_POPUP_URL;
     private String DAPP_URL;
@@ -463,12 +461,12 @@ public class GRPCClientPlugin implements
     public void onFireEventSucceeded(CrawlerContext context, Eventable eventable, List<Eventable> pathToFailure) {
         logger.info("One event is fired successfully");
 //        processMetamaskPopup(context);
-    }
-
-    @Override
-    public void preStateCrawling(CrawlerContext context, ImmutableList<CandidateElement> candidateElements, StateVertex state) {
         // Before a new state is crawled, check unapproved tx queue
-        UnapprovedTxMessage unapprovedTxMessage = this.unapprovedTxQueue.poll();
+        UnapprovedTxMessage unapprovedTxMessage = null;
+        try {
+            unapprovedTxMessage = this.unapprovedTxQueue.poll(50, TimeUnit.MILLISECONDS);
+        } catch (InterruptedException ignored) {
+        }
         if (unapprovedTxMessage == null) {
             // no unapproved tx
             return;
