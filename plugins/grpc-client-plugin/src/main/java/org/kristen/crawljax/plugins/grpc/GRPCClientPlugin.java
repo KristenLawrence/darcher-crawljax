@@ -21,6 +21,7 @@ import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import lombok.extern.slf4j.Slf4j;
+import org.openqa.selenium.WindowType;
 import org.openqa.selenium.logging.LogEntries;
 import org.openqa.selenium.logging.LogEntry;
 import org.openqa.selenium.logging.LogType;
@@ -31,6 +32,7 @@ import java.awt.*;
 import java.awt.datatransfer.Clipboard;
 import java.awt.datatransfer.DataFlavor;
 import java.awt.datatransfer.Transferable;
+import java.io.IOException;
 import java.net.InetSocketAddress;
 import java.net.URI;
 import java.net.URISyntaxException;
@@ -245,6 +247,13 @@ public class GRPCClientPlugin implements
                 .setInstanceId(Integer.toString(this.instanceId))
                 .build();
         blockingStub.notifyTestEnd(testEndMsg);
+
+        // stop MetaMask Notification WebSocket server
+        try {
+            this.metaMaskNotificationServer.stop();
+        } catch (IOException | InterruptedException e) {
+            e.printStackTrace();
+        }
     }
 
     @Override
@@ -315,10 +324,12 @@ public class GRPCClientPlugin implements
         // Open a new tab in the browser and visit Metamask pop-up page
         EmbeddedBrowser browser = context.getBrowser();
         WebDriver driver = browser.getWebDriver();
-        String currentHandle = driver.getWindowHandle();
-        ((JavascriptExecutor) driver).executeScript("window.open()");
-        ArrayList<String> tabs = new ArrayList<>(driver.getWindowHandles());
-        driver.switchTo().window(tabs.get(tabs.indexOf(currentHandle) + 1));
+        String originalTab = driver.getWindowHandle();
+        driver.switchTo().newWindow(WindowType.TAB);
+        String metamaskTab = driver.getWindowHandle();
+//        ((JavascriptExecutor) driver).executeScript("window.open()");
+//        ArrayList<String> tabs = new ArrayList<>(driver.getWindowHandles());
+//        driver.switchTo().window(tabs.get(tabs.indexOf(currentHandle) + 1));
         driver.get(METAMASK_POPUP_URL);
 
         try {
@@ -401,14 +412,21 @@ public class GRPCClientPlugin implements
                     .setEvents(this.events)
                     .build();
             logger.debug("Begin to send txMsg and wait for tx being processed, dappName={}, instanceId={}, txHash={}, fromAddress={}, toAddress={}", dappName, instanceId, txHash, fromAddress, toAddress);
+
+            // return to previous tab in case REFRESH_PATH requests from DArcher
+            driver.switchTo().window(originalTab);
+
             blockingStub.waitForTxProcess(txMsg);
             logger.debug("Finish sending txMsg and processing tx, dappName={}, instanceId={}, txHash={}, fromAddress={}, toAddress={}", dappName, instanceId, txHash, fromAddress, toAddress);
             System.out.println();
+
+            // switch to metamask tab
+            driver.switchTo().window(metamaskTab);
         }
 
         // Close current tab, return to the original testing tab
         driver.close();
-        driver.switchTo().window(currentHandle);
+        driver.switchTo().window(originalTab);
 
         logger.debug("Exit processMetamaskPopup function, end processing");
     }
@@ -444,7 +462,7 @@ public class GRPCClientPlugin implements
     @Override
     public void onFireEventSucceeded(CrawlerContext context, Eventable eventable, List<Eventable> pathToFailure) {
         logger.info("One event is fired successfully");
-        processMetamaskPopup(context);
+//        processMetamaskPopup(context);
     }
 
     @Override
