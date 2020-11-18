@@ -13,6 +13,7 @@ import com.crawljax.core.state.Eventable;
 import com.crawljax.core.state.Identification;
 import com.crawljax.core.state.*;
 
+import com.google.common.collect.ImmutableList;
 import io.grpc.stub.StreamObserver;
 import io.grpc.ManagedChannel;
 import io.grpc.ManagedChannelBuilder;
@@ -30,14 +31,24 @@ import java.awt.*;
 import java.awt.datatransfer.Clipboard;
 import java.awt.datatransfer.DataFlavor;
 import java.awt.datatransfer.Transferable;
+import java.net.InetSocketAddress;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.ArrayBlockingQueue;
+import java.util.concurrent.BlockingQueue;
+import java.util.concurrent.Semaphore;
 
 import org.kristen.rpc.darcher.*;
 
-public class GRPCClientPlugin implements PreCrawlingPlugin, PostCrawlingPlugin, OnBrowserCreatedPlugin, OnUrlFirstLoadPlugin, OnFireEventSucceededPlugin {
+public class GRPCClientPlugin implements
+        PreCrawlingPlugin,
+        PostCrawlingPlugin,
+        OnBrowserCreatedPlugin,
+        OnUrlFirstLoadPlugin,
+        OnFireEventSucceededPlugin,
+        PreStateCrawlingPlugin {
     private String METAMASK_PASSWORD;
     private String METAMASK_POPUP_URL;
     private String DAPP_URL;
@@ -66,6 +77,10 @@ public class GRPCClientPlugin implements PreCrawlingPlugin, PostCrawlingPlugin, 
     public HandleBrowserConsoleErrorThread handleBrowserConsoleErrorThread;
     public EmbeddedBrowser dappBrowser;
 
+    // the websocket server which receives message from metamask
+    private final MetaMaskNotificationServer metaMaskNotificationServer;
+    private final BlockingQueue<UnapprovedTxMessage> unapprovedTxQueue;
+
     public GRPCClientPlugin(String dappName, int instanceId, String metamaskUrl, String dappUrl, String metamaskPassword) {
         logger.info("Init GRPC client plugin, dappName={}, instanceId={}, dapUrl={}", dappName, instanceId, dappUrl);
         blockingStub = DAppTestDriverServiceGrpc.newBlockingStub(channel);
@@ -81,6 +96,10 @@ public class GRPCClientPlugin implements PreCrawlingPlugin, PostCrawlingPlugin, 
         Thread controlThread = new Thread(this.controlMsgHandlerThread);
         controlThread.start();
         logger.info("Start the control msg handler thread, dappName={}, instanceId={}", dappName, instanceId);
+
+        this.unapprovedTxQueue = new ArrayBlockingQueue<>(100);
+        this.metaMaskNotificationServer = new MetaMaskNotificationServer(new InetSocketAddress(1237), this.unapprovedTxQueue::offer);
+        this.metaMaskNotificationServer.start();
     }
 
     /**
@@ -428,6 +447,17 @@ public class GRPCClientPlugin implements PreCrawlingPlugin, PostCrawlingPlugin, 
         processMetamaskPopup(context);
     }
 
+    @Override
+    public void preStateCrawling(CrawlerContext context, ImmutableList<CandidateElement> candidateElements, StateVertex state) {
+        // Before a new state is crawled, check unapproved tx queue
+        UnapprovedTxMessage unapprovedTxMessage = this.unapprovedTxQueue.poll();
+        if (unapprovedTxMessage == null) {
+            // no unapproved tx
+            return;
+        }
+        processMetamaskPopup(context);
+    }
+
 
     /**
      * The class to handle the control messages sent by the server
@@ -437,7 +467,7 @@ public class GRPCClientPlugin implements PreCrawlingPlugin, PostCrawlingPlugin, 
         private int instanceId;
         public DappTestService.DAppDriverControlMsg dAppDriverCtlMsg;
 
-        public ControlMsgHandlerThread (String dappName, int instanceId) {
+        public ControlMsgHandlerThread(String dappName, int instanceId) {
             logger.debug("Init the ControlMsgHandlerThread");
             this.dappName = dappName;
             this.instanceId = instanceId;
