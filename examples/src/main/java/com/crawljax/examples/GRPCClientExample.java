@@ -18,7 +18,7 @@ import java.util.concurrent.TimeUnit;
 public class GRPCClientExample {
     private static final long WAIT_TIME_AFTER_EVENT = 500;
     private static final long WAIT_TIME_AFTER_RELOAD = 500;
-    private static final String DAPP_URL = "chrome-extension://jbppcachblnkaogkgacckpgohjbpcekf/home.html";
+    private static final String DAPP_URL = "chrome-extension://jbppcachblnkaogkgacckpgohjbpcekf/home.html#send";
     private static final String DAPP_NAME = "Metamask";
     private static int instanceId = 1;
     private static final String METAMASK_POPUP_URL = "chrome-extension://jbppcachblnkaogkgacckpgohjbpcekf/home.html";

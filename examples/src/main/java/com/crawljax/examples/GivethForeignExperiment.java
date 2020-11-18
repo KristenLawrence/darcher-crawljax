@@ -9,6 +9,7 @@ import com.crawljax.forms.FormInput;
 import com.crawljax.forms.InputValue;
 import com.crawljax.plugins.crawloverview.CrawlOverview;
 import org.kristen.crawljax.plugins.grpc.GRPCClientPlugin;
+import org.openqa.selenium.By;
 import org.w3c.dom.Node;
 
 import java.io.IOException;
@@ -18,7 +19,7 @@ import java.util.concurrent.atomic.AtomicInteger;
 public class GivethForeignExperiment {
     private static final long WAIT_TIME_AFTER_EVENT = 500;
     private static final long WAIT_TIME_AFTER_RELOAD = 500;
-    private static final String DAPP_URL = "http://localhost:3010/my-campaigns";
+    private static final String DAPP_URL = "http://localhost:3010/";
     private static final String DAPP_NAME = "Giveth Foreign";
     private static int instanceId = 1;
     private static final String METAMASK_POPUP_URL = "chrome-extension://jbppcachblnkaogkgacckpgohjbpcekf/home.html";
@@ -47,6 +48,9 @@ public class GivethForeignExperiment {
 //        builder.crawlRules().click("A");
         builder.crawlRules().click("BUTTON");
 
+        // test zone
+        builder.crawlRules().dontClick("BUTTON").underXPath("//NAV[@id = 'main-menu']/BUTTON[1]");
+
         builder.crawlRules().crawlHiddenAnchors(true);
         builder.crawlRules().crawlFrames(false);
         builder.setUnlimitedCrawlDepth();
@@ -60,7 +64,7 @@ public class GivethForeignExperiment {
         builder.setMaximumDepth(0); // unlimited
         builder.crawlRules().clickElementsInRandomOrder(true);
 
-        // Set timeouts
+        /* Set timeouts */
         builder.crawlRules().waitAfterReloadUrl(WAIT_TIME_AFTER_RELOAD, TimeUnit.MILLISECONDS);
         builder.crawlRules().waitAfterEvent(WAIT_TIME_AFTER_EVENT, TimeUnit.MILLISECONDS);
 
@@ -72,6 +76,9 @@ public class GivethForeignExperiment {
 
         // form input specifications
         InputSpecification inputSpec = new InputSpecification();
+
+        inputSpec.inputField(FormInput.InputType.TEXT, new Identification(Identification.How.name, "picture"))
+                .inputValues("/Users/troublor/workspace/darcher/packages/darcher-examples/giveth/misc/picture.jpg");
 
         /* don't click editor tool bar */
         builder.crawlRules().dontClick("BUTTON").underXPath("//*[@id=\"quill-formsy\"]/DIV[2]/DIV[3]");
@@ -131,8 +138,13 @@ public class GivethForeignExperiment {
         createMileStoneForm.inputField(FormInput.InputType.SELECT, new Identification(Identification.How.name, "reviewerAddress"))
                 .inputValues(ETHEREUM_ADDRESS); // select Giveth0 account as reviewer always
         // select money destination after completion
-        createMileStoneForm.inputField(FormInput.InputType.TEXT, new Identification(Identification.How.name, "recipientAddress"))
-                .inputValues(ETHEREUM_ADDRESS);
+//        createMileStoneForm.inputField(FormInput.InputType.TEXT, new Identification(Identification.How.name, "recipientAddress"))
+//                .inputValues(ETHEREUM_ADDRESS);
+        createMileStoneForm.inputField(FormInput.InputType.CUSTOMIZE, new Identification(Identification.How.name,
+                "recipientAddress"))
+                .setInputFiller((webElement, nodeElement) -> {
+                    webElement.sendKeys(ETHEREUM_ADDRESS);
+                });
         // no need to click "Use My Address" anymore
         builder.crawlRules().dontClick("BUTTON").withText("Use My Address");
         // set maximum amount
@@ -190,6 +202,9 @@ public class GivethForeignExperiment {
 
         /* Don't download CSV */
         builder.crawlRules().dontClick("BUTTON").withText("Download CSV");
+
+        /* Click DIV button */
+        builder.crawlRules().click("DIV").withAttribute("role", "button");
 
 
         builder.crawlRules().setInputSpec(inputSpec);
