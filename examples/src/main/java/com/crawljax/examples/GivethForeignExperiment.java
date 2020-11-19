@@ -12,6 +12,7 @@ import com.crawljax.core.state.Identification;
 import com.crawljax.forms.FormInput;
 import com.crawljax.forms.InputValue;
 import com.crawljax.plugins.crawloverview.CrawlOverview;
+import jdk.nashorn.internal.ir.LabelNode;
 import org.kristen.crawljax.plugins.grpc.GRPCClientPlugin;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
@@ -49,7 +50,7 @@ public class GivethForeignExperiment {
 //        builder.crawlRules().click("div").withAttribute("")
         // we use normal mode to avoid randomly fill forms and only allow predefined form inputs
         builder.crawlRules().setFormFillMode(CrawlRules.FormFillMode.NORMAL);
-        builder.crawlRules().clickOnce(true);
+        builder.crawlRules().clickOnce(false);
         // click these elements
         builder.crawlRules().click("A");
         builder.crawlRules().click("BUTTON");
@@ -164,7 +165,12 @@ public class GivethForeignExperiment {
                     while (!node.getNodeName().toUpperCase().equals("B")) {
                         node = node.getPreviousSibling();
                     }
-                    String answer = node.getTextContent().substring(0,5);
+                    String answer;
+                    try {
+                        answer = node.getTextContent().substring(0, 5);
+                    } catch (Exception e) {
+                        answer = "Campa";
+                    }
                     return new InputValue(answer);
                 });
 
