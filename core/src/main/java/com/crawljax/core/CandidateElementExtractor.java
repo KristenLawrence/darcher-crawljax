@@ -256,6 +256,14 @@ public class CandidateElementExtractor {
 			String id = element.getNodeName() + ": " + DomUtils.getAllElementAttributes(element);
 			if (matchesXpath && !checkedElements.isChecked(id)
 					&& !isExcluded(dom, element, eventableConditionChecker)) {
+				// TODO troublor modify starts: special case, when tag is DIV, the xpath need to be exactly equal;
+				//  this is because I don't understand why the matchesXpath above uses under but not exactly match,
+				//  so I only check exactly match for "DIV" tags
+				if (!expressions.contains(XPathHelper.getXPathExpression(element))) {
+					continue;
+				}
+				// troublor modify ends
+
 				addElement(element, result, crawlElement);
 			} else {
 				LOG.debug("Element {} was not added", element);
