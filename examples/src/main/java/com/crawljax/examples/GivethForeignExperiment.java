@@ -2,14 +2,20 @@ package com.crawljax.examples;
 
 import com.crawljax.browser.EmbeddedBrowser;
 import com.crawljax.core.CrawlSession;
+import com.crawljax.core.CrawlerContext;
 import com.crawljax.core.CrawljaxRunner;
 import com.crawljax.core.configuration.*;
+import com.crawljax.core.plugin.OnUrlFirstLoadPlugin;
+import com.crawljax.core.plugin.OnUrlLoadPlugin;
+import com.crawljax.core.plugin.PreStateCrawlingPlugin;
 import com.crawljax.core.state.Identification;
 import com.crawljax.forms.FormInput;
 import com.crawljax.forms.InputValue;
 import com.crawljax.plugins.crawloverview.CrawlOverview;
 import org.kristen.crawljax.plugins.grpc.GRPCClientPlugin;
 import org.openqa.selenium.By;
+import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.WebElement;
 import org.w3c.dom.Node;
 
 import java.io.IOException;
@@ -45,11 +51,8 @@ public class GivethForeignExperiment {
         builder.crawlRules().setFormFillMode(CrawlRules.FormFillMode.NORMAL);
         builder.crawlRules().clickOnce(true);
         // click these elements
-//        builder.crawlRules().click("A");
+        builder.crawlRules().click("A");
         builder.crawlRules().click("BUTTON");
-
-        // test zone
-        builder.crawlRules().dontClick("BUTTON").underXPath("//NAV[@id = 'main-menu']/BUTTON[1]");
 
         builder.crawlRules().crawlHiddenAnchors(true);
         builder.crawlRules().crawlFrames(false);
