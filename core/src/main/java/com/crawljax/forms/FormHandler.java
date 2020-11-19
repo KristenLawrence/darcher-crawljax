@@ -5,7 +5,6 @@ import com.crawljax.condition.eventablecondition.EventableCondition;
 import com.crawljax.core.CandidateElement;
 import com.crawljax.core.configuration.CrawlRules;
 import com.crawljax.core.exception.BrowserConnectionException;
-import com.crawljax.core.state.Identification;
 import com.crawljax.util.DomUtils;
 import com.crawljax.util.XPathHelper;
 import com.google.common.base.Enums;
@@ -120,7 +119,7 @@ public class FormHandler {
 			return;
 		}
 		WebElement inputElement = browser.getWebElement(input.getIdentification());
-		String text = generator.generate(inputElement, node).getValue();
+		String text = generator.generate(browser.getWebDriver(), inputElement, node).getValue();
 		if (null == text || text.length() == 0) {
 			return;
 		}
@@ -130,7 +129,7 @@ public class FormHandler {
 
     private void handleCustomize(FormInput input, Element node) {
         WebElement inputElement = browser.getWebElement(input.getIdentification());
-        input.getInputFiller().fillInput(inputElement, node);
+        input.getInputFiller().fillInput(browser.getWebDriver(), inputElement, node);
     }
 	// troublor modify ends
 

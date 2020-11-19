@@ -10,9 +10,9 @@ import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
+import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.w3c.dom.Element;
-import org.w3c.dom.Node;
 
 import java.util.HashSet;
 import java.util.Set;
@@ -25,12 +25,12 @@ public class FormInput {
 	// TODO troublor modify starts:
 	@FunctionalInterface
 	public interface InputGenerator {
-		InputValue generate(WebElement webElement, Element nodeElement);
+		InputValue generate(WebDriver driver, WebElement webElement, Element nodeElement);
 	}
 
 	@FunctionalInterface
 	public interface InputFiller {
-		void fillInput(WebElement webElement, Element nodeElement);
+		void fillInput(WebDriver driver, WebElement webElement, Element nodeElement);
 	}
 	// troublor modify ends
 
