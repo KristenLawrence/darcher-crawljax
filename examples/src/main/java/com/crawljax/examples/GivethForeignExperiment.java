@@ -2,24 +2,22 @@ package com.crawljax.examples;
 
 import com.crawljax.browser.EmbeddedBrowser;
 import com.crawljax.core.CrawlSession;
-import com.crawljax.core.CrawlerContext;
 import com.crawljax.core.CrawljaxRunner;
 import com.crawljax.core.configuration.*;
-import com.crawljax.core.plugin.OnUrlFirstLoadPlugin;
-import com.crawljax.core.plugin.OnUrlLoadPlugin;
-import com.crawljax.core.plugin.PreStateCrawlingPlugin;
 import com.crawljax.core.state.Identification;
 import com.crawljax.forms.FormInput;
 import com.crawljax.forms.InputValue;
 import com.crawljax.plugins.crawloverview.CrawlOverview;
-import jdk.nashorn.internal.ir.LabelNode;
 import org.kristen.crawljax.plugins.grpc.GRPCClientPlugin;
 import org.openqa.selenium.By;
-import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
+import org.openqa.selenium.support.ui.WebDriverWait;
 import org.w3c.dom.Node;
 
 import java.io.IOException;
+import java.time.Duration;
+import java.util.List;
+import java.util.Random;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicInteger;
 
@@ -50,7 +48,7 @@ public class GivethForeignExperiment {
 //        builder.crawlRules().click("div").withAttribute("")
         // we use normal mode to avoid randomly fill forms and only allow predefined form inputs
         builder.crawlRules().setFormFillMode(CrawlRules.FormFillMode.NORMAL);
-        builder.crawlRules().clickOnce(false);
+        builder.crawlRules().clickOnce(true);
         // click these elements
         builder.crawlRules().click("A");
         builder.crawlRules().click("BUTTON");
@@ -96,10 +94,10 @@ public class GivethForeignExperiment {
         AtomicInteger dacCount = new AtomicInteger(0);
         // campaign name
         createDACForm.inputField(FormInput.InputType.DYNAMIC, new Identification(Identification.How.id, "title-input"))
-                .setInputGenerator((webElement, nodeElement) -> new InputValue("DAC" + dacCount.getAndIncrement()));
+                .setInputGenerator((driver, webElement, nodeElement) -> new InputValue("DAC" + dacCount.getAndIncrement()));
         // campaign description
         createDACForm.inputField(FormInput.InputType.CUSTOMIZE, new Identification(Identification.How.xpath, "//*[@id=\"quill-formsy\"]/DIV[2]/DIV[1]"))
-                .setInputFiller((webElement, nodeElement) -> webElement.sendKeys("Several descriptions here..."));
+                .setInputFiller((driver, webElement, nodeElement) -> webElement.sendKeys("Several descriptions here..."));
         // campaign picture
         createDACForm.inputField(FormInput.InputType.TEXT, new Identification(Identification.How.name, "picture"))
                 .inputValues("/Users/troublor/workspace/darcher/packages/darcher-examples/giveth/misc/picture.jpg");
@@ -111,10 +109,10 @@ public class GivethForeignExperiment {
         AtomicInteger campaignCount = new AtomicInteger(0);
         // campaign name
         createCampaignForm.inputField(FormInput.InputType.DYNAMIC, new Identification(Identification.How.id, "title-input"))
-                .setInputGenerator((webElement, nodeElement) -> new InputValue("Campaign" + campaignCount.getAndIncrement()));
+                .setInputGenerator((driver, webElement, nodeElement) -> new InputValue("Campaign" + campaignCount.getAndIncrement()));
         // campaign description
         createCampaignForm.inputField(FormInput.InputType.CUSTOMIZE, new Identification(Identification.How.xpath, "//*[@id=\"quill-formsy\"]/DIV[2]/DIV[1]"))
-                .setInputFiller((webElement, nodeElement) -> webElement.sendKeys("Several descriptions here..."));
+                .setInputFiller((driver, webElement, nodeElement) -> webElement.sendKeys("Several descriptions here..."));
         // campaign picture
         createCampaignForm.inputField(FormInput.InputType.TEXT, new Identification(Identification.How.name, "picture"))
                 .inputValues("/Users/troublor/workspace/darcher/packages/darcher-examples/giveth/misc/picture.jpg");
@@ -129,10 +127,10 @@ public class GivethForeignExperiment {
         AtomicInteger milestoneCount = new AtomicInteger(0);
         // campaign name
         createMileStoneForm.inputField(FormInput.InputType.DYNAMIC, new Identification(Identification.How.id, "title-input"))
-                .setInputGenerator((webElement, nodeElement) -> new InputValue("Milestone" + milestoneCount.getAndIncrement()));
+                .setInputGenerator((driver, webElement, nodeElement) -> new InputValue("Milestone" + milestoneCount.getAndIncrement()));
         // campaign description
         createMileStoneForm.inputField(FormInput.InputType.CUSTOMIZE, new Identification(Identification.How.xpath, "//*[@id=\"quill-formsy\"]/DIV[2]/DIV[1]"))
-                .setInputFiller((webElement, nodeElement) -> {
+                .setInputFiller((driver, webElement, nodeElement) -> {
                     webElement.sendKeys("Several descriptions here...");
                 });
         // campaign picture
@@ -146,7 +144,7 @@ public class GivethForeignExperiment {
 //                .inputValues(ETHEREUM_ADDRESS);
         createMileStoneForm.inputField(FormInput.InputType.CUSTOMIZE, new Identification(Identification.How.name,
                 "recipientAddress"))
-                .setInputFiller((webElement, nodeElement) -> {
+                .setInputFiller((driver, webElement, nodeElement) -> {
                     webElement.sendKeys(ETHEREUM_ADDRESS);
                 });
         // no need to click "Use My Address" anymore
@@ -159,7 +157,7 @@ public class GivethForeignExperiment {
 
         /* cancel campaign confirmation input */
         inputSpec.inputField(FormInput.InputType.DYNAMIC, new Identification(Identification.How.xpath, "/HTML/BODY/DIV/DIV/DIV[4]/DIV/INPUT"))
-                .setInputGenerator((webElement, nodeElement) -> {
+                .setInputGenerator((driver, webElement, nodeElement) -> {
                     // fill the confirmation input by copy the answer from previous sibling node
                     Node node = nodeElement;
                     while (!node.getNodeName().toUpperCase().equals("B")) {
@@ -167,7 +165,8 @@ public class GivethForeignExperiment {
                     }
                     String answer;
                     try {
-                        answer = node.getTextContent().substring(0, 5);
+                        int end = Math.min(node.getTextContent().trim().length(), 5);
+                        answer = node.getTextContent().trim().substring(0, end);
                     } catch (Exception e) {
                         answer = "Campa";
                     }
@@ -177,7 +176,7 @@ public class GivethForeignExperiment {
         /* Change Milestone Recipient */
         inputSpec.inputField(FormInput.InputType.DYNAMIC,
                 new Identification(Identification.How.xpath, "//INPUT[@class='swal-content__input']"))
-                .setInputGenerator((webElement, nodeElement) -> {
+                .setInputGenerator((driver, webElement, nodeElement) -> {
                     if (nodeElement.getAttribute("placeholder").contains("recipient address")) {
                         return new InputValue(OTHER_ADDRESS);
                     } else {
@@ -188,9 +187,20 @@ public class GivethForeignExperiment {
         /* Delegate Donation Form */
         Form delegateDonationForm = new Form();
         // delegate 1 ETH
-        delegateDonationForm.inputField(FormInput.InputType.NUMBER,
+        delegateDonationForm.inputField(FormInput.InputType.DYNAMIC,
                 new Identification(Identification.How.name, "amount"))
-                .inputValues("1");
+                .setInputGenerator((driver, webElement, nodeElement) -> {
+                    // click delegate destination
+                    WebElement element = webElement;
+                    while (!element.getTagName().toLowerCase().equals("form")) {
+                        element = element.findElement(By.xpath("./.."));
+                    }
+                    // randomly click one delegate destination
+                    List<WebElement> options = element.findElements(By.className("ReactTokenInput__option"));
+                    WebElement option = options.get(new Random().nextInt(options.size()));
+                    option.click();
+                    return new InputValue("1");
+                });
         // click source
         builder.crawlRules().click("DIV").withAttribute("class", "ReactTokenInput__option");
         inputSpec.setValuesInForm(delegateDonationForm).beforeClickElement("BUTTON").withText("Delegate here");
@@ -199,7 +209,7 @@ public class GivethForeignExperiment {
         Form cancelMilestoneForm = new Form();
         cancelMilestoneForm.inputField(FormInput.InputType.CUSTOMIZE,
                 new Identification(Identification.How.xpath, "//*[@id=\"quill-formsy\"]/DIV[2]/DIV[1]"))
-                .setInputFiller((webElement, nodeElement) -> webElement.sendKeys("Cancel milestone"));
+                .setInputFiller((driver, webElement, nodeElement) -> webElement.sendKeys("Cancel milestone"));
         inputSpec.setValuesInForm(cancelMilestoneForm).beforeClickElement("BUTTON").withText("Cancel Milestone");
 
         /* Change ownership form */
@@ -215,6 +225,18 @@ public class GivethForeignExperiment {
         /* Click DIV button */
         builder.crawlRules().click("DIV").withAttribute("role", "button");
 
+        /* don't click share buttons */
+        builder.crawlRules().dontClick("DIV").withAttribute("class", "SocialMediaShareButton SocialMediaShareButton--facebook");
+        builder.crawlRules().dontClick("DIV").withAttribute("class", "SocialMediaShareButton SocialMediaShareButton--twitter");
+        builder.crawlRules().dontClick("DIV").withAttribute("class", "SocialMediaShareButton SocialMediaShareButton--telegram");
+        builder.crawlRules().dontClick("DIV").withAttribute("class", "SocialMediaShareButton SocialMediaShareButton--linkedin");
+
+        /* Don't click Donate button, which are not usable in Foreign network */
+        builder.crawlRules().dontClick("BUTTON").withText("Donate");
+
+        /* Profile view is excluded to reduce search space */
+        builder.crawlRules().dontClick("BUTTON").underXPath("//*[@id=\"profile-view\"]");
+        builder.crawlRules().dontClick("A").underXPath("//*[@id=\"profile-view\"]");
 
         builder.crawlRules().setInputSpec(inputSpec);
         builder.setBrowserConfig(
@@ -225,6 +247,9 @@ public class GivethForeignExperiment {
         builder.addPlugin(new CrawlOverview());
 //        builder.addPlugin(new MetaMaskSupportPlugin(METAMASK_POPUP_URL, METAMASK_PASSWORD));
         builder.addPlugin(new GRPCClientPlugin(DAPP_NAME, instanceId, METAMASK_POPUP_URL, DAPP_URL, METAMASK_PASSWORD));
+
+        // test zone
+//        builder.crawlRules().click("BUTTON").withAttribute("class", "btn btn-danger btn-sm");
 
         CrawljaxRunner crawljax = new CrawljaxRunner(builder.build());
         CrawlSession session = crawljax.call();
