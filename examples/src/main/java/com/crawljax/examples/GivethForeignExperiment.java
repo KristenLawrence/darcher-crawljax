@@ -10,7 +10,9 @@ import com.crawljax.forms.InputValue;
 import com.crawljax.plugins.crawloverview.CrawlOverview;
 import org.kristen.crawljax.plugins.grpc.GRPCClientPlugin;
 import org.openqa.selenium.By;
+import org.openqa.selenium.TimeoutException;
 import org.openqa.selenium.WebElement;
+import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 import org.w3c.dom.Node;
 
@@ -195,13 +197,42 @@ public class GivethForeignExperiment {
                     while (!element.getTagName().toLowerCase().equals("form")) {
                         element = element.findElement(By.xpath("./.."));
                     }
-                    // randomly click one delegate destination
-                    List<WebElement> options = element.findElements(By.className("ReactTokenInput__option"));
-                    WebElement option = options.get(new Random().nextInt(options.size()));
-                    option.click();
-                    return new InputValue("1");
+                    // randomly click one type of delegate destination
+                    List<WebElement> tokenInputs = element.findElements(By.xpath("//div[@class='ReactTokenInput']"));
+                    if (tokenInputs.size() > 0) {
+                        WebElement reactTokenInput = tokenInputs.get(new Random().nextInt(tokenInputs.size()));
+                        reactTokenInput.click();
+                        try {
+                            new WebDriverWait(driver, Duration.ofSeconds(1))
+                                    .until(ExpectedConditions.elementToBeClickable(
+                                            reactTokenInput.findElement(By.xpath("//div[@class='ReactTokenInput__option']"))));
+                        } catch (TimeoutException ignored) {
+                        }
+
+                        // randomly click one destination
+                        List<WebElement> options = reactTokenInput.findElements(By.className("ReactTokenInput__option"));
+                        if (options.size() > 0) {
+                            options.get(new Random().nextInt(options.size())).click();
+                        }
+                    }
+
+                    // decide delegate value
+                    WebElement rangeSlide = element.findElement(By.className("rangeslider"));
+                    double verySmallValue = 0.001;
+                    if (rangeSlide == null) {
+                        return new InputValue(String.valueOf(verySmallValue));
+                    }
+                    // get max value
+                    double maxValue;
+                    try {
+                        maxValue = Double.parseDouble(rangeSlide.getAttribute("aria-valuemax"));
+                    } catch (NumberFormatException e) {
+                        maxValue = verySmallValue;
+                    }
+                    return new InputValue(String.valueOf(maxValue > 1 ? 1 : maxValue));
                 });
         // click source
+        builder.crawlRules().click("DIV").withAttribute("class", "ReactTokenInput");
         builder.crawlRules().click("DIV").withAttribute("class", "ReactTokenInput__option");
         inputSpec.setValuesInForm(delegateDonationForm).beforeClickElement("BUTTON").withText("Delegate here");
 
@@ -234,6 +265,10 @@ public class GivethForeignExperiment {
         /* Don't click Donate button, which are not usable in Foreign network */
         builder.crawlRules().dontClick("BUTTON").withText("Donate");
 
+        /* No need to edit (no tx involved) */
+        builder.crawlRules().dontClick("BUTTON").underXPath("//BUTTON[contains(text(), 'Edit')]");
+        builder.crawlRules().dontClick("A").underXPath("//BUTTON[contains(text(), 'Edit')]");
+
         /* Profile view is excluded to reduce search space */
         builder.crawlRules().dontClick("BUTTON").underXPath("//*[@id=\"profile-view\"]");
         builder.crawlRules().dontClick("A").underXPath("//*[@id=\"profile-view\"]");
@@ -249,7 +284,7 @@ public class GivethForeignExperiment {
         builder.addPlugin(new GRPCClientPlugin(DAPP_NAME, instanceId, METAMASK_POPUP_URL, DAPP_URL, METAMASK_PASSWORD));
 
         // test zone
-//        builder.crawlRules().click("BUTTON").withAttribute("class", "btn btn-danger btn-sm");
+//        builder.crawlRules().click("BUTTON").withText("Delegate funds here");
 
         CrawljaxRunner crawljax = new CrawljaxRunner(builder.build());
         CrawlSession session = crawljax.call();
