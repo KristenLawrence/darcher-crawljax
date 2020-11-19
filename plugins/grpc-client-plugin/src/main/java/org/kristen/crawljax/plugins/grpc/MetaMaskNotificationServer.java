@@ -29,10 +29,15 @@ public class MetaMaskNotificationServer extends WebSocketServer {
         void onUnlockRequestListener(UnlockRequestMessage unlockRequestMessage);
     }
 
+    public interface StackTraceMessageListener {
+        void onStackTraceMessage(StackTraceMessage stackTraceMessage);
+    }
+
     private final UnapprovedTxListener unapprovedTxListener;
     private final UnconfirmedMessageListener unconfirmedMessageListener;
     private final PermissionRequestListener permissionRequestListener;
     private final UnlockRequestListener unlockRequestListener;
+    private final StackTraceMessageListener stackTraceMessageListener;
 
     private final Logger logger;
 
@@ -42,18 +47,21 @@ public class MetaMaskNotificationServer extends WebSocketServer {
                                       UnapprovedTxListener unapprovedTxListener,
                                       UnconfirmedMessageListener unconfirmedMessageListener,
                                       PermissionRequestListener permissionRequestListener,
-                                      UnlockRequestListener unlockRequestListener) {
+                                      UnlockRequestListener unlockRequestListener,
+                                      StackTraceMessageListener stackTraceMessageListener) {
         super(address);
         this.unapprovedTxListener = unapprovedTxListener;
         this.unconfirmedMessageListener = unconfirmedMessageListener;
         this.permissionRequestListener = permissionRequestListener;
         this.unlockRequestListener = unlockRequestListener;
+        this.stackTraceMessageListener = stackTraceMessageListener;
         this.logger = LoggerFactory.getLogger(getClass());
     }
 
     public MetaMaskNotificationServer(InetSocketAddress address,
-                                      UnapprovedTxListener unapprovedTxListener) {
-        this(address, unapprovedTxListener, null, null, null);
+                                      UnapprovedTxListener unapprovedTxListener,
+                                      StackTraceMessageListener stackTraceMessageListener) {
+        this(address, unapprovedTxListener, null, null, null, stackTraceMessageListener);
     }
 
     @Override
@@ -96,6 +104,12 @@ public class MetaMaskNotificationServer extends WebSocketServer {
                     unconfirmedMessageListener.onUnconfirmedMessage((UnconfirmedMessage) msg);
                 }
                 break;
+            case Message.FETCH_STACK_TRACE:
+                logger.debug("Receive stack trace message");
+                if (stackTraceMessageListener != null) {
+                    stackTraceMessageListener.onStackTraceMessage((StackTraceMessage) msg);
+                }
+                break;
             default:
                 logger.warn("Unknown message with type: " + msg.getType());
         }
@@ -128,6 +142,9 @@ public class MetaMaskNotificationServer extends WebSocketServer {
         MetaMaskNotificationServer server = new MetaMaskNotificationServer(new InetSocketAddress("localhost", 1237),
                 unapprovedTxMessage -> {
                     System.out.println(unapprovedTxMessage);
+                },
+                stackTraceMessage -> {
+                    System.out.println(stackTraceMessage);
                 });
         Runtime.getRuntime().addShutdownHook(new Thread(() -> {
             try {
@@ -146,6 +163,7 @@ class Message {
     public static final String UNCONFIRMED_MESSAGE = "UnconfirmedMessage";
     public static final String UNLOCK_REQUEST = "UnlockRequest";
     public static final String PERMISSION_REQUEST = "PermissionRequest";
+    public static final String FETCH_STACK_TRACE = "FetchStackTrace";
 
     private String type;
 
@@ -166,6 +184,30 @@ interface Decoder<T> {
     T decode(String s);
 
     boolean willDecode(String s);
+}
+
+class StackTraceMessage extends Message {
+    private String[] stack;
+
+    public StackTraceMessage(String type, String[] stack) {
+        super(type);
+        this.stack = stack;
+        if (!type.equals(Message.FETCH_STACK_TRACE)) {
+            throw new IllegalArgumentException("Invalid type '" + type + "' for StackTraceMessage");
+        }
+    }
+
+    public StackTraceMessage(String[] stack) {
+        this(Message.FETCH_STACK_TRACE, stack);
+    }
+
+    public String[] getStack() {
+        return stack;
+    }
+
+    public void setStack(String[] stack) {
+        this.stack = stack;
+    }
 }
 
 class UnapprovedTxMessage extends Message {
@@ -241,7 +283,7 @@ class UnlockRequestMessage extends Message {
     public UnlockRequestMessage(String type) {
         super(type);
         if (!type.equals(Message.UNLOCK_REQUEST)) {
-            throw new IllegalArgumentException("Invalid type '" + type + "' for UnapprovedTxMessage");
+            throw new IllegalArgumentException("Invalid type '" + type + "' for UnlockRequestMessage");
         }
     }
 
@@ -254,7 +296,7 @@ class UnconfirmedMessage extends Message {
     public UnconfirmedMessage(String type) {
         super(type);
         if (!type.equals(Message.UNCONFIRMED_MESSAGE)) {
-            throw new IllegalArgumentException("Invalid type '" + type + "' for UnapprovedTxMessage");
+            throw new IllegalArgumentException("Invalid type '" + type + "' for UnconfirmedMessage");
         }
     }
 
@@ -267,7 +309,7 @@ class PermissionRequestMessage extends Message {
     public PermissionRequestMessage(String type) {
         super(type);
         if (!type.equals(Message.PERMISSION_REQUEST)) {
-            throw new IllegalArgumentException("Invalid type '" + type + "' for UnapprovedTxMessage");
+            throw new IllegalArgumentException("Invalid type '" + type + "' for PermissionRequestMessage");
         }
     }
 
@@ -292,6 +334,8 @@ class MessageDecoder implements Decoder<Message> {
                 return gson.fromJson(s, PermissionRequestMessage.class);
             case Message.UNCONFIRMED_MESSAGE:
                 return gson.fromJson(s, UnconfirmedMessage.class);
+            case Message.FETCH_STACK_TRACE:
+                return gson.fromJson(s, StackTraceMessage.class);
             default:
                 throw new InvalidArgumentException("Invalid type '" + msg.getType() + "'");
         }

@@ -8,19 +8,16 @@ import com.crawljax.browser.EmbeddedBrowser;
 import com.crawljax.core.*;
 import com.crawljax.core.configuration.CrawljaxConfiguration;
 import com.crawljax.core.plugin.*;
-import com.crawljax.core.state.CrawlPath;
 import com.crawljax.core.state.Eventable;
 import com.crawljax.core.state.Identification;
 import com.crawljax.core.state.*;
 
-import com.google.common.collect.ImmutableList;
 import io.grpc.stub.StreamObserver;
 import io.grpc.ManagedChannel;
 import io.grpc.ManagedChannelBuilder;
 import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
-import lombok.extern.slf4j.Slf4j;
 import org.openqa.selenium.WindowType;
 import org.openqa.selenium.logging.LogEntries;
 import org.openqa.selenium.logging.LogEntry;
@@ -98,7 +95,8 @@ public class GRPCClientPlugin implements
         logger.info("Start the control msg handler thread, dappName={}, instanceId={}", dappName, instanceId);
 
         this.unapprovedTxQueue = new ArrayBlockingQueue<>(100);
-        this.metaMaskNotificationServer = new MetaMaskNotificationServer(new InetSocketAddress(1237), this.unapprovedTxQueue::offer);
+        this.metaMaskNotificationServer = new MetaMaskNotificationServer(new InetSocketAddress(1237),
+                this.unapprovedTxQueue::offer, null);
         this.metaMaskNotificationServer.start();
     }
 
