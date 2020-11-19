@@ -102,6 +102,15 @@ public final class FormInputValueHelper {
         // check the maximum number of form inputValues
         for (FormInput fieldName : fieldNames) {
             Set<InputValue> values = fieldName.getInputValues();// getValuesForName(fieldName);
+
+            // TODO troublor modify starts: assume FormInput with type DYNAMIC/CUSTOMIZE has one input value
+            if (fieldName.getType() == InputType.DYNAMIC || fieldName.getType() == InputType.CUSTOMIZE) {
+                if (maxValues < 1) {
+                    maxValues = 1;
+                }
+            }
+            // troublor modify ends
+
             if (values != null && values.size() > maxValues) {
                 maxValues = values.size();
             }
