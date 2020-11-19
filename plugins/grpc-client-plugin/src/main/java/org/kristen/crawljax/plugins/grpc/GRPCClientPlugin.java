@@ -29,10 +29,13 @@ import java.awt.*;
 import java.awt.datatransfer.Clipboard;
 import java.awt.datatransfer.DataFlavor;
 import java.awt.datatransfer.Transferable;
+import java.io.File;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.net.InetSocketAddress;
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.ArrayBlockingQueue;
 import java.util.concurrent.BlockingQueue;
@@ -54,6 +57,8 @@ public class GRPCClientPlugin implements
     private int WAIT_TIME_FOR_METAMASK_PLUGIN = 1000;
     private static String SERVER_HOST = "localhost";
     private static int SERVER_PORT = 1234;
+
+    private static String txCrawlPathDir = "crawl_paths";
 
     final Logger logger = LoggerFactory.getLogger(getClass());
 
@@ -314,7 +319,7 @@ public class GRPCClientPlugin implements
      *
      * @param context the crawler context
      */
-    private void processMetamaskPopup(CrawlerContext context) {
+    private void processMetamaskPopup(CrawlerContext context, CrawlPath crawlPath) {
         logger.debug("Enter processMetamaskPopup function, begin to process");
 
         // Open a new tab in the browser and visit Metamask pop-up page
@@ -409,6 +414,25 @@ public class GRPCClientPlugin implements
                     .build();
             logger.debug("Begin to send txMsg and wait for tx being processed, dappName={}, instanceId={}, txHash={}, fromAddress={}, toAddress={}", dappName, instanceId, txHash, fromAddress, toAddress);
 
+            // TODO workaround: since it is painful to change gRPC, we simply save the crawlPath along with txHash in
+            //  files
+            try {
+                File crawlPathDir = new File(txCrawlPathDir);
+                crawlPathDir.mkdirs();
+                File txCrawlPath = new File(txCrawlPathDir + File.pathSeparator + this.txHash + ".log");
+                txCrawlPath.createNewFile();
+                FileWriter fileWriter = new FileWriter(txCrawlPath);
+                fileWriter.write(this.txHash + "\n");
+                for (Eventable eventable :
+                        crawlPath) {
+                    fileWriter.write(eventable.toString() + "\n");
+                }
+                fileWriter.close();
+                logger.info("Crawl path for tx " + this.txHash + " has been saved at " + txCrawlPath.getAbsolutePath());
+            } catch (IOException e) {
+                logger.error("Failed to save crawl path for tx " + this.txHash + ": " + e.getMessage());
+            }
+
             // return to previous tab in case REFRESH_PATH requests from DArcher
             driver.switchTo().window(originalTab);
 
@@ -456,10 +480,10 @@ public class GRPCClientPlugin implements
     }
 
     @Override
-    public void onFireEventSucceeded(CrawlerContext context, Eventable eventable, List<Eventable> pathToFailure) {
+    public void onFireEventSucceeded(CrawlerContext context, Eventable eventable, List<Eventable> pathToHere) {
         logger.info("One event is fired successfully");
 //        processMetamaskPopup(context);
-        // Before a new state is crawled, check unapproved tx queue
+        // Before a new event is fired, check unapproved tx queue
         UnapprovedTxMessage unapprovedTxMessage = null;
         try {
             unapprovedTxMessage = this.unapprovedTxQueue.poll(50, TimeUnit.MILLISECONDS);
@@ -469,7 +493,10 @@ public class GRPCClientPlugin implements
             // no unapproved tx
             return;
         }
-        processMetamaskPopup(context);
+        // there is unapproved tx to process
+        List<Eventable> path = new ArrayList<>(pathToHere);
+        path.add(eventable);
+        processMetamaskPopup(context, new CrawlPath(path));
     }
 
 
