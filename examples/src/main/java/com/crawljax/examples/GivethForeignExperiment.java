@@ -82,7 +82,7 @@ public class GivethForeignExperiment {
         InputSpecification inputSpec = new InputSpecification();
 
         inputSpec.inputField(FormInput.InputType.TEXT, new Identification(Identification.How.name, "picture"))
-                .inputValues("/Users/troublor/workspace/darcher/packages/darcher-examples/giveth/misc/picture.jpg");
+                .inputValues("/Users/troublor/workspace/darcher/packages/darcher-examples/giveth/misc/picture.png");
 
         /* don't click editor tool bar */
         builder.crawlRules().dontClick("BUTTON").underXPath("//*[@id=\"quill-formsy\"]/DIV[2]/DIV[3]");
@@ -102,7 +102,7 @@ public class GivethForeignExperiment {
                 .setInputFiller((driver, webElement, nodeElement) -> webElement.sendKeys("Several descriptions here..."));
         // campaign picture
         createDACForm.inputField(FormInput.InputType.TEXT, new Identification(Identification.How.name, "picture"))
-                .inputValues("/Users/troublor/workspace/darcher/packages/darcher-examples/giveth/misc/picture.jpg");
+                .inputValues("/Users/troublor/workspace/darcher/packages/darcher-examples/giveth/misc/picture.png");
         // attach create campaign form at BUTTON[@text='Create DAC']
         inputSpec.setValuesInForm(createDACForm).beforeClickElement("BUTTON").withText("Create DAC");
 
@@ -117,7 +117,7 @@ public class GivethForeignExperiment {
                 .setInputFiller((driver, webElement, nodeElement) -> webElement.sendKeys("Several descriptions here..."));
         // campaign picture
         createCampaignForm.inputField(FormInput.InputType.TEXT, new Identification(Identification.How.name, "picture"))
-                .inputValues("/Users/troublor/workspace/darcher/packages/darcher-examples/giveth/misc/picture.jpg");
+                .inputValues("/Users/troublor/workspace/darcher/packages/darcher-examples/giveth/misc/picture.png");
         // select reviewer
         createCampaignForm.inputField(FormInput.InputType.SELECT, new Identification(Identification.How.name, "reviewerAddress"))
                 .inputValues(ETHEREUM_ADDRESS); // select Giveth0 account as reviewer always
@@ -137,7 +137,7 @@ public class GivethForeignExperiment {
                 });
         // campaign picture
         createMileStoneForm.inputField(FormInput.InputType.TEXT, new Identification(Identification.How.name, "picture"))
-                .inputValues("/Users/troublor/workspace/darcher/packages/darcher-examples/giveth/misc/picture.jpg");
+                .inputValues("/Users/troublor/workspace/darcher/packages/darcher-examples/giveth/misc/picture.png");
         // select reviewer
         createMileStoneForm.inputField(FormInput.InputType.SELECT, new Identification(Identification.How.name, "reviewerAddress"))
                 .inputValues(ETHEREUM_ADDRESS); // select Giveth0 account as reviewer always

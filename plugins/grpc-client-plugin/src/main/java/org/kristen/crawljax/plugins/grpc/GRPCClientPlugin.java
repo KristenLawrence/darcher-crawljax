@@ -373,7 +373,7 @@ public class GRPCClientPlugin implements
 //            }
 
             try {
-                Thread.sleep(1500);
+                Thread.sleep(2500);
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
@@ -419,7 +419,7 @@ public class GRPCClientPlugin implements
             try {
                 File crawlPathDir = new File(txCrawlPathDir);
                 crawlPathDir.mkdirs();
-                File txCrawlPath = new File(txCrawlPathDir + File.pathSeparator + this.txHash + ".log");
+                File txCrawlPath = new File(txCrawlPathDir + File.separator + this.txHash + ".log");
                 txCrawlPath.createNewFile();
                 FileWriter fileWriter = new FileWriter(txCrawlPath);
                 fileWriter.write(this.txHash + "\n");

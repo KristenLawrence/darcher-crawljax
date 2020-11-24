@@ -102,6 +102,10 @@ public final class Common {
 
     public final com.google.protobuf.Descriptors.EnumValueDescriptor
         getValueDescriptor() {
+      if (this == UNRECOGNIZED) {
+        throw new java.lang.IllegalStateException(
+            "Can't get the descriptor of an unrecognized enum value.");
+      }
       return getDescriptor().getValues().get(ordinal());
     }
     public final com.google.protobuf.Descriptors.EnumDescriptor
@@ -224,6 +228,10 @@ public final class Common {
 
     public final com.google.protobuf.Descriptors.EnumValueDescriptor
         getValueDescriptor() {
+      if (this == UNRECOGNIZED) {
+        throw new java.lang.IllegalStateException(
+            "Can't get the descriptor of an unrecognized enum value.");
+      }
       return getDescriptor().getValues().get(ordinal());
     }
     public final com.google.protobuf.Descriptors.EnumDescriptor
@@ -355,6 +363,10 @@ public final class Common {
 
     public final com.google.protobuf.Descriptors.EnumValueDescriptor
         getValueDescriptor() {
+      if (this == UNRECOGNIZED) {
+        throw new java.lang.IllegalStateException(
+            "Can't get the descriptor of an unrecognized enum value.");
+      }
       return getDescriptor().getValues().get(ordinal());
     }
     public final com.google.protobuf.Descriptors.EnumDescriptor
@@ -497,6 +509,10 @@ public final class Common {
 
     public final com.google.protobuf.Descriptors.EnumValueDescriptor
         getValueDescriptor() {
+      if (this == UNRECOGNIZED) {
+        throw new java.lang.IllegalStateException(
+            "Can't get the descriptor of an unrecognized enum value.");
+      }
       return getDescriptor().getValues().get(ordinal());
     }
     public final com.google.protobuf.Descriptors.EnumDescriptor
@@ -573,7 +589,7 @@ public final class Common {
   /**
    * Protobuf type {@code darcher.TxErrorMsg}
    */
-  public  static final class TxErrorMsg extends
+  public static final class TxErrorMsg extends
       com.google.protobuf.GeneratedMessageV3 implements
       // @@protoc_insertion_point(message_implements:darcher.TxErrorMsg)
       TxErrorMsgOrBuilder {
@@ -674,6 +690,7 @@ public final class Common {
      * <code>string hash = 1;</code>
      * @return The hash.
      */
+    @java.lang.Override
     public java.lang.String getHash() {
       java.lang.Object ref = hash_;
       if (ref instanceof java.lang.String) {
@@ -690,6 +707,7 @@ public final class Common {
      * <code>string hash = 1;</code>
      * @return The bytes for hash.
      */
+    @java.lang.Override
     public com.google.protobuf.ByteString
         getHashBytes() {
       java.lang.Object ref = hash_;
@@ -710,14 +728,14 @@ public final class Common {
      * <code>.darcher.TxErrorType type = 2;</code>
      * @return The enum numeric value on the wire for type.
      */
-    public int getTypeValue() {
+    @java.lang.Override public int getTypeValue() {
       return type_;
     }
     /**
      * <code>.darcher.TxErrorType type = 2;</code>
      * @return The type.
      */
-    public org.kristen.rpc.darcher.Common.TxErrorType getType() {
+    @java.lang.Override public org.kristen.rpc.darcher.Common.TxErrorType getType() {
       @SuppressWarnings("deprecation")
       org.kristen.rpc.darcher.Common.TxErrorType result = org.kristen.rpc.darcher.Common.TxErrorType.valueOf(type_);
       return result == null ? org.kristen.rpc.darcher.Common.TxErrorType.UNRECOGNIZED : result;
@@ -729,6 +747,7 @@ public final class Common {
      * <code>string description = 3;</code>
      * @return The description.
      */
+    @java.lang.Override
     public java.lang.String getDescription() {
       java.lang.Object ref = description_;
       if (ref instanceof java.lang.String) {
@@ -745,6 +764,7 @@ public final class Common {
      * <code>string description = 3;</code>
      * @return The bytes for description.
      */
+    @java.lang.Override
     public com.google.protobuf.ByteString
         getDescriptionBytes() {
       java.lang.Object ref = description_;
@@ -1175,7 +1195,7 @@ public final class Common {
        * <code>.darcher.TxErrorType type = 2;</code>
        * @return The enum numeric value on the wire for type.
        */
-      public int getTypeValue() {
+      @java.lang.Override public int getTypeValue() {
         return type_;
       }
       /**
@@ -1184,6 +1204,7 @@ public final class Common {
        * @return This builder for chaining.
        */
       public Builder setTypeValue(int value) {
+        
         type_ = value;
         onChanged();
         return this;
@@ -1192,6 +1213,7 @@ public final class Common {
        * <code>.darcher.TxErrorType type = 2;</code>
        * @return The type.
        */
+      @java.lang.Override
       public org.kristen.rpc.darcher.Common.TxErrorType getType() {
         @SuppressWarnings("deprecation")
         org.kristen.rpc.darcher.Common.TxErrorType result = org.kristen.rpc.darcher.Common.TxErrorType.valueOf(type_);

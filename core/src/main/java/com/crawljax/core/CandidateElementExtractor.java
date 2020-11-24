@@ -259,7 +259,8 @@ public class CandidateElementExtractor {
 				// TODO troublor modify starts: special case, when tag is DIV, the xpath need to be exactly equal;
 				//  this is because I don't understand why the matchesXpath above uses under but not exactly match,
 				//  so I only check exactly match for "DIV" tags
-				if (!expressions.contains(XPathHelper.getXPathExpression(element))) {
+				if (element.getTagName().toUpperCase().equals("DIV") &&
+						!expressions.contains(XPathHelper.getXPathExpression(element))) {
 					continue;
 				}
 				// troublor modify ends
