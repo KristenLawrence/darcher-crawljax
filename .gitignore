@@ -21,4 +21,4 @@ out/
 # Mac
 .DS_Store
 /crawl_paths/
-/scripts/
+/node_modules/

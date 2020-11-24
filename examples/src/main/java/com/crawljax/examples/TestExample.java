@@ -3,19 +3,22 @@ package com.crawljax.examples;
 import com.crawljax.browser.EmbeddedBrowser;
 import com.crawljax.core.CrawlSession;
 import com.crawljax.core.CrawljaxRunner;
+import com.crawljax.core.ExitNotifier;
 import com.crawljax.core.configuration.*;
 import com.crawljax.core.state.Identification;
 import com.crawljax.forms.FormInput;
 import com.crawljax.plugins.crawloverview.CrawlOverview;
 import org.kristen.crawljax.plugins.grpc.GRPCClientPlugin;
 
+import java.io.File;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.util.concurrent.TimeUnit;
 
 public class TestExample {
     private static final long WAIT_TIME_AFTER_EVENT = 500;
     private static final long WAIT_TIME_AFTER_RELOAD = 500;
-    private static final String DAPP_URL = "http://localhost:63342/metamask-test/index.html?_ijt=vmestubhmi376lnj1r3ak434d1";
+    private static final String DAPP_URL = "file:///Users/troublor/workspace/darcher_mics/metamask-test/index.html";
     private static final String DAPP_NAME = "Test DApp";
     private static int instanceId = 1;
     private static final String METAMASK_POPUP_URL = "chrome-extension://jbppcachblnkaogkgacckpgohjbpcekf/home.html";
@@ -45,7 +48,7 @@ public class TestExample {
         builder.setUnlimitedStates();
 
         // 1 hour timeout
-        builder.setMaximumRunTime(1, TimeUnit.HOURS);
+        builder.setMaximumRunTime(1, TimeUnit.MINUTES);
 
         builder.crawlRules().clickElementsInRandomOrder(false);
 
@@ -64,8 +67,17 @@ public class TestExample {
 
         CrawljaxRunner crawljax = new CrawljaxRunner(builder.build());
         CrawlSession session = crawljax.call();
-        System.out.println("Crawl Complete: " + crawljax.getReason());
+        String f;
+        if (args.length > 0) {
+            f = args[0];
+        } else {
+            f = "scripts" + File.separator + "status.log";
+        }
+        try (FileWriter writer = new FileWriter(new File(f))) {
+            writer.write(crawljax.getReason().toString());
+        }
 
+        System.out.println("Crawl Complete: " + crawljax.getReason());
 
     }
 }

@@ -89,6 +89,10 @@
 						</goals>
 					</execution>
 				</executions>
+				<configuration>
+					<!--suppress UnresolvedMavenProperty -->
+					<mainClass>com.crawljax.examples.${env.SUBJECT}</mainClass>
+				</configuration>
 			</plugin>
 		</plugins>
 	</build>
