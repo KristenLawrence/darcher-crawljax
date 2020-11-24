@@ -20,3 +20,4 @@ out/
 
 # Mac
 .DS_Store
+/crawl_paths/
