@@ -60,6 +60,10 @@ public class WebDriverBrowserBuilder implements Provider<EmbeddedBrowser> {
 		EmbeddedBrowser.BrowserType browserType =
 				configuration.getBrowserConfig().getBrowserType();
 		String userDir = configuration.getBrowserConfig().getBrowserOptions().getUserDir();
+
+		// TODO troublor modify starts: only used in CHROME_EXISTING
+		String debuggerAddress = configuration.getBrowserConfig().getDebuggerAddress();
+		// troublor modify ends
 		try {
 			switch (browserType) {
 				case CHROME:
@@ -70,6 +74,11 @@ public class WebDriverBrowserBuilder implements Provider<EmbeddedBrowser> {
 					browser = newChromeBrowser(filterAttributes, crawlWaitReload,
 							crawlWaitEvent, true, userDir);
 					break;
+                // TODO troublor modify starts
+                case CHROME_EXISTING:
+					browser = existingChromeBrowser(filterAttributes, crawlWaitReload,crawlWaitEvent, debuggerAddress);
+					break;
+                // troublor modify ends
 				case FIREFOX:
 					browser = newFirefoxBrowser(filterAttributes, crawlWaitReload, crawlWaitEvent,
 							false);
@@ -151,6 +160,20 @@ public class WebDriverBrowserBuilder implements Provider<EmbeddedBrowser> {
 		return WebDriverBackedEmbeddedBrowser.withDriver(new FirefoxDriver(firefoxOptions),
 				filterAttributes, crawlWaitReload, crawlWaitEvent);
 	}
+
+    // TODO troublor modify starts:
+	private EmbeddedBrowser existingChromeBrowser(ImmutableSortedSet<String> filterAttributes,
+												  long crawlWaitReload, long crawlWaitEvent, String debuggerAddress) {
+		WebDriverManager.chromedriver().setup();
+
+		ChromeOptions options = new ChromeOptions();
+		options.setExperimentalOption("debuggerAddress",debuggerAddress);
+		ChromeDriver driver = new ChromeDriver(options);
+
+		return WebDriverBackedEmbeddedBrowser.withDriver(driver, filterAttributes,
+				crawlWaitEvent, crawlWaitReload);
+	}
+    // troublor modify ends
 
 	private EmbeddedBrowser newChromeBrowser(ImmutableSortedSet<String> filterAttributes,
 											 long crawlWaitReload, long crawlWaitEvent, boolean headless, String userDir) {
