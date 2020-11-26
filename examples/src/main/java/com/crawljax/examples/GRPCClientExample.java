@@ -2,6 +2,7 @@ package com.crawljax.examples;
 
 import com.crawljax.browser.EmbeddedBrowser;
 import com.crawljax.core.CrawlSession;
+import com.crawljax.core.CrawlTaskConsumer;
 import com.crawljax.core.CrawljaxRunner;
 import com.crawljax.core.configuration.*;
 import com.crawljax.core.state.Identification;
@@ -18,12 +19,12 @@ import java.util.concurrent.TimeUnit;
 public class GRPCClientExample {
     private static final long WAIT_TIME_AFTER_EVENT = 500;
     private static final long WAIT_TIME_AFTER_RELOAD = 500;
-    private static final String DAPP_URL = "chrome-extension://jbppcachblnkaogkgacckpgohjbpcekf/home.html#send";
+    private static final String DAPP_URL = "chrome-extension://nkbihfbeogaeaoehlefnkodbefgpgknn/home.html#send";
     private static final String DAPP_NAME = "Metamask";
     private static int instanceId = 1;
-    private static final String METAMASK_POPUP_URL = "chrome-extension://jbppcachblnkaogkgacckpgohjbpcekf/home.html";
-    private static final String METAMASK_PASSWORD = "12345678";
-    private static final String BROWSER_PROFILE_PATH = "/Users/troublor/workspace/darcher_mics/browsers/Chrome/UserData";
+    private static final String METAMASK_POPUP_URL = "chrome-extension://nkbihfbeogaeaoehlefnkodbefgpgknn/home.html";
+    private static final String METAMASK_PASSWORD = "gRP'b~jz|zz;DA7~[[P9";
+    private static final String BROWSER_PROFILE_PATH = "/Users/shuqing/Documents/application";
 
 
     /**
@@ -129,9 +130,8 @@ public class GRPCClientExample {
         builder.addPlugin(new GRPCClientPlugin(DAPP_NAME, instanceId, METAMASK_POPUP_URL, DAPP_URL, METAMASK_PASSWORD));
 
         CrawljaxRunner crawljax = new CrawljaxRunner(builder.build());
-        CrawlSession session = crawljax.call();
+        CrawlTaskConsumer consumer = crawljax.callRtnConsumer();
         System.out.println("Crawl Complete: " + crawljax.getReason());
-
-
+        consumer.crawler.close();
     }
 }
