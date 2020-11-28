@@ -31,7 +31,7 @@ class Worker {
             this.stderrStream = fs.createWriteStream(Worker.stderrFile, {flags: 'a'});
             await new Promise<void>((resolve, reject) => {
                 const p = child_process.spawn("mvn",
-                    ["clean", "compile"], {
+                    ["install", "-DskipTests"], {
                         cwd: path.join(__dirname, ".."),
                         stdio: ["inherit", "pipe", "pipe"],
                     });

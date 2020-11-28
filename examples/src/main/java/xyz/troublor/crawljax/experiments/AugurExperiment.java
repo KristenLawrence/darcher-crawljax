@@ -25,7 +25,7 @@ import java.util.concurrent.TimeUnit;
 public class AugurExperiment extends Experiment {
     private static final long WAIT_TIME_AFTER_EVENT = 500;
     private static final long WAIT_TIME_AFTER_RELOAD = 500;
-    private static final String DAPP_URL = "http://localhost:8080/#!/market?id=0x235A1911EDbF88574658C0cde1f72cbd14f99eCb";
+    private static final String DAPP_URL = "http://localhost:8080/";
     private static final String DAPP_NAME = "Augur";
     private static int instanceId = 1;
     private static final String METAMASK_POPUP_URL = "chrome-extension://jbppcachblnkaogkgacckpgohjbpcekf/home.html";
