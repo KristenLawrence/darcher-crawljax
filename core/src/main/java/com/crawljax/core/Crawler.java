@@ -123,8 +123,8 @@ public class Crawler {
 		browser.handlePopups();
 		browser.goToUrl(url);
 		// Checks the landing page for URL and sets the current page accordingly
-		checkOnURLState();
 		plugins.runOnUrlLoadPlugins(context);
+		checkOnURLState();
 		crawlDepth.set(0);
 	}
 
