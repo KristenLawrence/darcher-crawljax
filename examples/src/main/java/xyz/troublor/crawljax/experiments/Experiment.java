@@ -1,6 +1,6 @@
 package xyz.troublor.crawljax.experiments;
 
-import com.crawljax.core.CrawlSession;
+import com.crawljax.core.CrawlTaskConsumer;
 import com.crawljax.core.CrawljaxRunner;
 
 import java.io.File;
@@ -12,7 +12,8 @@ public abstract class Experiment {
 
     public void start(String statusLogPath, String chromeDebuggerAddress) throws IOException {
         CrawljaxRunner crawljaxRunner = this.initialize(chromeDebuggerAddress);
-        CrawlSession session = crawljaxRunner.call();
+        CrawlTaskConsumer consumer = crawljaxRunner.callRtnConsumer();
+        consumer.crawler.close();
         try (FileWriter writer = new FileWriter(new File(statusLogPath))) {
             writer.write(crawljaxRunner.getReason().toString());
         }
