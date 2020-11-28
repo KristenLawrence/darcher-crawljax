@@ -31,7 +31,7 @@ class Worker {
                 this.stdoutStream = fs.createWriteStream(Worker.stdoutFile, { flags: 'a' });
                 this.stderrStream = fs.createWriteStream(Worker.stderrFile, { flags: 'a' });
                 yield new Promise((resolve, reject) => {
-                    const p = child_process.spawn("mvn", ["clean", "compile"], {
+                    const p = child_process.spawn("mvn", ["install", "-DskipTests"], {
                         cwd: path.join(__dirname, ".."),
                         stdio: ["inherit", "pipe", "pipe"],
                     });
