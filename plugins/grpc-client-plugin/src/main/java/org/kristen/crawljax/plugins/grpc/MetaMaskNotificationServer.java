@@ -33,15 +33,19 @@ public class MetaMaskNotificationServer extends WebSocketServer {
         void onStackTraceMessage(StackTraceMessage stackTraceMessage);
     }
 
-    private final UnapprovedTxListener unapprovedTxListener;
-    private final UnconfirmedMessageListener unconfirmedMessageListener;
-    private final PermissionRequestListener permissionRequestListener;
-    private final UnlockRequestListener unlockRequestListener;
-    private final StackTraceMessageListener stackTraceMessageListener;
+    private UnapprovedTxListener unapprovedTxListener;
+    private UnconfirmedMessageListener unconfirmedMessageListener;
+    private PermissionRequestListener permissionRequestListener;
+    private UnlockRequestListener unlockRequestListener;
+    private StackTraceMessageListener stackTraceMessageListener;
 
     private final Logger logger;
 
     private final MessageDecoder decoder = new MessageDecoder();
+
+    public MetaMaskNotificationServer(InetSocketAddress address) {
+        this(address, null, null, null, null, null);
+    }
 
     public MetaMaskNotificationServer(InetSocketAddress address,
                                       UnapprovedTxListener unapprovedTxListener,
@@ -136,6 +140,26 @@ public class MetaMaskNotificationServer extends WebSocketServer {
         logger.info("Stopping WebSocket server...");
         this.getConnections().forEach(WebSocket::close);
         super.stop();
+    }
+
+    public void setUnapprovedTxListener(UnapprovedTxListener unapprovedTxListener) {
+        this.unapprovedTxListener = unapprovedTxListener;
+    }
+
+    public void setUnconfirmedMessageListener(UnconfirmedMessageListener unconfirmedMessageListener) {
+        this.unconfirmedMessageListener = unconfirmedMessageListener;
+    }
+
+    public void setPermissionRequestListener(PermissionRequestListener permissionRequestListener) {
+        this.permissionRequestListener = permissionRequestListener;
+    }
+
+    public void setUnlockRequestListener(UnlockRequestListener unlockRequestListener) {
+        this.unlockRequestListener = unlockRequestListener;
+    }
+
+    public void setStackTraceMessageListener(StackTraceMessageListener stackTraceMessageListener) {
+        this.stackTraceMessageListener = stackTraceMessageListener;
     }
 
     public static void main(String[] args) {

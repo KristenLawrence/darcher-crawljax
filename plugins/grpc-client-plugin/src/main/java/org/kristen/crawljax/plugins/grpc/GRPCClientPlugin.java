@@ -82,7 +82,7 @@ public class GRPCClientPlugin implements
 
     // the websocket server which receives message from metamask
     private final MetaMaskNotificationServer metaMaskNotificationServer;
-    private final BlockingQueue<UnapprovedTxMessage> unapprovedTxQueue;
+    private final BlockingQueue<Message> metamaskMessageQueue;
 
     public GRPCClientPlugin(String dappName, int instanceId, String metamaskUrl, String dappUrl, String metamaskPassword) {
         logger.info("Init GRPC client plugin, dappName={}, instanceId={}, dapUrl={}", dappName, instanceId, dappUrl);
@@ -100,9 +100,10 @@ public class GRPCClientPlugin implements
         controlThread.start();
         logger.info("Start the control msg handler thread, dappName={}, instanceId={}", dappName, instanceId);
 
-        this.unapprovedTxQueue = new ArrayBlockingQueue<>(100);
-        this.metaMaskNotificationServer = new MetaMaskNotificationServer(new InetSocketAddress(1237),
-                this.unapprovedTxQueue::offer, null);
+        this.metamaskMessageQueue = new ArrayBlockingQueue<>(100);
+        this.metaMaskNotificationServer = new MetaMaskNotificationServer(new InetSocketAddress(1237));
+        this.metaMaskNotificationServer.setUnapprovedTxListener(this.metamaskMessageQueue::add);
+        this.metaMaskNotificationServer.setUnconfirmedMessageListener(this.metamaskMessageQueue::add);
         this.metaMaskNotificationServer.start();
         // listen to SIGINT to shutdown MetaMask Notifier server
         Runtime.getRuntime().addShutdownHook(new Thread(() -> {
@@ -296,17 +297,17 @@ public class GRPCClientPlugin implements
 //        }
 
         // TODO: handle other scenarios (specific)
-        try {
-            newBrowser.goToUrl(new URI(DAPP_URL));
-
-//            // Sign up for Augur
-//            WebDriver driver = newBrowser.getWebDriver();
-//            driver.manage().timeouts().implicitlyWait(10, TimeUnit.SECONDS);
-//            driver.findElement(By.cssSelector(".buttons-styles_SecondaryButton")).click();
-//            driver.findElement(By.cssSelector(".buttons-styles_SecondarySignInButton:nth-child(7) > div > div > div:nth-child(1)")).click();
-        } catch (URISyntaxException e) {
-            System.out.println("ERROR: invalid DAPP url, " + DAPP_URL);
-        }
+//        try {
+//            newBrowser.goToUrl(new URI(DAPP_URL));
+//
+////            // Sign up for Augur
+////            WebDriver driver = newBrowser.getWebDriver();
+////            driver.manage().timeouts().implicitlyWait(10, TimeUnit.SECONDS);
+////            driver.findElement(By.cssSelector(".buttons-styles_SecondaryButton")).click();
+////            driver.findElement(By.cssSelector(".buttons-styles_SecondarySignInButton:nth-child(7) > div > div > div:nth-child(1)")).click();
+//        } catch (URISyntaxException e) {
+//            System.out.println("ERROR: invalid DAPP url, " + DAPP_URL);
+//        }
     }
 
     /**
@@ -363,8 +364,12 @@ public class GRPCClientPlugin implements
             Identification defaultBtnId = new Identification(Identification.How.xpath,
                     "//button[contains(@class, 'btn-default')]");
 //            Identification signBtnId = new Identification(Identification.How.xpath, "//button[contains(@class, 'request-signature__footer__sign-button')]");
+            boolean isSendTx = false;
             if (browser.elementExists(primaryBtnId)) {
                 WebElement primaryBtn = browser.getWebElement(primaryBtnId);
+                if (primaryBtn.getText().contains("Confirm")) {
+                    isSendTx = true;
+                }
                 primaryBtn.click();
 
             } else if (browser.elementExists(secondaryBtnId)) {
@@ -386,76 +391,84 @@ public class GRPCClientPlugin implements
 //                return;
 //            }
 
-            try {
-                Thread.sleep(2500);
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
+            if (isSendTx) {
+                try {
+                    Thread.sleep(2500);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
 
-            getTxInfo(browser);
+                getTxInfo(browser);
 
-            // Get reproduction
+                // Get reproduction
 //            System.out.println("########################################################################");
-            events = "";
+                events = "";
 //        for (StackTraceElement s: context.getCrawlPath().asStackTrace()) {
 //            System.out.println(s);
 //        }
-            for (List<Eventable> l : context.getSession().getCrawlPaths()) {
-                for (Eventable e : l) {
-                    events += e.toString() + "\n";
+                for (List<Eventable> l : context.getSession().getCrawlPaths()) {
+                    for (Eventable e : l) {
+                        events += e.toString() + "\n";
 //                    System.out.println(e);
+                    }
                 }
-            }
 //            System.out.println("########################################################################");
 
 //            System.out.println("************************************************************************");
-            states = "";
-            for (StateVertex s : context.getSession().getStateFlowGraph().getAllStates()) {
-                states += s.toString() + "\n";
+                states = "";
+                for (StateVertex s : context.getSession().getStateFlowGraph().getAllStates()) {
+                    states += s.toString() + "\n";
 //                System.out.println(s.getName() + "         " + s.getUrl());
-            }
+                }
 //            System.out.println("************************************************************************");
 
-            logger.info("Send out a transaction, send txMsg to the server, dappName={}, instanceId={}, txHash={}, fromAddress={}, toAddress={}", dappName, instanceId, txHash, fromAddress, toAddress);
-            DappTestService.TxMsg txMsg = DappTestService.TxMsg.newBuilder()
-                    .setDappName(this.dappName)
-                    .setInstanceId(Integer.toString(this.instanceId))
-                    .setHash(this.txHash)
-                    .setFrom(this.fromAddress)
-                    .setTo(this.toAddress)
-                    .setStates(this.states)
-                    .setEvents(this.events)
-                    .build();
-            logger.debug("Begin to send txMsg and wait for tx being processed, dappName={}, instanceId={}, txHash={}, fromAddress={}, toAddress={}", dappName, instanceId, txHash, fromAddress, toAddress);
+                logger.info("Send out a transaction, send txMsg to the server, dappName={}, instanceId={}, txHash={}, fromAddress={}, toAddress={}", dappName, instanceId, txHash, fromAddress, toAddress);
+                DappTestService.TxMsg txMsg = DappTestService.TxMsg.newBuilder()
+                        .setDappName(this.dappName)
+                        .setInstanceId(Integer.toString(this.instanceId))
+                        .setHash(this.txHash)
+                        .setFrom(this.fromAddress)
+                        .setTo(this.toAddress)
+                        .setStates(this.states)
+                        .setEvents(this.events)
+                        .build();
+                logger.debug("Begin to send txMsg and wait for tx being processed, dappName={}, instanceId={}, txHash={}, fromAddress={}, toAddress={}", dappName, instanceId, txHash, fromAddress, toAddress);
 
-            // TODO workaround: since it is painful to change gRPC, we simply save the crawlPath along with txHash in
-            //  files
-            try {
-                File crawlPathDir = new File(txCrawlPathDir);
-                crawlPathDir.mkdirs();
-                File txCrawlPath = new File(txCrawlPathDir + File.separator + this.txHash + ".log");
-                txCrawlPath.createNewFile();
-                FileWriter fileWriter = new FileWriter(txCrawlPath);
-                fileWriter.write(this.txHash + "\n");
-                for (Eventable eventable :
-                        crawlPath) {
-                    fileWriter.write(eventable.toString() + "\n");
+                // TODO workaround: since it is painful to change gRPC, we simply save the crawlPath along with txHash in
+                //  files
+                try {
+                    File crawlPathDir = new File(txCrawlPathDir);
+                    crawlPathDir.mkdirs();
+                    File txCrawlPath = new File(txCrawlPathDir + File.separator + this.txHash + ".log");
+                    txCrawlPath.createNewFile();
+                    FileWriter fileWriter = new FileWriter(txCrawlPath);
+                    fileWriter.write(this.txHash + "\n");
+                    for (Eventable eventable :
+                            crawlPath) {
+                        fileWriter.write(eventable.toString() + "\n");
+                    }
+                    fileWriter.close();
+                    logger.info("Crawl path for tx " + this.txHash + " has been saved at " + txCrawlPath.getAbsolutePath());
+                } catch (IOException e) {
+                    logger.error("Failed to save crawl path for tx " + this.txHash + ": " + e.getMessage());
                 }
-                fileWriter.close();
-                logger.info("Crawl path for tx " + this.txHash + " has been saved at " + txCrawlPath.getAbsolutePath());
-            } catch (IOException e) {
-                logger.error("Failed to save crawl path for tx " + this.txHash + ": " + e.getMessage());
+
+                // return to previous tab in case REFRESH_PATH requests from DArcher
+                driver.switchTo().window(originalTab);
+
+                blockingStub.waitForTxProcess(txMsg);
+                logger.debug("Finish sending txMsg and processing tx, dappName={}, instanceId={}, txHash={}, fromAddress={}, toAddress={}", dappName, instanceId, txHash, fromAddress, toAddress);
+                System.out.println();
+
+                // switch to metamask tab
+                driver.switchTo().window(metamaskTab);
+            }else {
+                try {
+                    Thread.sleep(500);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
             }
-
-            // return to previous tab in case REFRESH_PATH requests from DArcher
-            driver.switchTo().window(originalTab);
-
-            blockingStub.waitForTxProcess(txMsg);
-            logger.debug("Finish sending txMsg and processing tx, dappName={}, instanceId={}, txHash={}, fromAddress={}, toAddress={}", dappName, instanceId, txHash, fromAddress, toAddress);
-            System.out.println();
-
-            // switch to metamask tab
-            driver.switchTo().window(metamaskTab);
         }
 
         // Close current tab, return to the original testing tab
@@ -498,9 +511,9 @@ public class GRPCClientPlugin implements
         logger.info("One event is fired successfully");
 //        processMetamaskPopup(context);
         // Before a new event is fired, check unapproved tx queue
-        UnapprovedTxMessage unapprovedTxMessage = null;
+        Message unapprovedTxMessage = null;
         try {
-            unapprovedTxMessage = this.unapprovedTxQueue.poll(50, TimeUnit.MILLISECONDS);
+            unapprovedTxMessage = this.metamaskMessageQueue.poll(50, TimeUnit.MILLISECONDS);
         } catch (InterruptedException ignored) {
         }
         if (unapprovedTxMessage == null) {
