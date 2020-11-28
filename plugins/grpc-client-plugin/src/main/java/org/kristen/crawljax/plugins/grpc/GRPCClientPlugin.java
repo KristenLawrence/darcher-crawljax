@@ -12,6 +12,7 @@ import com.crawljax.core.state.Eventable;
 import com.crawljax.core.state.Identification;
 import com.crawljax.core.state.*;
 
+import io.grpc.StatusRuntimeException;
 import io.grpc.stub.StreamObserver;
 import io.grpc.ManagedChannel;
 import io.grpc.ManagedChannelBuilder;
@@ -41,6 +42,7 @@ import java.util.concurrent.ArrayBlockingQueue;
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicBoolean;
+import java.util.logging.Level;
 
 import org.kristen.rpc.darcher.*;
 
@@ -462,7 +464,7 @@ public class GRPCClientPlugin implements
 
                 // switch to metamask tab
                 driver.switchTo().window(metamaskTab);
-            }else {
+            } else {
                 try {
                     Thread.sleep(500);
                 } catch (InterruptedException e) {
@@ -634,18 +636,22 @@ public class GRPCClientPlugin implements
                 }
                 LogEntries logEntries = dappBrowser.getWebDriver().manage().logs().get(LogType.BROWSER);
                 if (!logEntries.getAll().isEmpty()) {
-                    errorString = "";
                     for (LogEntry entry : logEntries) {
-                        errorString += entry.toString() + "\n";
-                        System.out.println(entry.toString());
+                        if (entry.getLevel().equals(Level.SEVERE)) {
+                            consoleErrorMsg = DappTestService.ConsoleErrorMsg
+                                    .newBuilder()
+                                    .setDappName(dappName)
+                                    .setInstanceId(Integer.toString(instanceId))
+                                    .setErrorString(entry.toString())
+                                    .build();
+                            try {
+                                blockingStub.notifyConsoleError(consoleErrorMsg);
+                            } catch (StatusRuntimeException e) {
+                                logger.error("Failed to notify console error: " + e.getMessage());
+                            }
+                        }
                     }
-                    consoleErrorMsg = DappTestService.ConsoleErrorMsg
-                            .newBuilder()
-                            .setDappName(dappName)
-                            .setInstanceId(Integer.toString(instanceId))
-                            .setErrorString(errorString)
-                            .build();
-                    blockingStub.notifyConsoleError(consoleErrorMsg);
+
                 }
             }
         }
