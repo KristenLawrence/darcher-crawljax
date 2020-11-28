@@ -6,9 +6,9 @@ import * as child_process from "child_process";
 import {Logger, sleep} from "@darcher/helpers";
 
 class Worker {
-    public static readonly stdoutFile = path.join(__dirname, "stdout.log");
-    public static readonly stderrFile = path.join(__dirname, "stderr.log");
-    public static readonly statusFile = path.join(__dirname, "status.log");
+    public static stdoutFile = path.join(__dirname, "stdout.log");
+    public static stderrFile = path.join(__dirname, "stderr.log");
+    public static statusFile = path.join(__dirname, "status.log");
 
     private process: child_process.ChildProcess | null;
     private stdoutStream: NodeJS.WritableStream;
@@ -18,6 +18,7 @@ class Worker {
 
     constructor(
         private readonly logger: Logger,
+        private readonly chromeDebuggerAddress: string,
         private readonly subject: string,
     ) {
     }
@@ -59,6 +60,8 @@ class Worker {
                 cwd: path.join(__dirname, ".."),
                 stdio: ["inherit", "pipe", "pipe"],
                 env: Object.assign(process.env, {
+                    STATUS_LOG_PATH: Worker.statusFile,
+                    CHROME_DEBUGGER_ADDRESS: this.chromeDebuggerAddress,
                     SUBJECT: this.subject
                 })
             });
@@ -98,114 +101,127 @@ class Worker {
     }
 
     private static cleanProcess() {
-        child_process.spawnSync("pkill", ["-INT", "chromedriver"]); // kill chrome driver
-        child_process.spawnSync("pkill", ["-INT", "Google Chrome"]); // kill Google Chrome
+        // child_process.spawnSync("pkill", ["-INT", "chromedriver"]); // kill chrome driver
+        // child_process.spawnSync("pkill", ["-INT", "Google Chrome"]); // kill Google Chrome
         child_process.execSync("lsof -ti:1237 | xargs kill"); // kill the websocket server on port 1237
     }
 }
 
-(async () => {
-    /**
-     *
-     * @param name
-     * @return path to main class
-     */
-    const findMainClass = (name: string): string | null => {
-        const examplesDir = path.join(__dirname, "..", "examples", "src", "main", "java", "com", "crawljax", "examples");
-        for (const file of fs.readdirSync(examplesDir)) {
-            if (path.extname(file) !== ".java") {
-                continue;
+export async function startCrawljax(logger: Logger, chromeDebuggerAddress: string, mainClass: string, timeBudget: number, logDir?: string) {
+    if (logDir) {
+        Worker.stdoutFile = path.join(logDir, "crawljax.stdout.log");
+        Worker.stderrFile = path.join(logDir, "crawljax.stderr.log");
+        Worker.statusFile = path.join(logDir, "crawljax.status.log");
+    }
+    return new Promise<void>(async resolve => {
+        type CrawljaxStatus =
+            "Maximum time passed"
+            | "Maximum states passed"
+            | "Exhausted"
+            | "Errored"
+            | "Stopped manually";
+
+        let shouldContinue: boolean = true;
+        let subprocess: Worker = new Worker(logger, chromeDebuggerAddress, mainClass);
+        await subprocess.start();
+
+        // watch status of crawljax, since crawljax cannot exit by itself
+        const checkCrawljaxStatue = (): CrawljaxStatus | null => {
+            if (!fs.existsSync(Worker.statusFile)) {
+                return null;
             }
-            const basename = path.basename(file).slice(0, path.basename(file).length - 5);
-            if (basename.toLowerCase().trim() === name.toLowerCase().trim() ||
-                basename.toLowerCase().trim() === name.toLowerCase().trim() + "experiment" ||
-                basename.toLowerCase().trim() === name.toLowerCase().trim() + "example") {
-                return basename;
-            }
+            return fs.readFileSync(Worker.statusFile, {encoding: 'utf-8'}) as CrawljaxStatus;
         }
-        return null;
-    }
-
-    const response0 = await prompts({
-        type: "text",
-        name: "mainClass",
-        message: "What is the main class?",
-        validate: (prev: string) => findMainClass(prev) ? true : `Main class '${prev}' not found`,
-        format: prev => findMainClass(prev),
+        const interval = setInterval(async () => {
+            const status = checkCrawljaxStatue();
+            logger.debug("read status file", {status});
+            if (!status) {
+                // file not exist
+                return;
+            }
+            logger.info("Crawljax status updated", {status: status})
+            switch (status) {
+                case "Errored":
+                case "Stopped manually":
+                    // should stop the process ahead
+                    await subprocess.stop();
+                    break;
+                case "Maximum time passed":
+                case "Maximum states passed":
+                case "Exhausted":
+                    // should stop the process ahead
+                    await subprocess.stop();
+                    if (shouldContinue) {
+                        if (fs.existsSync(Worker.statusFile)) {
+                            fs.unlinkSync(Worker.statusFile);
+                        }
+                        await subprocess.start();
+                    }
+                    break;
+                default:
+                    logger.warn("Unknown crawljax status", {status});
+            }
+        }, 500);
+        setTimeout(async () => {
+            shouldContinue = false;
+            subprocess.stop();
+            logger.info("Crawljax timeout", {timeBudget: timeBudget + "s"});
+            clearInterval(interval);
+            await sleep(1000);
+            resolve();
+        }, timeBudget * 1000);
     });
+};
 
-    const parseTimeBudget = (budget: string): number | null => {
-        return parseDuration(budget, 's');
-    }
-
-    const response1 = await prompts({
-        type: "text",
-        name: "timeBudget",
-        message: "What is the time budget?",
-        validate: prev => typeof parseTimeBudget(prev) === "number",
-        format: prev => parseTimeBudget(prev) as number,
-    });
-
-    const logger = new Logger("Crawljax", 'info');
-    logger.info("Starting crawljax...", {
-        subject: path.basename(response0.mainClass),
-        timeBudget: response1.timeBudget + "s"
-    });
-
-    type CrawljaxStatus =
-        "Maximum time passed"
-        | "Maximum states passed"
-        | "Exhausted"
-        | "Errored"
-        | "Stopped manually";
-
-    let shouldContinue: boolean = true;
-    let subprocess: Worker = new Worker(logger, response0.mainClass);
-    await subprocess.start();
-
-    // watch status of crawljax, since crawljax cannot exit by itself
-    const checkCrawljaxStatue = (): CrawljaxStatus | null => {
-        if (!fs.existsSync(Worker.statusFile)) {
+if (require.main === module) {
+    (async () => {
+        /**
+         *
+         * @param name
+         * @return path to main class
+         */
+        const findMainClass = (name: string): string | null => {
+            const examplesDir = path.join(__dirname, "..", "examples", "src", "main", "java", "com", "crawljax", "examples");
+            for (const file of fs.readdirSync(examplesDir)) {
+                if (path.extname(file) !== ".java") {
+                    continue;
+                }
+                const basename = path.basename(file).slice(0, path.basename(file).length - 5);
+                if (basename.toLowerCase().trim() === name.toLowerCase().trim() ||
+                    basename.toLowerCase().trim() === name.toLowerCase().trim() + "experiment" ||
+                    basename.toLowerCase().trim() === name.toLowerCase().trim() + "example") {
+                    return basename;
+                }
+            }
             return null;
         }
-        return fs.readFileSync(Worker.statusFile, {encoding: 'utf-8'}) as CrawljaxStatus;
-    }
-    const interval = setInterval(async () => {
-        const status = checkCrawljaxStatue();
-        logger.debug("read status file", {status});
-        if (!status) {
-            // file not exist
-            return;
+
+        const response0 = await prompts({
+            type: "text",
+            name: "mainClass",
+            message: "What is the main class?",
+            validate: (prev: string) => findMainClass(prev) ? true : `Main class '${prev}' not found`,
+            format: prev => findMainClass(prev),
+        });
+
+        const parseTimeBudget = (budget: string): number | null => {
+            return parseDuration(budget, 's');
         }
-        logger.info("Crawljax status updated", {status: status})
-        switch (status) {
-            case "Errored":
-            case "Stopped manually":
-                // should stop the process ahead
-                await subprocess.stop();
-                break;
-            case "Maximum time passed":
-            case "Maximum states passed":
-            case "Exhausted":
-                // should stop the process ahead
-                await subprocess.stop();
-                if (shouldContinue) {
-                    if (fs.existsSync(Worker.statusFile)) {
-                        fs.unlinkSync(Worker.statusFile);
-                    }
-                    await subprocess.start();
-                }
-                break;
-            default:
-                logger.warn("Unknown crawljax status", {status});
-        }
-    }, 500);
-    setTimeout(async () => {
-        shouldContinue = false;
-        subprocess.stop();
-        logger.info("Crawljax timeout", {timeBudget: response1.timeBudget + "s"});
-        clearInterval(interval);
-        await sleep(1000);
-        process.exit(0);
-    }, response1.timeBudget * 1000);
-})();
+
+        const response1 = await prompts({
+            type: "text",
+            name: "timeBudget",
+            message: "What is the time budget?",
+            validate: prev => typeof parseTimeBudget(prev) === "number",
+            format: prev => parseTimeBudget(prev) as number,
+        });
+
+        const logger = new Logger("Crawljax", 'info');
+        logger.info("Starting crawljax...", {
+            subject: path.basename(response0.mainClass),
+            timeBudget: response1.timeBudget + "s"
+        });
+
+        await startCrawljax(logger, "localhost:9222", response0.mainClass, response1.timeBudget);
+    })();
+}

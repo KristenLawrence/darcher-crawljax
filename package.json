@@ -4,9 +4,9 @@
   "repository": {
     "url": "https://github.com/KristenLawrence/darcher-crawljax"
   },
-  "main": "scripts",
-  "types": "scripts",
+  "main": "scripts/index.js",
   "scripts": {
+    "build": "tsc",
     "start:experiment": "ts-node scripts/start-crawljax.ts"
   },
   "author": "KristenLawrence",
