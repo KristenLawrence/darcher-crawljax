@@ -40,6 +40,7 @@ import java.util.List;
 import java.util.concurrent.ArrayBlockingQueue;
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.TimeUnit;
+import java.util.concurrent.atomic.AtomicBoolean;
 
 import org.kristen.rpc.darcher.*;
 
@@ -265,6 +266,9 @@ public class GRPCClientPlugin implements
         } catch (IOException | InterruptedException e) {
             e.printStackTrace();
         }
+
+        // stop console error listener
+        this.handleBrowserConsoleErrorThread.stop();
     }
 
     @Override
@@ -596,15 +600,25 @@ public class GRPCClientPlugin implements
         private String errorString;
         public DappTestService.ConsoleErrorMsg consoleErrorMsg;
 
+        private AtomicBoolean stopped = new AtomicBoolean(false);
+
         public HandleBrowserConsoleErrorThread(String dappName, int instanceId) {
             logger.debug("Init the HandleBrowserConsoleErrorThread");
             this.dappName = dappName;
             this.instanceId = instanceId;
         }
 
+        public void stop() {
+            stopped.set(true);
+        }
+
         @Override
         public void run() {
             while (true) {
+                if (stopped.get()) {
+                    System.out.println("console error exit");
+                    return;
+                }
                 LogEntries logEntries = dappBrowser.getWebDriver().manage().logs().get(LogType.BROWSER);
                 if (!logEntries.getAll().isEmpty()) {
                     errorString = "";
