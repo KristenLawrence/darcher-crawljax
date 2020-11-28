@@ -142,12 +142,26 @@ public class AugurExperiment extends Experiment {
                             .until(d -> d.findElement(By.xpath("//UL[@class='form-styles_CategoryMultiSelect']/LI[3]//BUTTON[@value='Academy Awards']")));
                     academicAwards.click();
                 });
-        // 5 minutes later
         /* Don't click view txs button in account summary */
         builder.crawlRules().dontClick("BUTTON").withAttribute("title", "View Transactions");
 
+        /* Don't click save draft */
+        builder.crawlRules().dontClick("BUTTON").withAttribute("title", "Save draft");
+
+        /* Don't click Back */
+        builder.crawlRules().dontClick("BUTTON").withAttribute("title", "Back");
+
+        /* Don't preview market */
+        builder.crawlRules().dontClick("BUTTON").withAttribute("title", "Preview your market");
+
         /* Don't click Add Funds */
         builder.crawlRules().dontClick("BUTTON").withAttribute("title", "Deposit");
+
+        /* Don't click Learn More */
+        builder.crawlRules().dontClick("BUTTON").withText("Learn more");
+
+        /* Don't click depth chart */
+        builder.crawlRules().dontClick("BUTTON").underXPath("//DIV[@class='depth-styles_MarketOutcomeDepth__container']");
 
         /* Transfer funds form (same with Withdraw form) */
         Form transferForm = new Form();
