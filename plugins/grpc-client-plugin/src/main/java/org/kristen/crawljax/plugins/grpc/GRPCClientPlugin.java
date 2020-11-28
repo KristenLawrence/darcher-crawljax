@@ -103,6 +103,16 @@ public class GRPCClientPlugin implements
         this.metaMaskNotificationServer = new MetaMaskNotificationServer(new InetSocketAddress(1237),
                 this.unapprovedTxQueue::offer, null);
         this.metaMaskNotificationServer.start();
+        // listen to SIGINT to shutdown MetaMask Notifier server
+        Runtime.getRuntime().addShutdownHook(new Thread(() -> {
+            try {
+                this.metaMaskNotificationServer.stop();
+            } catch (IOException | InterruptedException e) {
+                logger.error("MetaMask Notifier server not stopped");
+                e.printStackTrace();
+            }
+        }));
+
     }
 
     /**
