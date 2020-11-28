@@ -134,7 +134,6 @@ export async function startCrawljax(logger: Logger, chromeDebuggerAddress: strin
         }
         const interval = setInterval(async () => {
             const status = checkCrawljaxStatue();
-            logger.debug("read status file", {status});
             if (!status) {
                 // file not exist
                 return;
