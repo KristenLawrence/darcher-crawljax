@@ -90,8 +90,15 @@
 					</execution>
 				</executions>
 				<configuration>
-					<!--suppress UnresolvedMavenProperty -->
-					<mainClass>com.crawljax.examples.${env.SUBJECT}</mainClass>
+					<mainClass>xyz.troublor.crawljax.experiments.ExperimentLauncher</mainClass>
+					<arguments>
+						<!--suppress UnresolvedMavenProperty -->
+						<argument>${env.STATUS_LOG_PATH}</argument>
+						<!--suppress UnresolvedMavenProperty -->
+						<argument>${env.CHROME_DEBUGGER_ADDRESS}</argument>
+						<!--suppress UnresolvedMavenProperty -->
+						<argument>${env.SUBJECT}</argument>
+					</arguments>
 				</configuration>
 			</plugin>
 		</plugins>

@@ -1,7 +1,6 @@
-package com.crawljax.examples;
+package xyz.troublor.crawljax.experiments;
 
 import com.crawljax.browser.EmbeddedBrowser;
-import com.crawljax.core.CrawlSession;
 import com.crawljax.core.CrawljaxRunner;
 import com.crawljax.core.configuration.*;
 import com.crawljax.core.state.Identification;
@@ -9,10 +8,11 @@ import com.crawljax.forms.FormInput;
 import com.crawljax.plugins.crawloverview.CrawlOverview;
 import org.kristen.crawljax.plugins.grpc.GRPCClientPlugin;
 
+import java.io.File;
 import java.io.IOException;
 import java.util.concurrent.TimeUnit;
 
-public class MetaMaskExperiment {
+public class MetaMaskExperiment extends Experiment {
     private static final long WAIT_TIME_AFTER_EVENT = 500;
     private static final long WAIT_TIME_AFTER_RELOAD = 500;
     private static final String DAPP_URL = "chrome-extension://jbppcachblnkaogkgacckpgohjbpcekf/home.html";
@@ -25,10 +25,8 @@ public class MetaMaskExperiment {
 
     /**
      * Run this method to start the crawl.
-     *
-     * @throws IOException when the output folder cannot be created or emptied.
      */
-    public static void main(String[] args) throws IOException {
+    public CrawljaxRunner initialize(String chromeDebuggerAddress) {
         CrawljaxConfiguration.CrawljaxConfigurationBuilder builder = CrawljaxConfiguration.builderFor(DAPP_URL);
 
 //        builder.crawlRules().setFormFillMode(CrawlRules.FormFillMode.RANDOM);
@@ -124,10 +122,10 @@ public class MetaMaskExperiment {
 //        builder.addPlugin(new MetaMaskSupportPlugin(METAMASK_POPUP_URL, METAMASK_PASSWORD));
         builder.addPlugin(new GRPCClientPlugin(DAPP_NAME, instanceId, METAMASK_POPUP_URL, DAPP_URL, METAMASK_PASSWORD));
 
-        CrawljaxRunner crawljax = new CrawljaxRunner(builder.build());
-        CrawlSession session = crawljax.call();
-        System.out.println("Crawl Complete: " + crawljax.getReason());
+        return new CrawljaxRunner(builder.build());
+    }
 
-
+    public static void main(String[] args) throws IOException {
+        new MetaMaskExperiment().start("scripts" + File.separator + "status.log", "localhost:9222");
     }
 }

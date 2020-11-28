@@ -1,42 +1,47 @@
-package com.crawljax.examples;
+package xyz.troublor.crawljax.experiments;
 
 import com.crawljax.browser.EmbeddedBrowser;
 import com.crawljax.core.CrawlSession;
 import com.crawljax.core.CrawljaxRunner;
-import com.crawljax.core.ExitNotifier;
 import com.crawljax.core.configuration.*;
 import com.crawljax.core.state.Identification;
 import com.crawljax.forms.FormInput;
 import com.crawljax.plugins.crawloverview.CrawlOverview;
 import org.kristen.crawljax.plugins.grpc.GRPCClientPlugin;
+import org.openqa.selenium.chrome.ChromeDriver;
+import org.openqa.selenium.chrome.ChromeOptions;
 
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.concurrent.TimeUnit;
 
-public class TestExample {
+public class AugurExperiment extends Experiment {
     private static final long WAIT_TIME_AFTER_EVENT = 500;
     private static final long WAIT_TIME_AFTER_RELOAD = 500;
-    private static final String DAPP_URL = "file:///Users/troublor/workspace/darcher_mics/metamask-test/index.html";
-    private static final String DAPP_NAME = "Test DApp";
+    private static final String DAPP_URL = "http://localhost:8080/";
+    private static final String DAPP_NAME = "Augur";
     private static int instanceId = 1;
     private static final String METAMASK_POPUP_URL = "chrome-extension://jbppcachblnkaogkgacckpgohjbpcekf/home.html";
     private static final String METAMASK_PASSWORD = "12345678";
     private static final String BROWSER_PROFILE_PATH = "/Users/troublor/workspace/darcher_mics/browsers/Chrome/UserData";
 
+    // DApp Gloabal Variables
+    private static final String ETHEREUM_ADDRESS = "0x90F8bf6A479f320ead074411a4B0e7944Ea8c9C1";
+    private static final String OTHER_ADDRESS = "0xFFcf8FDEE72ac11b5c542428B35EEF5769C409f0";
+
 
     /**
      * Run this method to start the crawl.
-     *
-     * @throws IOException when the output folder cannot be created or emptied.
-     */
-    public static void main(String[] args) throws IOException {
+     **/
+    public CrawljaxRunner initialize(String chromeDebuggerAddress) {
         CrawljaxConfiguration.CrawljaxConfigurationBuilder builder = CrawljaxConfiguration.builderFor(DAPP_URL);
 
+//        builder.crawlRules().setFormFillMode(CrawlRules.FormFillMode.RANDOM);
+//        builder.crawlRules().click("div").withAttribute("")
+        // we use normal mode to avoid randomly fill forms and only allow predefined form inputs
         builder.crawlRules().setFormFillMode(CrawlRules.FormFillMode.NORMAL);
-        builder.crawlRules().clickOnce(false);
-        builder.crawlRules().setCrawlPriorityMode(CrawlRules.CrawlPriorityMode.RANDOM);
+        builder.crawlRules().clickOnce(true);
         // click these elements
         builder.crawlRules().click("A");
         builder.crawlRules().click("BUTTON");
@@ -48,36 +53,35 @@ public class TestExample {
         builder.setUnlimitedStates();
 
         // 1 hour timeout
-        builder.setMaximumRunTime(1, TimeUnit.MINUTES);
+        builder.setMaximumRunTime(1, TimeUnit.HOURS);
 
-        builder.crawlRules().clickElementsInRandomOrder(false);
+//        builder.setMaximumStates(0); // unlimited
+        builder.setMaximumDepth(0); // unlimited
+        builder.crawlRules().clickElementsInRandomOrder(true);
 
-        // Set timeouts
+        /* Set timeouts */
         builder.crawlRules().waitAfterReloadUrl(WAIT_TIME_AFTER_RELOAD, TimeUnit.MILLISECONDS);
         builder.crawlRules().waitAfterEvent(WAIT_TIME_AFTER_EVENT, TimeUnit.MILLISECONDS);
 
+        InputSpecification inputSpec = new InputSpecification();
+
+
+        builder.crawlRules().setInputSpec(inputSpec);
         builder.setBrowserConfig(
-                new BrowserConfiguration(EmbeddedBrowser.BrowserType.CHROME, 1,
-                        new BrowserOptions(BROWSER_PROFILE_PATH)));
+                new BrowserConfiguration(EmbeddedBrowser.BrowserType.CHROME_EXISTING, chromeDebuggerAddress));
 
         // CrawlOverview
-        builder.addPlugin(new CrawlOverview());
+//        builder.addPlugin(new CrawlOverview());
 //        builder.addPlugin(new MetaMaskSupportPlugin(METAMASK_POPUP_URL, METAMASK_PASSWORD));
         builder.addPlugin(new GRPCClientPlugin(DAPP_NAME, instanceId, METAMASK_POPUP_URL, DAPP_URL, METAMASK_PASSWORD));
 
-        CrawljaxRunner crawljax = new CrawljaxRunner(builder.build());
-        CrawlSession session = crawljax.call();
-        String f;
-        if (args.length > 0) {
-            f = args[0];
-        } else {
-            f = "scripts" + File.separator + "status.log";
-        }
-        try (FileWriter writer = new FileWriter(new File(f))) {
-            writer.write(crawljax.getReason().toString());
-        }
+        // test zone
+//        builder.crawlRules().click("BUTTON").withText("Delegate funds here");
 
-        System.out.println("Crawl Complete: " + crawljax.getReason());
+        return new CrawljaxRunner(builder.build());
+    }
 
+    public static void main(String[] args) throws IOException {
+        new AugurExperiment().start("scripts" + File.separator + "status.log", "localhost:9222");
     }
 }

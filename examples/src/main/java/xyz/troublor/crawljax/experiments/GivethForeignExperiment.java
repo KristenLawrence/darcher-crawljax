@@ -1,7 +1,6 @@
-package com.crawljax.examples;
+package xyz.troublor.crawljax.experiments;
 
 import com.crawljax.browser.EmbeddedBrowser;
-import com.crawljax.core.CrawlSession;
 import com.crawljax.core.CrawljaxRunner;
 import com.crawljax.core.configuration.*;
 import com.crawljax.core.state.Identification;
@@ -16,6 +15,7 @@ import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 import org.w3c.dom.Node;
 
+import java.io.File;
 import java.io.IOException;
 import java.time.Duration;
 import java.util.List;
@@ -23,7 +23,7 @@ import java.util.Random;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicInteger;
 
-public class GivethForeignExperiment {
+public class GivethForeignExperiment extends Experiment {
     private static final long WAIT_TIME_AFTER_EVENT = 500;
     private static final long WAIT_TIME_AFTER_RELOAD = 500;
     private static final String DAPP_URL = "http://localhost:3010/";
@@ -43,7 +43,7 @@ public class GivethForeignExperiment {
      *
      * @throws IOException when the output folder cannot be created or emptied.
      */
-    public static void main(String[] args) throws IOException {
+    public CrawljaxRunner initialize(String chromeDebuggerAddress) {
         CrawljaxConfiguration.CrawljaxConfigurationBuilder builder = CrawljaxConfiguration.builderFor(DAPP_URL);
 
 //        builder.crawlRules().setFormFillMode(CrawlRules.FormFillMode.RANDOM);
@@ -275,8 +275,7 @@ public class GivethForeignExperiment {
 
         builder.crawlRules().setInputSpec(inputSpec);
         builder.setBrowserConfig(
-                new BrowserConfiguration(EmbeddedBrowser.BrowserType.CHROME, 1,
-                        new BrowserOptions(BROWSER_PROFILE_PATH)));
+                new BrowserConfiguration(EmbeddedBrowser.BrowserType.CHROME_EXISTING, chromeDebuggerAddress));
 
         // CrawlOverview
         builder.addPlugin(new CrawlOverview());
@@ -286,8 +285,10 @@ public class GivethForeignExperiment {
         // test zone
 //        builder.crawlRules().click("BUTTON").withText("Delegate funds here");
 
-        CrawljaxRunner crawljax = new CrawljaxRunner(builder.build());
-        CrawlSession session = crawljax.call();
-        System.out.println("Crawl Complete: " + crawljax.getReason());
+        return new CrawljaxRunner(builder.build());
+    }
+
+    public static void main(String[] args) throws IOException {
+        new GivethForeignExperiment().start("scripts" + File.separator + "status.log", "localhost:9222");
     }
 }
