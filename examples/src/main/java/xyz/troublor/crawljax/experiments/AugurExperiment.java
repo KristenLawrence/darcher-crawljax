@@ -49,8 +49,8 @@ public class AugurExperiment extends Experiment {
         builder.crawlRules().setFormFillMode(CrawlRules.FormFillMode.NORMAL);
         builder.crawlRules().clickOnce(true);
         // click these elements
-        builder.crawlRules().click("A");
-        builder.crawlRules().click("BUTTON");
+//        builder.crawlRules().click("A");
+//        builder.crawlRules().click("BUTTON");
 
         builder.crawlRules().crawlHiddenAnchors(true);
         builder.crawlRules().crawlFrames(false);
@@ -70,6 +70,10 @@ public class AugurExperiment extends Experiment {
         builder.crawlRules().waitAfterEvent(WAIT_TIME_AFTER_EVENT, TimeUnit.MILLISECONDS);
 
         InputSpecification inputSpec = new InputSpecification();
+
+        /* Go into markets */
+        builder.crawlRules().click("A").underXPath("//H3[@class='market-common-styles_MarketTemplateTitle']");
+        builder.crawlRules().click("A").underXPath("//H3[@class='common-styles_OutcomeGroup']");
 
         /* creating markets (create customized market is clicked)*/
         inputSpec.inputField(FormInput.InputType.CUSTOMIZE,
@@ -142,6 +146,12 @@ public class AugurExperiment extends Experiment {
                             .until(d -> d.findElement(By.xpath("//UL[@class='form-styles_CategoryMultiSelect']/LI[3]//BUTTON[@value='Academy Awards']")));
                     academicAwards.click();
                 });
+        builder.crawlRules().click("BUTTON").withText("Create Market");
+        builder.crawlRules().click("BUTTON").withText("Create a custom market");
+        builder.crawlRules().click("BUTTON").withAttribute("title", "Next");
+        builder.crawlRules().click("BUTTON").withAttribute("title", "Create");
+        builder.crawlRules().click("BUTTON").withAttribute("title", "Confirm");
+
         /* Don't click view txs button in account summary */
         builder.crawlRules().dontClick("BUTTON").withAttribute("title", "View Transactions");
 
@@ -172,6 +182,12 @@ public class AugurExperiment extends Experiment {
                 new Identification(Identification.How.xpath, "//INPUT[@placeholder='0.00']"))
                 .inputValues("10");
         inputSpec.setValuesInForm(transferForm).beforeClickElement("BUTTON").withAttribute("title", "Send");
+        builder.crawlRules().click("BUTTON").withAttribute("title", "Withdraw");
+
+        /* Faucet button */
+        builder.crawlRules().click("BUTTON").withAttribute("title", "REP Faucet");
+        builder.crawlRules().click("BUTTON").withAttribute("title", "DAI Faucet");
+        builder.crawlRules().click("BUTTON").withAttribute("title", "Legacy REP Faucet");
 
         /* don't cancel */
         builder.crawlRules().dontClick("BUTTON").withAttribute("title", "Cancel");
@@ -184,12 +200,21 @@ public class AugurExperiment extends Experiment {
         /* Don't click Disputing Guide button */
         builder.crawlRules().dontClick("BUTTON").withAttribute("class", "common-styles_ReportingModalButton");
 
+        builder.crawlRules().click("A").withText("Account Summary");
+        builder.crawlRules().click("A").withText("Markets");
+        builder.crawlRules().click("A").withText("Portfolio");
+        builder.crawlRules().click("A").withText("Disputing");
+        builder.crawlRules().click("A").withText("Reporting");
+        builder.crawlRules().click("BUTTON").underXPath("//DIV[@class='notification-styles_Message']");
+
+
         /* But Tokens form */
         Form buyTokensForm = new Form();
         buyTokensForm.inputField(FormInput.InputType.TEXT,
                 new Identification(Identification.How.xpath, "//INPUT[@placeholder='0.0000']"))
                 .inputValues("10");
         inputSpec.setValuesInForm(buyTokensForm).beforeClickElement("BUTTON").withText("buy");
+        builder.crawlRules().click("BUTTON").withAttribute("title", "Get Participation Tokens");
 
         /* Don't click alert button */
         builder.crawlRules().dontClick("BUTTON").withAttribute("class", "top-bar-styles_alerts");
@@ -254,6 +279,8 @@ public class AugurExperiment extends Experiment {
                 });
         inputSpec.setValuesInForm(placeBuyOrderForm).beforeClickElement("BUTTON").withAttribute("class", "buttons-styles_SellOrderButton");
         inputSpec.setValuesInForm(placeBuyOrderForm).beforeClickElement("BUTTON").withAttribute("class", "buttons-styles_BuyOrderButton");
+        builder.crawlRules().click("BUTTON").withAttribute("class", "buttons-styles_BuyOrderButton");
+        builder.crawlRules().click("BUTTON").withAttribute("class", "buttons-styles_SellOrderButton");
 
         builder.crawlRules().setInputSpec(inputSpec);
         builder.setBrowserConfig(
@@ -297,13 +324,6 @@ public class AugurExperiment extends Experiment {
         });
 
         // test zone
-//        builder.crawlRules().click("BUTTON").withText("Create Market");
-//        builder.crawlRules().click("BUTTON").withText("Create a custom market");
-//        builder.crawlRules().click("BUTTON").withAttribute("title", "Next");
-//        builder.crawlRules().click("BUTTON").withAttribute("class", "buttons-styles_BuyOrderButton");
-//        builder.crawlRules().click("BUTTON").withAttribute("class", "buttons-styles_SellOrderButton");
-//        builder.crawlRules().click("BUTTON").withText("Account Summary");
-//        builder.crawlRules().click("BUTTON").underXPath("//DIV[@class='notification-styles_Message']");
 
         return new CrawljaxRunner(builder.build());
     }
