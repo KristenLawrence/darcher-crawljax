@@ -103,7 +103,10 @@ class Worker {
     private static cleanProcess() {
         // child_process.spawnSync("pkill", ["-INT", "chromedriver"]); // kill chrome driver
         // child_process.spawnSync("pkill", ["-INT", "Google Chrome"]); // kill Google Chrome
-        child_process.execSync("lsof -ti:1237 | xargs kill"); // kill the websocket server on port 1237
+        try {
+            child_process.execSync("lsof -ti:1237 | xargs kill"); // kill the websocket server on port 1237
+        } catch (ignored) {
+        }
     }
 }
 
@@ -180,7 +183,7 @@ if (require.main === module) {
          * @return path to main class
          */
         const findMainClass = (name: string): string | null => {
-            const examplesDir = path.join(__dirname, "..", "examples", "src", "main", "java", "com", "crawljax", "examples");
+            const examplesDir = path.join(__dirname, "..", "examples", "src", "main", "java", "xyz", "troublor", "crawljax", "experiments");
             for (const file of fs.readdirSync(examplesDir)) {
                 if (path.extname(file) !== ".java") {
                     continue;
