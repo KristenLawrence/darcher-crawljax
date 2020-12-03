@@ -7,7 +7,6 @@ import com.crawljax.core.configuration.CrawlRules;
 import com.crawljax.core.configuration.CrawljaxConfiguration;
 import com.crawljax.core.configuration.InputSpecification;
 import com.crawljax.core.plugin.OnUrlLoadPlugin;
-import com.crawljax.plugins.crawloverview.CrawlOverview;
 import org.kristen.crawljax.plugins.grpc.GRPCClientPlugin;
 import org.openqa.selenium.By;
 import org.openqa.selenium.NoSuchElementException;
@@ -20,12 +19,12 @@ import java.io.IOException;
 import java.time.Duration;
 import java.util.concurrent.TimeUnit;
 
-public class LordsofthesnailsExperiment extends Experiment {
+public class EtherollExperiment extends Experiment {
 
     private static final long WAIT_TIME_AFTER_EVENT = 500;
-    private static final long WAIT_TIME_AFTER_RELOAD = 5000;
-    private static final String DAPP_URL = "http://localhost:8888/game.html";
-    private static final String DAPP_NAME = "Lordsofthesnails";
+    private static final long WAIT_TIME_AFTER_RELOAD = 500;
+    private static final String DAPP_URL = "http://localhost:3000/#/";
+    private static final String DAPP_NAME = "Etheroll";
     private static int instanceId = 1;
     private static final String METAMASK_POPUP_URL = "chrome-extension://kdaoeelmbdcinklhldlcmmgmndjcmjpp/home.html";
     private static final String METAMASK_PASSWORD = "12345678";
@@ -41,7 +40,7 @@ public class LordsofthesnailsExperiment extends Experiment {
 //        builder.crawlRules().click("div").withAttribute("")
         // we use normal mode to avoid randomly fill forms and only allow predefined form inputs
         builder.crawlRules().setFormFillMode(CrawlRules.FormFillMode.NORMAL);
-        builder.crawlRules().clickOnce(true);
+        builder.crawlRules().clickOnce(false);
         // click these elements
         builder.crawlRules().click("A");
         builder.crawlRules().click("BUTTON");
@@ -65,8 +64,9 @@ public class LordsofthesnailsExperiment extends Experiment {
 
         InputSpecification inputSpec = new InputSpecification();
 
-        /* Don't click external links */
-        builder.crawlRules().dontClick("A").underXPath("/html/body/div[1]/div");
+        /* Don't click nav links */
+        builder.crawlRules().dontClick("A").underXPath("//*[@id=\"root\"]/DIV/HEADER/NAV");
+        builder.crawlRules().dontClick("BUTTON").underXPath("//*[@id=\"root\"]/DIV/HEADER/NAV");
 
         builder.crawlRules().setInputSpec(inputSpec);
         builder.setBrowserConfig(
@@ -76,11 +76,11 @@ public class LordsofthesnailsExperiment extends Experiment {
         // plugin to wait for loading
         builder.addPlugin((OnUrlLoadPlugin) context -> {
             WebDriver driver = context.getBrowser().getWebDriver();
-            System.out.print("Wait for Lordsofthesnails DApp reloading...");
+            System.out.print("Wait for Etheroll DApp reloading...");
             new WebDriverWait(driver, Duration.ofSeconds(10)).until(d -> {
                 try {
-                    WebElement sample = driver.findElement(By.xpath("//*[@id='leadereggs']"));
-                    return !sample.getText().equals("undefined");
+                    WebElement sample = driver.findElement(By.xpath("//*[@id=\"root\"]/DIV/DIV/DIV[1]/DIV[4]/A"));
+                    return sample.getText().equals("0x0DA18EBf3C1bA9c201B97693af91757040840664");
                 } catch (NoSuchElementException ignored) {
                     return false;
                 }
@@ -93,6 +93,6 @@ public class LordsofthesnailsExperiment extends Experiment {
     }
 
     public static void main(String[] args) throws IOException {
-        new LordsofthesnailsExperiment().start("scripts" + File.separator + "status.log", "localhost:9222");
+        new EtherollExperiment().start("scripts" + File.separator + "status.log", "localhost:9222");
     }
 }
