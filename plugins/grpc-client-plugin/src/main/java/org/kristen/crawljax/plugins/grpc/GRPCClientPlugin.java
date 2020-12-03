@@ -16,13 +16,11 @@ import io.grpc.StatusRuntimeException;
 import io.grpc.stub.StreamObserver;
 import io.grpc.ManagedChannel;
 import io.grpc.ManagedChannelBuilder;
-import org.openqa.selenium.JavascriptExecutor;
-import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.WebElement;
-import org.openqa.selenium.WindowType;
+import org.openqa.selenium.*;
 import org.openqa.selenium.logging.LogEntries;
 import org.openqa.selenium.logging.LogEntry;
 import org.openqa.selenium.logging.LogType;
+import org.openqa.selenium.support.ui.WebDriverWait;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -36,6 +34,7 @@ import java.io.IOException;
 import java.net.InetSocketAddress;
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.time.Duration;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.ArrayBlockingQueue;
@@ -169,10 +168,11 @@ public class GRPCClientPlugin implements
                 "/html/body/div[2]/div/div/section/div/div/div[1]/div[2]/div[1]/div/button");
 
         // Click the elements step by step to get pop-up window for tx information.
-        if (browser.elementExists(activityPaneId)) {
-            WebElement activityPane = browser.getWebElement(activityPaneId);
-            activityPane.click();
-        }
+        new WebDriverWait(browser.getWebDriver(), Duration.ofHours(1)).until(d -> browser.elementExists(activityPaneId));
+        WebElement activityPane = browser.getWebElement(activityPaneId);
+        activityPane.click();
+
+        new WebDriverWait(browser.getWebDriver(), Duration.ofHours(1)).until(d -> browser.elementExists(activityPaneId) || browser.elementExists(txBoxId));
         if (browser.elementExists(txStatusId)) {
             WebElement status = browser.getWebElement(txStatusId);
             if (status.getText().contains("Pending")) {
@@ -188,20 +188,19 @@ public class GRPCClientPlugin implements
         }
 
         // Click to copy from address, to address and hash for the tx, get the information from clipboard.
-        if (browser.elementExists(copyFromId)) {
-            WebElement copyFromElement = browser.getWebElement(copyFromId);
-            copyFromElement.click();
-        }
+        new WebDriverWait(browser.getWebDriver(), Duration.ofHours(1)).until(d -> browser.elementExists(copyFromId));
+        WebElement copyFromElement = browser.getWebElement(copyFromId);
+        copyFromElement.click();
         this.fromAddress = getTextFromClipboard();
-        if (browser.elementExists(copyToId)) {
-            WebElement copyToElement = browser.getWebElement(copyToId);
-            copyToElement.click();
-        }
+
+        new WebDriverWait(browser.getWebDriver(), Duration.ofHours(1)).until(d -> browser.elementExists(copyToId));
+        WebElement copyToElement = browser.getWebElement(copyToId);
+        copyToElement.click();
         this.toAddress = getTextFromClipboard();
-        if (browser.elementExists(copyTxHashId)) {
-            WebElement copyTxHashElement = browser.getWebElement(copyTxHashId);
-            copyTxHashElement.click();
-        }
+
+        new WebDriverWait(browser.getWebDriver(), Duration.ofHours(1)).until(d -> browser.elementExists(copyTxHashId));
+        WebElement copyTxHashElement = browser.getWebElement(copyTxHashId);
+        copyTxHashElement.click();
         this.txHash = getTextFromClipboard();
 
         logger.debug("Finish getting transaction information, fromAddress={}, toAddress={}, txHash={}", fromAddress, toAddress, txHash);
@@ -394,11 +393,28 @@ public class GRPCClientPlugin implements
 //            }
 
             if (isSendTx) {
-                try {
-                    Thread.sleep(2500);
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                }
+//                try {
+//                    Thread.sleep(2500);
+//                } catch (InterruptedException e) {
+//                    e.printStackTrace();
+//                }
+                // wait for transaction reaches pending pool
+                new WebDriverWait(driver, Duration.ofHours(1)).until(d -> {
+                    try {
+                        WebElement list = driver.findElement(By.className("transaction-list"));
+                        if (list != null) {
+                            try {
+                                WebElement loading = driver.findElement(By.className("loading-overlay"));
+                                return loading == null;
+                            } catch (NoSuchElementException ignored) {
+                                return true;
+                            }
+                        }
+                        return false;
+                    } catch (NoSuchElementException ignored) {
+                        return false;
+                    }
+                });
 
                 getTxInfo(browser);
 
