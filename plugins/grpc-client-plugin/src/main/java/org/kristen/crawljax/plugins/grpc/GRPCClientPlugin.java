@@ -72,9 +72,9 @@ public class GRPCClientPlugin implements
 
     public String dappName;
     public int instanceId;
-    private String fromAddress;
-    private String toAddress;
-    private String txHash;
+    private String fromAddress = "";
+    private String toAddress = "";
+    private String txHash = "";
     private String events;
     private String states;
     public ControlMsgHandlerThread controlMsgHandlerThread;
@@ -424,7 +424,7 @@ public class GRPCClientPlugin implements
                     }
                 });
 
-                getTxInfo(browser);
+//                getTxInfo(browser);
 
                 // Get reproduction
 //            System.out.println("########################################################################");
