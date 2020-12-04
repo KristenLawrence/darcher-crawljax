@@ -167,41 +167,49 @@ public class GRPCClientPlugin implements
         Identification copyTxHashId = new Identification(Identification.How.xpath,
                 "/html/body/div[2]/div/div/section/div/div/div[1]/div[2]/div[1]/div/button");
 
-        // Click the elements step by step to get pop-up window for tx information.
-        new WebDriverWait(browser.getWebDriver(), Duration.ofHours(1)).until(d -> browser.elementExists(activityPaneId));
-        WebElement activityPane = browser.getWebElement(activityPaneId);
-        activityPane.click();
+        this.fromAddress = null;
+        this.toAddress = null;
+        this.txHash = null;
 
-        new WebDriverWait(browser.getWebDriver(), Duration.ofHours(1)).until(d -> browser.elementExists(activityPaneId) || browser.elementExists(txBoxId));
-        if (browser.elementExists(txStatusId)) {
-            WebElement status = browser.getWebElement(txStatusId);
-            if (status.getText().contains("Pending")) {
-                WebElement txBox = browser.getWebElement(alternativeTxBoxId);
-                txBox.click();
+        try {
+            // Click the elements step by step to get pop-up window for tx information.
+            new WebDriverWait(browser.getWebDriver(), Duration.ofHours(1)).until(d -> browser.elementExists(activityPaneId));
+            WebElement activityPane = browser.getWebElement(activityPaneId);
+            activityPane.click();
+
+            new WebDriverWait(browser.getWebDriver(), Duration.ofMinutes(1)).until(d -> browser.elementExists(activityPaneId) || browser.elementExists(txBoxId));
+            if (browser.elementExists(txStatusId)) {
+                WebElement status = browser.getWebElement(txStatusId);
+                if (status.getText().contains("Pending")) {
+                    WebElement txBox = browser.getWebElement(alternativeTxBoxId);
+                    txBox.click();
+                } else {
+                    WebElement txBox = browser.getWebElement(txBoxId);
+                    txBox.click();
+                }
             } else {
                 WebElement txBox = browser.getWebElement(txBoxId);
                 txBox.click();
             }
-        } else {
-            WebElement txBox = browser.getWebElement(txBoxId);
-            txBox.click();
+
+            // Click to copy from address, to address and hash for the tx, get the information from clipboard.
+            new WebDriverWait(browser.getWebDriver(), Duration.ofMinutes(1)).until(d -> browser.elementExists(copyFromId));
+            WebElement copyFromElement = browser.getWebElement(copyFromId);
+            copyFromElement.click();
+            this.fromAddress = getTextFromClipboard();
+
+            new WebDriverWait(browser.getWebDriver(), Duration.ofMinutes(1)).until(d -> browser.elementExists(copyToId));
+            WebElement copyToElement = browser.getWebElement(copyToId);
+            copyToElement.click();
+            this.toAddress = getTextFromClipboard();
+
+            new WebDriverWait(browser.getWebDriver(), Duration.ofMinutes(1)).until(d -> browser.elementExists(copyTxHashId));
+            WebElement copyTxHashElement = browser.getWebElement(copyTxHashId);
+            copyTxHashElement.click();
+            this.txHash = getTextFromClipboard();
+
+        } catch (RuntimeException ignored) {
         }
-
-        // Click to copy from address, to address and hash for the tx, get the information from clipboard.
-        new WebDriverWait(browser.getWebDriver(), Duration.ofHours(1)).until(d -> browser.elementExists(copyFromId));
-        WebElement copyFromElement = browser.getWebElement(copyFromId);
-        copyFromElement.click();
-        this.fromAddress = getTextFromClipboard();
-
-        new WebDriverWait(browser.getWebDriver(), Duration.ofHours(1)).until(d -> browser.elementExists(copyToId));
-        WebElement copyToElement = browser.getWebElement(copyToId);
-        copyToElement.click();
-        this.toAddress = getTextFromClipboard();
-
-        new WebDriverWait(browser.getWebDriver(), Duration.ofHours(1)).until(d -> browser.elementExists(copyTxHashId));
-        WebElement copyTxHashElement = browser.getWebElement(copyTxHashId);
-        copyTxHashElement.click();
-        this.txHash = getTextFromClipboard();
 
         logger.debug("Finish getting transaction information, fromAddress={}, toAddress={}, txHash={}", fromAddress, toAddress, txHash);
     }
