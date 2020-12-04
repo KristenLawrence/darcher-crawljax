@@ -501,6 +501,14 @@ public class GRPCClientPlugin implements
         driver.close();
         driver.switchTo().window(originalTab);
 
+        // check if there is more tx coming
+        try {
+            Thread.sleep(1000);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+        this.checkMetamaskMessage(context, crawlPath);
+
         logger.debug("Exit processMetamaskPopup function, end processing");
     }
 
@@ -536,7 +544,14 @@ public class GRPCClientPlugin implements
     public void onFireEventSucceeded(CrawlerContext context, Eventable eventable, List<Eventable> pathToHere) {
         logger.info("One event is fired successfully");
 //        processMetamaskPopup(context);
-        // Before a new event is fired, check unapproved tx queue
+        // there is unapproved tx to process
+        List<Eventable> path = new ArrayList<>(pathToHere);
+        path.add(eventable);
+        this.checkMetamaskMessage(context, path);
+    }
+
+    private void checkMetamaskMessage(CrawlerContext context, List<Eventable> path) {
+        // check unapproved tx queue
         Message unapprovedTxMessage = null;
         try {
             unapprovedTxMessage = this.metamaskMessageQueue.poll(50, TimeUnit.MILLISECONDS);
@@ -546,12 +561,8 @@ public class GRPCClientPlugin implements
             // no unapproved tx
             return;
         }
-        // there is unapproved tx to process
-        List<Eventable> path = new ArrayList<>(pathToHere);
-        path.add(eventable);
         processMetamaskPopup(context, new CrawlPath(path));
     }
-
 
     /**
      * The class to handle the control messages sent by the server
