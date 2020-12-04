@@ -42,8 +42,8 @@ public class EtherollExperiment extends Experiment {
         builder.crawlRules().setFormFillMode(CrawlRules.FormFillMode.NORMAL);
         builder.crawlRules().clickOnce(false);
         // click these elements
-        builder.crawlRules().click("A");
-        builder.crawlRules().click("BUTTON");
+//        builder.crawlRules().click("A");
+//        builder.crawlRules().click("BUTTON");
 
         builder.crawlRules().crawlHiddenAnchors(true);
         builder.crawlRules().crawlFrames(false);
@@ -67,6 +67,8 @@ public class EtherollExperiment extends Experiment {
         /* Don't click nav links */
         builder.crawlRules().dontClick("A").underXPath("//*[@id=\"root\"]/DIV/HEADER/NAV");
         builder.crawlRules().dontClick("BUTTON").underXPath("//*[@id=\"root\"]/DIV/HEADER/NAV");
+
+        builder.crawlRules().click("BUTTON").withText("Roll");
 
         builder.crawlRules().setInputSpec(inputSpec);
         builder.setBrowserConfig(
