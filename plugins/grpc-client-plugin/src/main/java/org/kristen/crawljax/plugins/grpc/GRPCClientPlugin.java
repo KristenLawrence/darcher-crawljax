@@ -20,6 +20,7 @@ import org.openqa.selenium.*;
 import org.openqa.selenium.logging.LogEntries;
 import org.openqa.selenium.logging.LogEntry;
 import org.openqa.selenium.logging.LogType;
+import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -407,23 +408,10 @@ public class GRPCClientPlugin implements
 //                    e.printStackTrace();
 //                }
                 // wait for transaction reaches pending pool
-                new WebDriverWait(driver, Duration.ofHours(1)).until(d -> {
-                    try {
-                        WebElement list = driver.findElement(By.className("transaction-list"));
-                        if (list != null) {
-                            try {
-                                WebElement loading = driver.findElement(By.className("loading-overlay"));
-                                return loading == null;
-                            } catch (NoSuchElementException ignored) {
-                                return true;
-                            }
-                        }
-                        return false;
-                    } catch (NoSuchElementException ignored) {
-                        return false;
-                    }
-                });
-
+                WebElement activityTab =
+                        new WebDriverWait(driver, Duration.ofHours(1)).until(ExpectedConditions.elementToBeClickable(By.xpath("//LI[@data-testid='home__activity-tab']")));
+                activityTab.click();
+                new WebDriverWait(driver, Duration.ofMillis(500)).until(ExpectedConditions.presenceOfElementLocated(By.className("transaction-list")));
 //                getTxInfo(browser);
 
                 // Get reproduction

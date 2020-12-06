@@ -7,20 +7,26 @@ import com.crawljax.core.state.Identification;
 import com.crawljax.forms.FormInput;
 import com.crawljax.plugins.crawloverview.CrawlOverview;
 import org.kristen.crawljax.plugins.grpc.GRPCClientPlugin;
+import org.openqa.selenium.By;
+import org.openqa.selenium.WebElement;
+import org.openqa.selenium.support.ui.ExpectedConditions;
+import org.openqa.selenium.support.ui.WebDriverWait;
 
 import java.io.File;
 import java.io.IOException;
+import java.time.Duration;
+import java.util.List;
+import java.util.Random;
 import java.util.concurrent.TimeUnit;
 
 public class MetaMaskExperiment extends Experiment {
     private static final long WAIT_TIME_AFTER_EVENT = 500;
     private static final long WAIT_TIME_AFTER_RELOAD = 500;
-    private static final String DAPP_URL = "chrome-extension://jbppcachblnkaogkgacckpgohjbpcekf/home.html";
+    private static final String DAPP_URL = "chrome-extension://kdaoeelmbdcinklhldlcmmgmndjcmjpp/home.html";
     private static final String DAPP_NAME = "Metamask";
     private static int instanceId = 1;
-    private static final String METAMASK_POPUP_URL = "chrome-extension://jbppcachblnkaogkgacckpgohjbpcekf/home.html";
+    private static final String METAMASK_POPUP_URL = "chrome-extension://kdaoeelmbdcinklhldlcmmgmndjcmjpp/home.html";
     private static final String METAMASK_PASSWORD = "12345678";
-    private static final String BROWSER_PROFILE_PATH = "/Users/troublor/workspace/darcher_mics/browsers/Chrome/UserData";
 
 
     /**
@@ -33,18 +39,10 @@ public class MetaMaskExperiment extends Experiment {
 //        builder.crawlRules().click("div").withAttribute("")
         // we use normal mode to avoid randomly fill forms and only allow predefined form inputs
         builder.crawlRules().setFormFillMode(CrawlRules.FormFillMode.NORMAL);
-        builder.crawlRules().clickOnce(false);
+        builder.crawlRules().clickOnce(true);
         // click these elements
-//        builder.crawlRules().clickDefaultElements();
-//        CrawljaxConfiguration crawler = new CrawljaxConfiguration();
-//        crawler.click("a");
-//        crawler.click("div").withAttribute("class", "clickable");
-//        crawler.dontClick("a").withText("id", "logout");
-//        crawler.dontClick("a").underXpath("//DIV[@id='header']");
         builder.crawlRules().click("A");
         builder.crawlRules().click("BUTTON");
-//        builder.crawlRules().click("div");
-//        builder.crawlRules().click("div").underXPath("//*[@onclick]");
 
         builder.crawlRules().crawlHiddenAnchors(true);
         builder.crawlRules().crawlFrames(false);
@@ -55,71 +53,61 @@ public class MetaMaskExperiment extends Experiment {
         // 1 hour timeout
         builder.setMaximumRunTime(1, TimeUnit.HOURS);
 
-        //builder.setMaximumStates(10);
-        //builder.setMaximumDepth(3);
+//        builder.setMaximumStates(0); // unlimited
+        builder.setMaximumDepth(0); // unlimited
         builder.crawlRules().clickElementsInRandomOrder(true);
 
-        // Set timeouts
+        /* Set timeouts */
         builder.crawlRules().waitAfterReloadUrl(WAIT_TIME_AFTER_RELOAD, TimeUnit.MILLISECONDS);
         builder.crawlRules().waitAfterEvent(WAIT_TIME_AFTER_EVENT, TimeUnit.MILLISECONDS);
 
-        // click "Transfer between my accounts"
-//        builder.crawlRules().click("A").withText("Transfer between my accounts");
-        // click the transfer recipient accounts from the list of "My Accounts"
-        builder.crawlRules().click("DIV").withAttribute("class", "send__select-recipient-wrapper__group-item");
-        // click to change the asset when transferring, make it possible to transfer ERC20 token
-        builder.crawlRules().click("DIV").withAttribute("class", "send-v2__asset-dropdown");
-        builder.crawlRules().click("DIV").withAttribute("class", "send-v2__asset-dropdown__input-wrapper");
-        builder.crawlRules().click("DIV").withAttribute("class", "send-v2__asset-dropdown__asset");
-        // click home page asset tab
-        builder.crawlRules().click("LI").withAttribute("data-testid", "home__asset-tab");
-        builder.crawlRules().click("LI").withAttribute("data-testid", "home__activity-tab");
+        InputSpecification inputSpec = new InputSpecification();
 
-        builder.crawlRules().click("DIV").withAttribute("class", "send-v2__asset-dropdown__asset");
-//        //TODO
-//        builder.crawlRules().click("BUTTON").withAttribute("data-testid", "page-container-footer-next");
-        // prevent removing an account
-        builder.crawlRules().dontClick("BUTTON").withAttribute("data-testid", "account-options-menu__remove-account");
-        // don't bother buy ether
-        builder.crawlRules().dontClick("BUTTON").withText("Buy");
-        // don't change network
+        /* Don't change network */
         builder.crawlRules().dontClick("DIV").withAttribute("class", "network-component pointer");
-//        // don't select ETH again when sending assets
-//        builder.crawlRules().dontClick("DIV").withText("ETH");
-        // don't change account
+
+        /* Don't change account */
         builder.crawlRules().dontClick("DIV").withAttribute("class", "account-menu__icon");
-//        // don't send to my self
-//        builder.crawlRules().dontClick("DIV").underXPath("//DIV[@class='send__select-recipient-wrapper__group']/DIV[2" +
-//                "]");
-//        builder.crawlRules().dontClick("BUTTON").withText("Send");
-        // don't leave send transaction page
-//        builder.crawlRules().dontClick("BUTTON").withAttribute("data-testid", "page-container-footer-cancel");
-        builder.crawlRules().dontClick("A").withText("Cancel");
-        // form input specifications
-        InputSpecification input = new InputSpecification();
-        // fill recipient address when sending ether
-//        Identification recipientInputId = new Identification(Identification.How.xpath, "//INPUT[@class='ens" +
-//                "-input__wrapper__input']");
-//        input.inputField(FormInput.InputType.TEXT, recipientInputId).inputValues(
-//                "0x2ecB718297080fF730269176E42C8278aA193434");
-//         fill the amount of ether to transfer
-        Identification amountId = new Identification(Identification.How.xpath, "//INPUT[@class='unit" +
-                "-input__input']");
-        input.inputField(FormInput.InputType.NUMBER, amountId).inputValues("1");
 
-        // fill search tokens
-        Identification searchTokenId = new Identification(Identification.How.id, "search-tokens");
-        input.inputField(FormInput.InputType.TEXT, searchTokenId).inputValues("0x1AADAa0620e0306156d8aF95E56b92e48eF1e6b8");
+        /* Don't click account options */
+        builder.crawlRules().dontClick("BUTTON").withAttribute("title", "Account Options");
 
-        builder.crawlRules().setInputSpec(input);
+        /* Don't click BUY ETH */
+        builder.crawlRules().dontClick("BUTTON").withText("Buy");
 
+        /* Go to Assets Tab */
+        builder.crawlRules().click("LI").withAttribute("data-testid", "home__asset-tab");
+
+        /* Click Send recipient */
+        builder.crawlRules().click("DIV").withAttribute("class", "send__select-recipient-wrapper__group-item");
+
+        /* Send Asset form */
+        Form sendForm = new Form();
+        sendForm.inputField(FormInput.InputType.CUSTOMIZE,
+                new Identification(Identification.How.xpath, "//INPUT[@class='unit-input__input']"))
+                .setInputFiller((driver, webElement, nodeElement) -> {
+                    // set value = 1
+                    webElement.clear();
+                    webElement.sendKeys("1");
+
+                    // randomly select one asset
+                    WebElement assetDropdown = driver.findElement(By.className("send-v2__asset-dropdown__asset"));
+                    assetDropdown.click();
+                    List<WebElement> assets = new WebDriverWait(driver, Duration.ofMillis(500))
+                            .until(ExpectedConditions.presenceOfAllElementsLocatedBy(By.className("send-v2__asset-dropdown__asset")));
+                    WebElement asset = assets.get(new Random().nextInt(assets.size() - 1) + 1);
+                    asset.click();
+                    try {
+                        Thread.sleep(500);
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
+                });
+        inputSpec.setValuesInForm(sendForm).beforeClickElement("BUTTON").withText("Next");
+
+        builder.crawlRules().setInputSpec(inputSpec);
         builder.setBrowserConfig(
-                new BrowserConfiguration(EmbeddedBrowser.BrowserType.CHROME, 1,
-                        new BrowserOptions(BROWSER_PROFILE_PATH)));
-
-        // CrawlOverview
-        builder.addPlugin(new CrawlOverview());
-//        builder.addPlugin(new MetaMaskSupportPlugin(METAMASK_POPUP_URL, METAMASK_PASSWORD));
+                new BrowserConfiguration(EmbeddedBrowser.BrowserType.CHROME_EXISTING, chromeDebuggerAddress));
         builder.addPlugin(new GRPCClientPlugin(DAPP_NAME, instanceId, METAMASK_POPUP_URL, DAPP_URL, METAMASK_PASSWORD));
 
         return new CrawljaxRunner(builder.build());
