@@ -408,10 +408,14 @@ public class GRPCClientPlugin implements
 //                    e.printStackTrace();
 //                }
                 // wait for transaction reaches pending pool
-                WebElement activityTab =
-                        new WebDriverWait(driver, Duration.ofHours(1)).until(ExpectedConditions.elementToBeClickable(By.xpath("//LI[@data-testid='home__activity-tab']")));
-                activityTab.click();
-                new WebDriverWait(driver, Duration.ofMillis(500)).until(ExpectedConditions.presenceOfElementLocated(By.className("transaction-list")));
+                new WebDriverWait(driver, Duration.ofHours(1)).until(d -> {
+                    try {
+                        WebElement loading = driver.findElement(By.className("loading-overlay"));
+                        return loading == null;
+                    } catch (NoSuchElementException ignored) {
+                        return true;
+                    }
+                });
 //                getTxInfo(browser);
 
                 // Get reproduction
