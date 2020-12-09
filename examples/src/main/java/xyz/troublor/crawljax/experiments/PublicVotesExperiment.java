@@ -8,6 +8,7 @@ import com.crawljax.forms.FormInput;
 import com.crawljax.forms.InputValue;
 import org.kristen.crawljax.plugins.grpc.GRPCClientPlugin;
 import org.openqa.selenium.By;
+import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
@@ -31,7 +32,7 @@ public class PublicVotesExperiment extends Experiment {
     private static final String DAPP_URL = "http://localhost:3000";
     private static final String DAPP_NAME = "publicvotes";
     private static int instanceId = 1;
-    private static final String METAMASK_POPUP_URL = "chrome-extension://jbppcachblnkaogkgacckpgohjbpcekf/home.html";
+    private static final String METAMASK_POPUP_URL = "chrome-extension://kdaoeelmbdcinklhldlcmmgmndjcmjpp/home.html";
     private static final String METAMASK_PASSWORD = "12345678";
 
     private static final String mainAddress = "0x6463F93D65391A8B7c98f0fc8439eFD5d38339d9";
@@ -82,7 +83,7 @@ public class PublicVotesExperiment extends Experiment {
                     } catch (InterruptedException e) {
                         e.printStackTrace();
                     }
-                    next.click();
+                    ((JavascriptExecutor) driver).executeScript("arguments[0].click()", next);
                     new WebDriverWait(driver, Duration.ofSeconds(3))
                             .until(ExpectedConditions.visibilityOfElementLocated(By.id("description")));
                     next = new WebDriverWait(driver, Duration.ofSeconds(3))
@@ -92,7 +93,7 @@ public class PublicVotesExperiment extends Experiment {
                     } catch (InterruptedException e) {
                         e.printStackTrace();
                     }
-                    next.click();
+                    ((JavascriptExecutor) driver).executeScript("arguments[0].click()", next);
                     new WebDriverWait(driver, Duration.ofSeconds(3))
                             .until(ExpectedConditions.visibilityOfElementLocated(By.id("options")));
                     driver.findElement(By.id("option-1")).sendKeys("A");
@@ -112,10 +113,10 @@ public class PublicVotesExperiment extends Experiment {
         inputSpec.inputField(FormInput.InputType.CUSTOMIZE, new Identification(Identification.How.xpath, "//DIV[@id" +
                 "='eth_address']/BUTTON[1]"))
                 .setInputFiller((driver, webElement, nodeElement) -> {
-                    webElement.click();
+                    ((JavascriptExecutor) driver).executeScript("arguments[0].click()", webElement);
                     WebElement startBtn = new WebDriverWait(driver, Duration.ofSeconds(3))
                             .until(ExpectedConditions.elementToBeClickable(By.xpath("//BUTTON[text()='Start Poll']")));
-                    startBtn.click();
+                    ((JavascriptExecutor) driver).executeScript("arguments[0].click()", startBtn);
                 });
 
         builder.crawlRules().click("DIV").underXPath("//DIV[contains(@class, 'option_click')]");

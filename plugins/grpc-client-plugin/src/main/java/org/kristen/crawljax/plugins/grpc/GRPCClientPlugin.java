@@ -51,7 +51,8 @@ public class GRPCClientPlugin implements
         PostCrawlingPlugin,
         OnBrowserCreatedPlugin,
         OnUrlFirstLoadPlugin,
-        OnFireEventSucceededPlugin {
+        OnFireEventSucceededPlugin,
+        OnFireEventFailedPlugin {
     private String METAMASK_PASSWORD;
     private String METAMASK_POPUP_URL;
     private String DAPP_URL;
@@ -535,6 +536,16 @@ public class GRPCClientPlugin implements
     @Override
     public void onFireEventSucceeded(CrawlerContext context, Eventable eventable, List<Eventable> pathToHere) {
         logger.info("One event is fired successfully");
+//        processMetamaskPopup(context);
+        // there is unapproved tx to process
+        List<Eventable> path = new ArrayList<>(pathToHere);
+        path.add(eventable);
+        this.checkMetamaskMessage(context, path);
+    }
+
+    @Override
+    public void onFireEventFailed(CrawlerContext context, Eventable eventable, List<Eventable> pathToHere) {
+        logger.info("One event fails to be fired");
 //        processMetamaskPopup(context);
         // there is unapproved tx to process
         List<Eventable> path = new ArrayList<>(pathToHere);
