@@ -38,7 +38,7 @@ public class EthereumVotingDAppExperiment extends Experiment {
     private static final String DAPP_URL = "http://localhost:8080";
     private static final String DAPP_NAME = "ethereum-voting-dapp";
     private static int instanceId = 1;
-    private static final String METAMASK_POPUP_URL = "chrome-extension://jbppcachblnkaogkgacckpgohjbpcekf/home.html";
+    private static final String METAMASK_POPUP_URL = "chrome-extension://kdaoeelmbdcinklhldlcmmgmndjcmjpp/home.html";
     private static final String METAMASK_PASSWORD = "12345678";
 
     private static final String mainAccount = "Default0";
@@ -53,7 +53,7 @@ public class EthereumVotingDAppExperiment extends Experiment {
 //        builder.crawlRules().click("div").withAttribute("")
         // we use normal mode to avoid randomly fill forms and only allow predefined form inputs
         builder.crawlRules().setFormFillMode(CrawlRules.FormFillMode.NORMAL);
-        builder.crawlRules().clickOnce(true);
+        builder.crawlRules().clickOnce(false);
         // click these elements
         builder.crawlRules().click("A");
         builder.crawlRules().click("BUTTON");
@@ -94,7 +94,7 @@ public class EthereumVotingDAppExperiment extends Experiment {
                     input.sendKeys(target);
                     WebElement voteBtn = new WebDriverWait(driver, Duration.ofSeconds(1))
                             .until(ExpectedConditions.elementToBeClickable(By.xpath("//BUTTON[@onclick='voteForCandidate()']")));
-                    voteBtn.click();
+                    ((JavascriptExecutor) driver).executeScript("arguments[0].click()", voteBtn);
                     try {
                         Thread.sleep(1000);
                     } catch (InterruptedException e) {
