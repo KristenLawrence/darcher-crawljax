@@ -295,7 +295,8 @@ public final class WebDriverBackedEmbeddedBrowser implements EmbeddedBrowser {
 		switch (eventable.getEventType()) {
 			case click:
 				try {
-					webElement.click();
+//					webElement.click();
+					((JavascriptExecutor) getWebDriver()).executeScript("arguments[0].click()", webElement);
 				} catch (ElementNotInteractableException e) {
 					throw e;
 				} catch (WebDriverException e) {
