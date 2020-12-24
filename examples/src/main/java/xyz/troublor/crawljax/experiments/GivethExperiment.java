@@ -5,6 +5,7 @@ import com.crawljax.core.CrawlerContext;
 import com.crawljax.core.CrawljaxRunner;
 import com.crawljax.core.configuration.*;
 import com.crawljax.core.plugin.OnFireEventSucceededPlugin;
+import com.crawljax.core.plugin.OnUrlFirstLoadPlugin;
 import com.crawljax.core.plugin.OnUrlLoadPlugin;
 import com.crawljax.core.state.Identification;
 import com.crawljax.forms.FormInput;
@@ -31,12 +32,12 @@ public class GivethExperiment extends Experiment {
     private static final String DAPP_URL = "http://localhost:3010";
     private static final String DAPP_NAME = "eth-hot-wallet";
     private static int instanceId = 1;
-    private static final String METAMASK_POPUP_URL = "chrome-extension://kdaoeelmbdcinklhldlcmmgmndjcmjpp/home.html";
+    private static final String METAMASK_POPUP_URL = "chrome-extension://jbppcachblnkaogkgacckpgohjbpcekf/home.html";
     private static final String METAMASK_PASSWORD = "12345678";
 
     private static final String ETHEREUM_ADDRESS = "0x90F8bf6A479f320ead074411a4B0e7944Ea8c9C1";
     private static final String OTHER_ADDRESS = "0xFFcf8FDEE72ac11b5c542428B35EEF5769C409f0";
-    private static final String PICTURE_PATH = "/home/troublor/workspace/darcher/packages/darcher-examples/giveth/misc/picture.png";
+    private static final String PICTURE_PATH = "/Users/troublor/workspace/darcher/packages/darcher-examples/giveth/misc/picture.png";
 
     private static String currentNetwork = "foreign";
 
@@ -62,7 +63,7 @@ public class GivethExperiment extends Experiment {
         builder.setUnlimitedStates();
 
         // 1 hour timeout
-        builder.setMaximumRunTime(1, TimeUnit.HOURS);
+        builder.setMaximumRunTime(30, TimeUnit.MINUTES);
 
 //        builder.setMaximumStates(0); // unlimited
         builder.setMaximumDepth(0); // unlimited
@@ -315,7 +316,7 @@ public class GivethExperiment extends Experiment {
             public void onUrlLoad(CrawlerContext context) {
                 // change network to foreign with 0.9 possibility
                 double v = new Random().nextDouble();
-                if (v > 0.7) {
+                if (v > 1) {
                     if (!currentNetwork.equals("home")) {
                         changeNetwork(context.getBrowser().getWebDriver(), "Localhost 8545");
 //                        changeMetamaskAccount(context.getBrowser().getWebDriver(), "Giveth1");
