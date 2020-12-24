@@ -27,7 +27,7 @@ public class TruffleVotingDAppExperiment extends Experiment {
     private static final String DAPP_URL = "http://localhost:3000";
     private static final String DAPP_NAME = "truffle-voting-dapp";
     private static int instanceId = 1;
-    private static final String METAMASK_POPUP_URL = "chrome-extension://jbppcachblnkaogkgacckpgohjbpcekf/home.html";
+    private static final String METAMASK_POPUP_URL = "chrome-extension://kdaoeelmbdcinklhldlcmmgmndjcmjpp/home.html";
     private static final String METAMASK_PASSWORD = "12345678";
 
 
