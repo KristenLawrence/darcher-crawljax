@@ -295,7 +295,7 @@ public class AugurExperiment extends Experiment {
         builder.addPlugin((OnUrlLoadPlugin) context -> {
             WebDriver driver = context.getBrowser().getWebDriver();
             System.out.print("Wait for Augur DApp reloading...");
-            new WebDriverWait(driver, Duration.ofSeconds(10)).until(d -> {
+            new WebDriverWait(driver, Duration.ofSeconds(30)).until(d -> {
                 try {
                     WebElement sample = driver.findElement(By.xpath("//*[@id=\"app\"]/main/div/section/section[3]/aside/ul/div[1]/div/div[1]/div/span[2]"));
                     try {
@@ -315,7 +315,7 @@ public class AugurExperiment extends Experiment {
             });
 
             try {
-                Thread.sleep(1500);
+                Thread.sleep(2000);
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
