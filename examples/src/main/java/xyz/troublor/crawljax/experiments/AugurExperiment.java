@@ -7,10 +7,7 @@ import com.crawljax.core.plugin.OnUrlLoadPlugin;
 import com.crawljax.core.state.Identification;
 import com.crawljax.forms.FormInput;
 import org.kristen.crawljax.plugins.grpc.GRPCClientPlugin;
-import org.openqa.selenium.By;
-import org.openqa.selenium.NoSuchElementException;
-import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.WebElement;
+import org.openqa.selenium.*;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
 import java.io.File;
@@ -20,17 +17,17 @@ import java.time.Duration;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
+import java.util.Random;
 import java.util.concurrent.TimeUnit;
 
 public class AugurExperiment extends Experiment {
-    private static final long WAIT_TIME_AFTER_EVENT = 500;
+    private static final long WAIT_TIME_AFTER_EVENT = 1000;
     private static final long WAIT_TIME_AFTER_RELOAD = 500;
     private static final String DAPP_URL = "http://localhost:8080/";
     private static final String DAPP_NAME = "Augur";
     private static int instanceId = 1;
-    private static final String METAMASK_POPUP_URL = "chrome-extension://jbppcachblnkaogkgacckpgohjbpcekf/home.html";
+    private static final String METAMASK_POPUP_URL = "chrome-extension://kdaoeelmbdcinklhldlcmmgmndjcmjpp/home.html";
     private static final String METAMASK_PASSWORD = "12345678";
-    private static final String BROWSER_PROFILE_PATH = "/Users/troublor/workspace/darcher_mics/browsers/Chrome/UserData";
 
     // DApp Gloabal Variables
     private static final String ETHEREUM_ADDRESS = "0x913dA4198E6bE1D5f5E4a40D0667f70C0B5430Eb";
@@ -86,12 +83,12 @@ public class AugurExperiment extends Experiment {
                     int monthMaxDays = cal.getActualMaximum(Calendar.DAY_OF_MONTH);
 
                     // click date picker
-                    webElement.click();
+                    ((JavascriptExecutor) driver).executeScript("arguments[0].click()", webElement);
                     WebElement picker = new WebDriverWait(driver, Duration.ofMillis(100))
                             .until(d -> d.findElement(
                                     By.xpath("//DIV[@class='SingleDatePicker_picker SingleDatePicker_picker_1 SingleDatePicker_picker__directionLeft SingleDatePicker_picker__directionLeft_2']")));
                     // find tomorrow button
-                    if (today > monthMaxDays - 3) {
+                    if (today > monthMaxDays - 15) {
                         // next month
                         picker.findElement(By.className("DayPickerNavigation_rightButton__horizontal")).click();
                         try {
@@ -100,7 +97,7 @@ public class AugurExperiment extends Experiment {
                             e.printStackTrace();
                         }
                     }
-                    cal.add(Calendar.DAY_OF_YEAR, 3);
+                    cal.add(Calendar.DAY_OF_YEAR, 15);
                     int tomorrow = cal.get(Calendar.DAY_OF_MONTH);
                     String monthStr = new SimpleDateFormat("MMMM").format(cal.getTime());
                     List<WebElement> elements =
@@ -108,13 +105,14 @@ public class AugurExperiment extends Experiment {
                     for (WebElement elem :
                             elements) {
                         if (elem.getAttribute("aria-label").contains(monthStr)) {
-                            elem.click();
+                            ((JavascriptExecutor) driver).executeScript("arguments[0].click()", elem);
                             break;
                         }
                     }
 
                     // time picker
-                    driver.findElement(By.cssSelector(".form-styles_TimeSelector")).findElement(By.tagName("BUTTON")).click();
+                    WebElement timePicker = driver.findElement(By.cssSelector(".form-styles_TimeSelector")).findElement(By.tagName("BUTTON"));
+                    ((JavascriptExecutor) driver).executeScript("arguments[0].click()", timePicker);
 
                     // Market question
                     List<WebElement> textAreas = driver.findElements(By.tagName("TEXTAREA"));
@@ -128,23 +126,25 @@ public class AugurExperiment extends Experiment {
                     }
 
                     // Market Category
-                    driver.findElement(By.xpath("//UL[@class='form-styles_CategoryMultiSelect']/LI[1]/*/DIV[@role='button']"))
-                            .click();
+                    WebElement category = driver.findElement(By.xpath("//UL[@class='form-styles_CategoryMultiSelect" +
+                            "']/LI[1]/*/DIV[@role" +
+                            "='button']"));
+                    ((JavascriptExecutor) driver).executeScript("arguments[0].click()", category);
                     WebElement entertainment = new WebDriverWait(driver, Duration.ofMillis(100))
                             .until(d -> d.findElement(By.xpath("//UL[@class='form-styles_CategoryMultiSelect']/LI[1]//BUTTON[@value='Entertainment']")));
-                    entertainment.click();
+                    ((JavascriptExecutor) driver).executeScript("arguments[0].click()", entertainment);
                     WebElement secondaryCategoryBtn = new WebDriverWait(driver, Duration.ofMillis(100))
                             .until(d -> d.findElement(By.xpath("//UL[@class='form-styles_CategoryMultiSelect']/LI[2]/*/DIV[@role='button']")));
-                    secondaryCategoryBtn.click();
+                    ((JavascriptExecutor) driver).executeScript("arguments[0].click()", secondaryCategoryBtn);
                     WebElement awards = new WebDriverWait(driver, Duration.ofMillis(100))
                             .until(d -> d.findElement(By.xpath("//UL[@class='form-styles_CategoryMultiSelect']/LI[2]//BUTTON[@value='Awards']")));
-                    awards.click();
+                    ((JavascriptExecutor) driver).executeScript("arguments[0].click()", awards);
                     WebElement subCategoryBtn = new WebDriverWait(driver, Duration.ofMillis(100))
                             .until(d -> d.findElement(By.xpath("//UL[@class='form-styles_CategoryMultiSelect']/LI[3]/*/DIV[@role='button']")));
-                    subCategoryBtn.click();
+                    ((JavascriptExecutor) driver).executeScript("arguments[0].click()", subCategoryBtn);
                     WebElement academicAwards = new WebDriverWait(driver, Duration.ofMillis(100))
                             .until(d -> d.findElement(By.xpath("//UL[@class='form-styles_CategoryMultiSelect']/LI[3]//BUTTON[@value='Academy Awards']")));
-                    academicAwards.click();
+                    ((JavascriptExecutor) driver).executeScript("arguments[0].click()", academicAwards);
                 });
         builder.crawlRules().click("BUTTON").withText("Create Market");
         builder.crawlRules().click("BUTTON").withText("Create a custom market");
@@ -257,7 +257,7 @@ public class AugurExperiment extends Experiment {
                 new Identification(Identification.How.id, "quantity"))
                 .setInputFiller((driver, webElement, nodeElement) -> {
                     if (webElement.getAttribute("value").equals("")) {
-                        webElement.sendKeys("100");
+                        webElement.sendKeys("10");
                         try {
                             Thread.sleep(100);
                         } catch (InterruptedException e) {
@@ -295,7 +295,7 @@ public class AugurExperiment extends Experiment {
         builder.addPlugin((OnUrlLoadPlugin) context -> {
             WebDriver driver = context.getBrowser().getWebDriver();
             System.out.print("Wait for Augur DApp reloading...");
-            new WebDriverWait(driver, Duration.ofSeconds(10)).until(d -> {
+            new WebDriverWait(driver, Duration.ofSeconds(30)).until(d -> {
                 try {
                     WebElement sample = driver.findElement(By.xpath("//*[@id=\"app\"]/main/div/section/section[3]/aside/ul/div[1]/div/div[1]/div/span[2]"));
                     try {
@@ -315,7 +315,7 @@ public class AugurExperiment extends Experiment {
             });
 
             try {
-                Thread.sleep(1500);
+                Thread.sleep(5000);
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
