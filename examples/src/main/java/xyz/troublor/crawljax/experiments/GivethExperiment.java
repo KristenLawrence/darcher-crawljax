@@ -30,7 +30,7 @@ public class GivethExperiment extends Experiment {
     private static final long WAIT_TIME_AFTER_EVENT = 500;
     private static final long WAIT_TIME_AFTER_RELOAD = 500;
     private static final String DAPP_URL = "http://localhost:3010";
-    private static final String DAPP_NAME = "eth-hot-wallet";
+    private static final String DAPP_NAME = "Giveth";
     private static int instanceId = 1;
     private static final String METAMASK_POPUP_URL = "chrome-extension://jbppcachblnkaogkgacckpgohjbpcekf/home.html";
     private static final String METAMASK_PASSWORD = "12345678";
@@ -181,8 +181,16 @@ public class GivethExperiment extends Experiment {
         // no need to click "Use My Address" anymore
         builder.crawlRules().dontClick("BUTTON").withText("Use My Address");
         // set maximum amount
-        createMileStoneForm.inputField(FormInput.InputType.NUMBER, new Identification(Identification.How.name, "fiatAmount"))
-                .inputValues("1");
+        createMileStoneForm.inputField(FormInput.InputType.CUSTOMIZE, new Identification(Identification.How.name,
+                "fiatAmount"))
+                .setInputFiller((driver, webElement, nodeElement) -> {
+                    webElement.sendKeys("1");
+                    try {
+                        Thread.sleep(500);
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
+                });
         // attach create campaign form at BUTTON[@text='Create Milestone']
         inputSpec.setValuesInForm(createMileStoneForm).beforeClickElement("BUTTON").withText("Create Milestone");
 
@@ -298,6 +306,7 @@ public class GivethExperiment extends Experiment {
         /* Profile view is excluded to reduce search space */
         builder.crawlRules().dontClick("BUTTON").underXPath("//*[@id=\"profile-view\"]");
         builder.crawlRules().dontClick("A").underXPath("//*[@id=\"profile-view\"]");
+        builder.crawlRules().dontClick("A").withText("Profile");
 
         /* donate */
         Form donateForm = new Form();
@@ -311,102 +320,102 @@ public class GivethExperiment extends Experiment {
                 new BrowserConfiguration(EmbeddedBrowser.BrowserType.CHROME_EXISTING, chromeDebuggerAddress));
         builder.addPlugin(new GRPCClientPlugin(DAPP_NAME, instanceId, METAMASK_POPUP_URL, DAPP_URL, METAMASK_PASSWORD));
 
-        builder.addPlugin(new OnUrlLoadPlugin() {
-            @Override
-            public void onUrlLoad(CrawlerContext context) {
-                // change network to foreign with 0.9 possibility
-                double v = new Random().nextDouble();
-                if (v > 1) {
-                    if (!currentNetwork.equals("home")) {
-                        changeNetwork(context.getBrowser().getWebDriver(), "Localhost 8545");
-//                        changeMetamaskAccount(context.getBrowser().getWebDriver(), "Giveth1");
-                    }
-
-                    currentNetwork = "home";
-                } else {
-                    if (!currentNetwork.equals("foreign")) {
-                        changeNetwork(context.getBrowser().getWebDriver(), "Localhost 8546");
-//                        changeMetamaskAccount(context.getBrowser().getWebDriver(), "Giveth0");
-                    }
-                    currentNetwork = "foreign";
-                }
-            }
-
-            private void changeNetwork(WebDriver driver, String networkName) {
-                String originalTab = driver.getWindowHandle();
-                driver.switchTo().newWindow(WindowType.TAB);
-                driver.get(METAMASK_POPUP_URL);
-
-                WebElement element = new WebDriverWait(driver, Duration.ofSeconds(3))
-                        .until(ExpectedConditions.elementToBeClickable(By.className("network-component")));
-                element.click();
-                WebElement dropDown = new WebDriverWait(driver, Duration.ofSeconds(1))
-                        .until(ExpectedConditions.presenceOfElementLocated(By.className("network-droppo")));
-                List<WebElement> networkItems = dropDown.findElements(By.tagName("li"));
-
-                for (WebElement network : networkItems) {
-                    try {
-                        String text = network.getText();
-                        if (!text.contains(networkName)) {
-                            continue;
-                        }
-                        network.click();
-                        new WebDriverWait(driver, Duration.ofSeconds(1))
-                                .until(ExpectedConditions.textToBePresentInElementLocated(
-                                        By.className("network-name"), networkName));
-                        break;
-                    } catch (Exception ignored) {
-                    }
-                }
-
-                driver.close();
-                driver.switchTo().window(originalTab);
-            }
-
-            private void changeMetamaskAccount(WebDriver driver, String accountName) {
-                String originalTab = driver.getWindowHandle();
-                driver.switchTo().newWindow(WindowType.TAB);
-                driver.get(METAMASK_POPUP_URL);
-
-                WebElement element = new WebDriverWait(driver, Duration.ofSeconds(3))
-                        .until(ExpectedConditions.elementToBeClickable(By.className("account-menu__icon")));
-                element.click();
-                WebElement dropDown = new WebDriverWait(driver, Duration.ofSeconds(1))
-                        .until(ExpectedConditions.presenceOfElementLocated(By.className("account-menu")));
-                List<WebElement> accountItems = dropDown.findElements(By.className("account-menu__account"));
-                if (accountName == null) {
-                    WebElement account = accountItems.get(new Random().nextInt(accountItems.size()));
-                    try {
-                        WebElement name = account.findElement(By.className("account-menu__name"));
-                        accountName = name.getText();
-                        account.click();
-                        new WebDriverWait(driver, Duration.ofSeconds(1))
-                                .until(ExpectedConditions.textToBePresentInElementLocated(
-                                        By.className("selected-account__name"), accountName));
-                    } catch (Exception ignored) {
-                    }
-                } else {
-                    for (WebElement account : accountItems) {
-                        try {
-                            WebElement name = account.findElement(By.className("account-menu__name"));
-                            String text = name.getText();
-                            if (!text.contains(accountName)) {
-                                continue;
-                            }
-                            account.click();
-                            new WebDriverWait(driver, Duration.ofSeconds(1))
-                                    .until(ExpectedConditions.textToBePresentInElementLocated(
-                                            By.className("selected-account__name"), accountName));
-                            break;
-                        } catch (Exception ignored) {
-                        }
-                    }
-                }
-
-                driver.close();
-                driver.switchTo().window(originalTab);
-            }
-        });
+//        builder.addPlugin(new OnUrlLoadPlugin() {
+//            @Override
+//            public void onUrlLoad(CrawlerContext context) {
+//                // change network to foreign with 0.9 possibility
+//                double v = new Random().nextDouble();
+//                if (v > 1) {
+//                    if (!currentNetwork.equals("home")) {
+//                        changeNetwork(context.getBrowser().getWebDriver(), "Localhost 8545");
+////                        changeMetamaskAccount(context.getBrowser().getWebDriver(), "Giveth1");
+//                    }
+//
+//                    currentNetwork = "home";
+//                } else {
+//                    if (!currentNetwork.equals("foreign")) {
+//                        changeNetwork(context.getBrowser().getWebDriver(), "Localhost 8546");
+////                        changeMetamaskAccount(context.getBrowser().getWebDriver(), "Giveth0");
+//                    }
+//                    currentNetwork = "foreign";
+//                }
+//            }
+//
+//            private void changeNetwork(WebDriver driver, String networkName) {
+//                String originalTab = driver.getWindowHandle();
+//                driver.switchTo().newWindow(WindowType.TAB);
+//                driver.get(METAMASK_POPUP_URL);
+//
+//                WebElement element = new WebDriverWait(driver, Duration.ofSeconds(3))
+//                        .until(ExpectedConditions.elementToBeClickable(By.className("network-component")));
+//                element.click();
+//                WebElement dropDown = new WebDriverWait(driver, Duration.ofSeconds(1))
+//                        .until(ExpectedConditions.presenceOfElementLocated(By.className("network-droppo")));
+//                List<WebElement> networkItems = dropDown.findElements(By.tagName("li"));
+//
+//                for (WebElement network : networkItems) {
+//                    try {
+//                        String text = network.getText();
+//                        if (!text.contains(networkName)) {
+//                            continue;
+//                        }
+//                        network.click();
+//                        new WebDriverWait(driver, Duration.ofSeconds(1))
+//                                .until(ExpectedConditions.textToBePresentInElementLocated(
+//                                        By.className("network-name"), networkName));
+//                        break;
+//                    } catch (Exception ignored) {
+//                    }
+//                }
+//
+//                driver.close();
+//                driver.switchTo().window(originalTab);
+//            }
+//
+//            private void changeMetamaskAccount(WebDriver driver, String accountName) {
+//                String originalTab = driver.getWindowHandle();
+//                driver.switchTo().newWindow(WindowType.TAB);
+//                driver.get(METAMASK_POPUP_URL);
+//
+//                WebElement element = new WebDriverWait(driver, Duration.ofSeconds(3))
+//                        .until(ExpectedConditions.elementToBeClickable(By.className("account-menu__icon")));
+//                element.click();
+//                WebElement dropDown = new WebDriverWait(driver, Duration.ofSeconds(1))
+//                        .until(ExpectedConditions.presenceOfElementLocated(By.className("account-menu")));
+//                List<WebElement> accountItems = dropDown.findElements(By.className("account-menu__account"));
+//                if (accountName == null) {
+//                    WebElement account = accountItems.get(new Random().nextInt(accountItems.size()));
+//                    try {
+//                        WebElement name = account.findElement(By.className("account-menu__name"));
+//                        accountName = name.getText();
+//                        account.click();
+//                        new WebDriverWait(driver, Duration.ofSeconds(1))
+//                                .until(ExpectedConditions.textToBePresentInElementLocated(
+//                                        By.className("selected-account__name"), accountName));
+//                    } catch (Exception ignored) {
+//                    }
+//                } else {
+//                    for (WebElement account : accountItems) {
+//                        try {
+//                            WebElement name = account.findElement(By.className("account-menu__name"));
+//                            String text = name.getText();
+//                            if (!text.contains(accountName)) {
+//                                continue;
+//                            }
+//                            account.click();
+//                            new WebDriverWait(driver, Duration.ofSeconds(1))
+//                                    .until(ExpectedConditions.textToBePresentInElementLocated(
+//                                            By.className("selected-account__name"), accountName));
+//                            break;
+//                        } catch (Exception ignored) {
+//                        }
+//                    }
+//                }
+//
+//                driver.close();
+//                driver.switchTo().window(originalTab);
+//            }
+//        });
 
         return new CrawljaxRunner(builder.build());
     }
