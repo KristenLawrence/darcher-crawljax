@@ -7,7 +7,7 @@
   "main": "scripts/index.js",
   "scripts": {
     "build": "tsc",
-    "start:experiment": "ts-node scripts/start-crawljax.ts"
+    "start:experiment": "node scripts/start-crawljax.js"
   },
   "author": "KristenLawrence",
   "license": "ISC",
