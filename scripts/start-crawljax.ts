@@ -1,4 +1,4 @@
-import * as prompts from "prompts";
+import prompts from "prompts";
 import * as path from "path";
 import * as fs from "fs";
 import parseDuration from "parse-duration";
@@ -14,7 +14,7 @@ class Worker {
     private stdoutStream: NodeJS.WritableStream;
     private stderrStream: NodeJS.WritableStream;
 
-    private started: boolean = false;
+    private started = false;
 
     constructor(
         private readonly logger: Logger,
@@ -25,10 +25,10 @@ class Worker {
 
     public async start() {
         if (!this.started) {
-            this.logger.info("Initial setting up...")
+            this.logger.info("Initial setting up...");
             Worker.setup();
-            this.stdoutStream = fs.createWriteStream(Worker.stdoutFile, {flags: 'a'});
-            this.stderrStream = fs.createWriteStream(Worker.stderrFile, {flags: 'a'});
+            this.stdoutStream = fs.createWriteStream(Worker.stdoutFile, {flags: "a"});
+            this.stderrStream = fs.createWriteStream(Worker.stderrFile, {flags: "a"});
             await new Promise<void>((resolve, reject) => {
                 const p = child_process.spawn("mvn",
                     ["install", "-DskipTests"], {
@@ -38,11 +38,11 @@ class Worker {
                 // pipe stdout/stderr to file
                 p.stdout.pipe(this.stdoutStream);
                 p.stderr.pipe(this.stderrStream);
-                this.logger.info("Compiling crawljax...")
+                this.logger.info("Compiling crawljax...");
                 p.on("exit", () => resolve());
                 p.on("error", err => reject(err));
-            })
-            this.logger.info("Compiling crawljax...done")
+            });
+            this.logger.info("Compiling crawljax...done");
             this.started = true;
         }
         this.restart();
@@ -51,8 +51,8 @@ class Worker {
 
     public restart() {
         // create stdout/stderr file stream
-        this.stdoutStream = fs.createWriteStream(Worker.stdoutFile, {flags: 'a'});
-        this.stderrStream = fs.createWriteStream(Worker.stderrFile, {flags: 'a'});
+        this.stdoutStream = fs.createWriteStream(Worker.stdoutFile, {flags: "a"});
+        this.stderrStream = fs.createWriteStream(Worker.stderrFile, {flags: "a"});
         // start process
         this.process = child_process.spawn(
             "mvn",
@@ -62,8 +62,8 @@ class Worker {
                 env: Object.assign(process.env, {
                     STATUS_LOG_PATH: Worker.statusFile,
                     CHROME_DEBUGGER_ADDRESS: this.chromeDebuggerAddress,
-                    SUBJECT: this.subject
-                })
+                    SUBJECT: this.subject,
+                }),
             });
         this.process.on("exit", () => {
             // if the process exit by itself, we set this.process = null
@@ -105,6 +105,7 @@ class Worker {
         // child_process.spawnSync("pkill", ["-INT", "Google Chrome"]); // kill Google Chrome
         try {
             child_process.execSync("lsof -ti:1237 | xargs kill"); // kill the websocket server on port 1237
+            // eslint-disable-next-line no-empty
         } catch (ignored) {
         }
     }
@@ -116,6 +117,7 @@ export async function startCrawljax(logger: Logger, chromeDebuggerAddress: strin
         Worker.stderrFile = path.join(logDir, "crawljax.stderr.log");
         Worker.statusFile = path.join(logDir, "crawljax.status.log");
     }
+    // eslint-disable-next-line no-async-promise-executor
     return new Promise<void>(async resolve => {
         type CrawljaxStatus =
             "Maximum time passed"
@@ -124,8 +126,8 @@ export async function startCrawljax(logger: Logger, chromeDebuggerAddress: strin
             | "Errored"
             | "Stopped manually";
 
-        let shouldContinue: boolean = true;
-        let subprocess: Worker = new Worker(logger, chromeDebuggerAddress, mainClass);
+        let shouldContinue = true;
+        const subprocess: Worker = new Worker(logger, chromeDebuggerAddress, mainClass);
         await subprocess.start();
 
         // watch status of crawljax, since crawljax cannot exit by itself
@@ -133,35 +135,35 @@ export async function startCrawljax(logger: Logger, chromeDebuggerAddress: strin
             if (!fs.existsSync(Worker.statusFile)) {
                 return null;
             }
-            return fs.readFileSync(Worker.statusFile, {encoding: 'utf-8'}) as CrawljaxStatus;
-        }
+            return fs.readFileSync(Worker.statusFile, {encoding: "utf-8"}) as CrawljaxStatus;
+        };
         const interval = setInterval(async () => {
             const status = checkCrawljaxStatue();
             if (!status) {
                 // file not exist
                 return;
             }
-            logger.info("Crawljax status updated", {status: status})
+            logger.info("Crawljax status updated", {status: status});
             switch (status) {
-                case "Errored":
-                case "Stopped manually":
-                    // should stop the process ahead
-                    await subprocess.stop();
-                    break;
-                case "Maximum time passed":
-                case "Maximum states passed":
-                case "Exhausted":
-                    // should stop the process ahead
-                    await subprocess.stop();
-                    if (shouldContinue) {
-                        if (fs.existsSync(Worker.statusFile)) {
-                            fs.unlinkSync(Worker.statusFile);
-                        }
-                        await subprocess.start();
+            case "Errored":
+            case "Stopped manually":
+                // should stop the process ahead
+                await subprocess.stop();
+                break;
+            case "Maximum time passed":
+            case "Maximum states passed":
+            case "Exhausted":
+                // should stop the process ahead
+                await subprocess.stop();
+                if (shouldContinue) {
+                    if (fs.existsSync(Worker.statusFile)) {
+                        fs.unlinkSync(Worker.statusFile);
                     }
-                    break;
-                default:
-                    logger.warn("Unknown crawljax status", {status});
+                    await subprocess.start();
+                }
+                break;
+            default:
+                logger.warn("Unknown crawljax status", {status});
             }
         }, 500);
         setTimeout(async () => {
@@ -173,7 +175,7 @@ export async function startCrawljax(logger: Logger, chromeDebuggerAddress: strin
             resolve();
         }, timeBudget * 1000);
     });
-};
+}
 
 if (require.main === module) {
     (async () => {
@@ -196,7 +198,7 @@ if (require.main === module) {
                 }
             }
             return null;
-        }
+        };
 
         const response0 = await prompts({
             type: "text",
@@ -207,8 +209,8 @@ if (require.main === module) {
         });
 
         const parseTimeBudget = (budget: string): number | null => {
-            return parseDuration(budget, 's');
-        }
+            return parseDuration(budget, "s");
+        };
 
         const response1 = await prompts({
             type: "text",
@@ -218,10 +220,10 @@ if (require.main === module) {
             format: prev => parseTimeBudget(prev) as number,
         });
 
-        const logger = new Logger("Crawljax", 'info');
+        const logger = new Logger("Crawljax", "info");
         logger.info("Starting crawljax...", {
             subject: path.basename(response0.mainClass),
-            timeBudget: response1.timeBudget + "s"
+            timeBudget: response1.timeBudget + "s",
         });
 
         await startCrawljax(logger, "localhost:9222", response0.mainClass, response1.timeBudget);

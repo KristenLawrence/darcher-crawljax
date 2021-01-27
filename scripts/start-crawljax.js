@@ -1,4 +1,23 @@
 "use strict";
+var __createBinding = (this && this.__createBinding) || (Object.create ? (function(o, m, k, k2) {
+    if (k2 === undefined) k2 = k;
+    Object.defineProperty(o, k2, { enumerable: true, get: function() { return m[k]; } });
+}) : (function(o, m, k, k2) {
+    if (k2 === undefined) k2 = k;
+    o[k2] = m[k];
+}));
+var __setModuleDefault = (this && this.__setModuleDefault) || (Object.create ? (function(o, v) {
+    Object.defineProperty(o, "default", { enumerable: true, value: v });
+}) : function(o, v) {
+    o["default"] = v;
+});
+var __importStar = (this && this.__importStar) || function (mod) {
+    if (mod && mod.__esModule) return mod;
+    var result = {};
+    if (mod != null) for (var k in mod) if (k !== "default" && Object.prototype.hasOwnProperty.call(mod, k)) __createBinding(result, mod, k);
+    __setModuleDefault(result, mod);
+    return result;
+};
 var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
     function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
     return new (P || (P = Promise))(function (resolve, reject) {
@@ -8,13 +27,16 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
         step((generator = generator.apply(thisArg, _arguments || [])).next());
     });
 };
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.startCrawljax = void 0;
-const prompts = require("prompts");
-const path = require("path");
-const fs = require("fs");
-const parse_duration_1 = require("parse-duration");
-const child_process = require("child_process");
+const prompts_1 = __importDefault(require("prompts"));
+const path = __importStar(require("path"));
+const fs = __importStar(require("fs"));
+const parse_duration_1 = __importDefault(require("parse-duration"));
+const child_process = __importStar(require("child_process"));
 const helpers_1 = require("@darcher/helpers");
 class Worker {
     constructor(logger, chromeDebuggerAddress, subject) {
@@ -28,8 +50,8 @@ class Worker {
             if (!this.started) {
                 this.logger.info("Initial setting up...");
                 Worker.setup();
-                this.stdoutStream = fs.createWriteStream(Worker.stdoutFile, { flags: 'a' });
-                this.stderrStream = fs.createWriteStream(Worker.stderrFile, { flags: 'a' });
+                this.stdoutStream = fs.createWriteStream(Worker.stdoutFile, { flags: "a" });
+                this.stderrStream = fs.createWriteStream(Worker.stderrFile, { flags: "a" });
                 yield new Promise((resolve, reject) => {
                     const p = child_process.spawn("mvn", ["install", "-DskipTests"], {
                         cwd: path.join(__dirname, ".."),
@@ -51,8 +73,8 @@ class Worker {
     }
     restart() {
         // create stdout/stderr file stream
-        this.stdoutStream = fs.createWriteStream(Worker.stdoutFile, { flags: 'a' });
-        this.stderrStream = fs.createWriteStream(Worker.stderrFile, { flags: 'a' });
+        this.stdoutStream = fs.createWriteStream(Worker.stdoutFile, { flags: "a" });
+        this.stderrStream = fs.createWriteStream(Worker.stderrFile, { flags: "a" });
         // start process
         this.process = child_process.spawn("mvn", ["exec:java", "-pl", "examples"], {
             cwd: path.join(__dirname, ".."),
@@ -60,8 +82,8 @@ class Worker {
             env: Object.assign(process.env, {
                 STATUS_LOG_PATH: Worker.statusFile,
                 CHROME_DEBUGGER_ADDRESS: this.chromeDebuggerAddress,
-                SUBJECT: this.subject
-            })
+                SUBJECT: this.subject,
+            }),
         });
         this.process.on("exit", () => {
             // if the process exit by itself, we set this.process = null
@@ -99,6 +121,7 @@ class Worker {
         // child_process.spawnSync("pkill", ["-INT", "Google Chrome"]); // kill Google Chrome
         try {
             child_process.execSync("lsof -ti:1237 | xargs kill"); // kill the websocket server on port 1237
+            // eslint-disable-next-line no-empty
         }
         catch (ignored) {
         }
@@ -114,16 +137,17 @@ function startCrawljax(logger, chromeDebuggerAddress, mainClass, timeBudget, log
             Worker.stderrFile = path.join(logDir, "crawljax.stderr.log");
             Worker.statusFile = path.join(logDir, "crawljax.status.log");
         }
+        // eslint-disable-next-line no-async-promise-executor
         return new Promise((resolve) => __awaiter(this, void 0, void 0, function* () {
             let shouldContinue = true;
-            let subprocess = new Worker(logger, chromeDebuggerAddress, mainClass);
+            const subprocess = new Worker(logger, chromeDebuggerAddress, mainClass);
             yield subprocess.start();
             // watch status of crawljax, since crawljax cannot exit by itself
             const checkCrawljaxStatue = () => {
                 if (!fs.existsSync(Worker.statusFile)) {
                     return null;
                 }
-                return fs.readFileSync(Worker.statusFile, { encoding: 'utf-8' });
+                return fs.readFileSync(Worker.statusFile, { encoding: "utf-8" });
             };
             const interval = setInterval(() => __awaiter(this, void 0, void 0, function* () {
                 const status = checkCrawljaxStatue();
@@ -166,7 +190,6 @@ function startCrawljax(logger, chromeDebuggerAddress, mainClass, timeBudget, log
     });
 }
 exports.startCrawljax = startCrawljax;
-;
 if (require.main === module) {
     (() => __awaiter(void 0, void 0, void 0, function* () {
         /**
@@ -189,7 +212,7 @@ if (require.main === module) {
             }
             return null;
         };
-        const response0 = yield prompts({
+        const response0 = yield prompts_1.default({
             type: "text",
             name: "mainClass",
             message: "What is the main class?",
@@ -197,19 +220,19 @@ if (require.main === module) {
             format: prev => findMainClass(prev),
         });
         const parseTimeBudget = (budget) => {
-            return parse_duration_1.default(budget, 's');
+            return parse_duration_1.default(budget, "s");
         };
-        const response1 = yield prompts({
+        const response1 = yield prompts_1.default({
             type: "text",
             name: "timeBudget",
             message: "What is the time budget?",
             validate: prev => typeof parseTimeBudget(prev) === "number",
             format: prev => parseTimeBudget(prev),
         });
-        const logger = new helpers_1.Logger("Crawljax", 'info');
+        const logger = new helpers_1.Logger("Crawljax", "info");
         logger.info("Starting crawljax...", {
             subject: path.basename(response0.mainClass),
-            timeBudget: response1.timeBudget + "s"
+            timeBudget: response1.timeBudget + "s",
         });
         yield startCrawljax(logger, "localhost:9222", response0.mainClass, response1.timeBudget);
     }))();
