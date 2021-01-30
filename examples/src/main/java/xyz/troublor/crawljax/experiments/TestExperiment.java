@@ -1,24 +1,20 @@
 package xyz.troublor.crawljax.experiments;
 
 import com.crawljax.browser.EmbeddedBrowser;
-import com.crawljax.core.CrawlSession;
 import com.crawljax.core.CrawljaxRunner;
-import com.crawljax.core.ExitNotifier;
 import com.crawljax.core.configuration.*;
-import com.crawljax.core.state.Identification;
-import com.crawljax.forms.FormInput;
 import com.crawljax.plugins.crawloverview.CrawlOverview;
 import org.kristen.crawljax.plugins.grpc.GRPCClientPlugin;
 
 import java.io.File;
-import java.io.FileWriter;
 import java.io.IOException;
+import java.nio.file.Path;
 import java.util.concurrent.TimeUnit;
 
 public class TestExperiment extends Experiment {
     private static final long WAIT_TIME_AFTER_EVENT = 500;
     private static final long WAIT_TIME_AFTER_RELOAD = 500;
-    private static final String DAPP_URL = "file:///Users/troublor/workspace/darcher_mics/metamask-test/index.html";
+    private static final String DAPP_URL = "file:///home/troublor/Desktop/testhtml/index.html";
     private static final String DAPP_NAME = "Test DApp";
     private static int instanceId = 1;
     private static final String METAMASK_POPUP_URL = "chrome-extension://jbppcachblnkaogkgacckpgohjbpcekf/home.html";
@@ -29,7 +25,7 @@ public class TestExperiment extends Experiment {
     /**
      * Run this method to start the crawl.
      */
-    public CrawljaxRunner initialize(String chromeDebuggerAddress) {
+    public CrawljaxRunner initialize(Path coverageDir, String chromeDebuggerAddress) {
         CrawljaxConfiguration.CrawljaxConfigurationBuilder builder = CrawljaxConfiguration.builderFor(DAPP_URL);
 
         builder.crawlRules().setFormFillMode(CrawlRules.FormFillMode.NORMAL);
@@ -69,6 +65,6 @@ public class TestExperiment extends Experiment {
     }
 
     public static void main(String[] args) throws IOException {
-        new TestExperiment().start("scripts" + File.separator + "status.log", "localhost:9222");
+        new TestExperiment().start("script/coverage", "scripts" + File.separator + "status.log", "localhost:9222");
     }
 }

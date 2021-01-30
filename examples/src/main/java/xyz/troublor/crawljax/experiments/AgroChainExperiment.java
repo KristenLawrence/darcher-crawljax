@@ -3,12 +3,11 @@ package xyz.troublor.crawljax.experiments;
 import com.crawljax.browser.EmbeddedBrowser;
 import com.crawljax.core.CrawljaxRunner;
 import com.crawljax.core.configuration.*;
-import com.crawljax.core.state.Identification;
-import com.crawljax.forms.FormInput;
 import org.kristen.crawljax.plugins.grpc.GRPCClientPlugin;
 
 import java.io.File;
 import java.io.IOException;
+import java.nio.file.Path;
 import java.util.concurrent.TimeUnit;
 
 public class AgroChainExperiment extends Experiment {
@@ -26,7 +25,7 @@ public class AgroChainExperiment extends Experiment {
     /**
      * Run this method to start the crawl.
      */
-    protected CrawljaxRunner initialize(String chromeDebuggerAddress) {
+    protected CrawljaxRunner initialize(Path coverageDir, String chromeDebuggerAddress) {
         CrawljaxConfiguration.CrawljaxConfigurationBuilder builder = CrawljaxConfiguration.builderFor(DAPP_URL);
 
 //        builder.crawlRules().setFormFillMode(CrawlRules.FormFillMode.RANDOM);
@@ -67,6 +66,6 @@ public class AgroChainExperiment extends Experiment {
     }
 
     public static void main(String[] args) throws IOException {
-        new AgroChainExperiment().start("scripts" + File.separator + "status.log", "localhost:9222");
+        new AgroChainExperiment().start("script/coverage", "scripts" + File.separator + "status.log", "localhost:9222");
     }
 }

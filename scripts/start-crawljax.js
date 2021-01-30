@@ -1,23 +1,4 @@
 "use strict";
-var __createBinding = (this && this.__createBinding) || (Object.create ? (function(o, m, k, k2) {
-    if (k2 === undefined) k2 = k;
-    Object.defineProperty(o, k2, { enumerable: true, get: function() { return m[k]; } });
-}) : (function(o, m, k, k2) {
-    if (k2 === undefined) k2 = k;
-    o[k2] = m[k];
-}));
-var __setModuleDefault = (this && this.__setModuleDefault) || (Object.create ? (function(o, v) {
-    Object.defineProperty(o, "default", { enumerable: true, value: v });
-}) : function(o, v) {
-    o["default"] = v;
-});
-var __importStar = (this && this.__importStar) || function (mod) {
-    if (mod && mod.__esModule) return mod;
-    var result = {};
-    if (mod != null) for (var k in mod) if (k !== "default" && Object.prototype.hasOwnProperty.call(mod, k)) __createBinding(result, mod, k);
-    __setModuleDefault(result, mod);
-    return result;
-};
 var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
     function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
     return new (P || (P = Promise))(function (resolve, reject) {
@@ -27,16 +8,13 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
         step((generator = generator.apply(thisArg, _arguments || [])).next());
     });
 };
-var __importDefault = (this && this.__importDefault) || function (mod) {
-    return (mod && mod.__esModule) ? mod : { "default": mod };
-};
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.startCrawljax = void 0;
-const prompts_1 = __importDefault(require("prompts"));
-const path = __importStar(require("path"));
-const fs = __importStar(require("fs"));
-const parse_duration_1 = __importDefault(require("parse-duration"));
-const child_process = __importStar(require("child_process"));
+const prompts_1 = require("prompts");
+const path = require("path");
+const fs = require("fs");
+const parse_duration_1 = require("parse-duration");
+const child_process = require("child_process");
 const helpers_1 = require("@darcher/helpers");
 class Worker {
     constructor(logger, chromeDebuggerAddress, subject) {
@@ -44,6 +22,9 @@ class Worker {
         this.chromeDebuggerAddress = chromeDebuggerAddress;
         this.subject = subject;
         this.started = false;
+        if (fs.existsSync(Worker.coverageDir)) {
+            fs.rmdirSync(Worker.coverageDir, { recursive: true });
+        }
     }
     start() {
         return __awaiter(this, void 0, void 0, function* () {
@@ -80,6 +61,7 @@ class Worker {
             cwd: path.join(__dirname, ".."),
             stdio: ["inherit", "pipe", "pipe"],
             env: Object.assign(process.env, {
+                COVERAGE_DIR: Worker.coverageDir,
                 STATUS_LOG_PATH: Worker.statusFile,
                 CHROME_DEBUGGER_ADDRESS: this.chromeDebuggerAddress,
                 SUBJECT: this.subject,
@@ -130,12 +112,14 @@ class Worker {
 Worker.stdoutFile = path.join(__dirname, "stdout.log");
 Worker.stderrFile = path.join(__dirname, "stderr.log");
 Worker.statusFile = path.join(__dirname, "status.log");
+Worker.coverageDir = path.join(__dirname, "coverage", "client");
 function startCrawljax(logger, chromeDebuggerAddress, mainClass, timeBudget, logDir) {
     return __awaiter(this, void 0, void 0, function* () {
         if (logDir) {
             Worker.stdoutFile = path.join(logDir, "crawljax.stdout.log");
             Worker.stderrFile = path.join(logDir, "crawljax.stderr.log");
             Worker.statusFile = path.join(logDir, "crawljax.status.log");
+            Worker.coverageDir = path.join(logDir, "coverage", "client");
         }
         // eslint-disable-next-line no-async-promise-executor
         return new Promise((resolve) => __awaiter(this, void 0, void 0, function* () {

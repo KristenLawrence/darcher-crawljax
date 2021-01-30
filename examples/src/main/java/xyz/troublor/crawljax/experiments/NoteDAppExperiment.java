@@ -7,15 +7,10 @@ import com.crawljax.core.state.Identification;
 import com.crawljax.forms.FormInput;
 import com.crawljax.forms.InputValue;
 import org.kristen.crawljax.plugins.grpc.GRPCClientPlugin;
-import org.openqa.selenium.By;
-import org.openqa.selenium.JavascriptExecutor;
-import org.openqa.selenium.WebElement;
-import org.openqa.selenium.support.ui.ExpectedConditions;
-import org.openqa.selenium.support.ui.WebDriverWait;
 
 import java.io.File;
 import java.io.IOException;
-import java.time.Duration;
+import java.nio.file.Path;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicInteger;
 
@@ -32,7 +27,7 @@ public class NoteDAppExperiment extends Experiment {
     /**
      * Run this method to start the crawl.
      */
-    protected CrawljaxRunner initialize(String chromeDebuggerAddress) {
+    protected CrawljaxRunner initialize(Path coverageDir, String chromeDebuggerAddress) {
         CrawljaxConfiguration.CrawljaxConfigurationBuilder builder = CrawljaxConfiguration.builderFor(DAPP_URL);
 
 //        builder.crawlRules().setFormFillMode(CrawlRules.FormFillMode.RANDOM);
@@ -80,6 +75,6 @@ public class NoteDAppExperiment extends Experiment {
     }
 
     public static void main(String[] args) throws IOException {
-        new NoteDAppExperiment().start("scripts" + File.separator + "status.log", "localhost:9222");
+        new NoteDAppExperiment().start("script/coverage", "scripts" + File.separator + "status.log", "localhost:9222");
     }
 }

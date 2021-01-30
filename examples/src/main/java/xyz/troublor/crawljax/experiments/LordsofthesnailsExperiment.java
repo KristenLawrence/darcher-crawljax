@@ -7,7 +7,6 @@ import com.crawljax.core.configuration.CrawlRules;
 import com.crawljax.core.configuration.CrawljaxConfiguration;
 import com.crawljax.core.configuration.InputSpecification;
 import com.crawljax.core.plugin.OnUrlLoadPlugin;
-import com.crawljax.plugins.crawloverview.CrawlOverview;
 import org.kristen.crawljax.plugins.grpc.GRPCClientPlugin;
 import org.openqa.selenium.By;
 import org.openqa.selenium.NoSuchElementException;
@@ -17,6 +16,7 @@ import org.openqa.selenium.support.ui.WebDriverWait;
 
 import java.io.File;
 import java.io.IOException;
+import java.nio.file.Path;
 import java.time.Duration;
 import java.util.concurrent.TimeUnit;
 
@@ -34,7 +34,7 @@ public class LordsofthesnailsExperiment extends Experiment {
     /**
      * Run this method to start the crawl.
      */
-    protected CrawljaxRunner initialize(String chromeDebuggerAddress) {
+    protected CrawljaxRunner initialize(Path coverageDir, String chromeDebuggerAddress) {
         CrawljaxConfiguration.CrawljaxConfigurationBuilder builder = CrawljaxConfiguration.builderFor(DAPP_URL);
 
 //        builder.crawlRules().setFormFillMode(CrawlRules.FormFillMode.RANDOM);
@@ -93,6 +93,6 @@ public class LordsofthesnailsExperiment extends Experiment {
     }
 
     public static void main(String[] args) throws IOException {
-        new LordsofthesnailsExperiment().start("scripts" + File.separator + "status.log", "localhost:9222");
+        new LordsofthesnailsExperiment().start("script/coverage", "scripts" + File.separator + "status.log", "localhost:9222");
     }
 }

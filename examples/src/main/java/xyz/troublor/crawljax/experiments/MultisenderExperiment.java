@@ -6,7 +6,6 @@ import com.crawljax.core.configuration.*;
 import com.crawljax.core.plugin.OnUrlLoadPlugin;
 import com.crawljax.core.state.Identification;
 import com.crawljax.forms.FormInput;
-import com.crawljax.forms.InputValue;
 import org.kristen.crawljax.plugins.grpc.GRPCClientPlugin;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebElement;
@@ -15,9 +14,9 @@ import org.openqa.selenium.support.ui.WebDriverWait;
 
 import java.io.File;
 import java.io.IOException;
+import java.nio.file.Path;
 import java.time.Duration;
 import java.util.concurrent.TimeUnit;
-import java.util.concurrent.atomic.AtomicInteger;
 
 public class MultisenderExperiment extends Experiment {
 
@@ -37,7 +36,7 @@ public class MultisenderExperiment extends Experiment {
     /**
      * Run this method to start the crawl.
      */
-    protected CrawljaxRunner initialize(String chromeDebuggerAddress) {
+    protected CrawljaxRunner initialize(Path coverageDir, String chromeDebuggerAddress) {
         CrawljaxConfiguration.CrawljaxConfigurationBuilder builder = CrawljaxConfiguration.builderFor(DAPP_URL);
 
 //        builder.crawlRules().setFormFillMode(CrawlRules.FormFillMode.RANDOM);
@@ -107,6 +106,6 @@ public class MultisenderExperiment extends Experiment {
     }
 
     public static void main(String[] args) throws IOException {
-        new MultisenderExperiment().start("scripts" + File.separator + "status.log", "localhost:9222");
+        new MultisenderExperiment().start("script/coverage", "scripts" + File.separator + "status.log", "localhost:9222");
     }
 }

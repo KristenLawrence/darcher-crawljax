@@ -1,17 +1,12 @@
 package xyz.troublor.crawljax.experiments;
 
 import com.crawljax.browser.EmbeddedBrowser;
-import com.crawljax.core.CrawlerContext;
 import com.crawljax.core.CrawljaxRunner;
 import com.crawljax.core.configuration.*;
-import com.crawljax.core.plugin.OnFireEventSucceededPlugin;
-import com.crawljax.core.plugin.OnUrlFirstLoadPlugin;
-import com.crawljax.core.plugin.OnUrlLoadPlugin;
 import com.crawljax.core.state.Identification;
 import com.crawljax.forms.FormInput;
 import com.crawljax.forms.InputValue;
 import org.kristen.crawljax.plugins.grpc.GRPCClientPlugin;
-import org.kristen.rpc.darcher.DappTestService;
 import org.openqa.selenium.*;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
@@ -19,6 +14,7 @@ import org.w3c.dom.Node;
 
 import java.io.File;
 import java.io.IOException;
+import java.nio.file.Path;
 import java.time.Duration;
 import java.util.List;
 import java.util.Random;
@@ -44,7 +40,7 @@ public class GivethExperiment extends Experiment {
     /**
      * Run this method to start the crawl.
      */
-    protected CrawljaxRunner initialize(String chromeDebuggerAddress) {
+    protected CrawljaxRunner initialize(Path coverageDir, String chromeDebuggerAddress) {
         CrawljaxConfiguration.CrawljaxConfigurationBuilder builder = CrawljaxConfiguration.builderFor(DAPP_URL);
 
 //        builder.crawlRules().setFormFillMode(CrawlRules.FormFillMode.RANDOM);
@@ -421,6 +417,6 @@ public class GivethExperiment extends Experiment {
     }
 
     public static void main(String[] args) throws IOException {
-        new GivethExperiment().start("scripts" + File.separator + "status.log", "localhost:9222");
+        new GivethExperiment().start("script/coverage", "scripts" + File.separator + "status.log", "localhost:9222");
     }
 }

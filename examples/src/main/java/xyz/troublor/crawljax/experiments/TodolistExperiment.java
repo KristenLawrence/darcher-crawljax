@@ -6,13 +6,13 @@ import com.crawljax.core.configuration.*;
 import com.crawljax.core.state.Identification;
 import com.crawljax.forms.FormHandler;
 import com.crawljax.forms.FormInput;
-import com.crawljax.forms.InputValue;
 import com.crawljax.forms.RandomInputValueGenerator;
 import org.kristen.crawljax.plugins.grpc.GRPCClientPlugin;
 import org.openqa.selenium.Keys;
 
 import java.io.File;
 import java.io.IOException;
+import java.nio.file.Path;
 import java.util.concurrent.TimeUnit;
 
 public class TodolistExperiment extends Experiment {
@@ -30,7 +30,7 @@ public class TodolistExperiment extends Experiment {
     /**
      * Run this method to start the crawl.
      */
-    protected CrawljaxRunner initialize(String chromeDebuggerAddress) {
+    protected CrawljaxRunner initialize(Path coverageDir, String chromeDebuggerAddress) {
         CrawljaxConfiguration.CrawljaxConfigurationBuilder builder = CrawljaxConfiguration.builderFor(DAPP_URL);
 
 //        builder.crawlRules().setFormFillMode(CrawlRules.FormFillMode.RANDOM);
@@ -75,13 +75,14 @@ public class TodolistExperiment extends Experiment {
         builder.crawlRules().setInputSpec(inputSpec);
         builder.setBrowserConfig(
                 new BrowserConfiguration(EmbeddedBrowser.BrowserType.CHROME_EXISTING, chromeDebuggerAddress));
-        builder.addPlugin(new GRPCClientPlugin(DAPP_NAME, instanceId, METAMASK_POPUP_URL, DAPP_URL, METAMASK_PASSWORD));
-
+        builder.addPlugin(new GRPCClientPlugin(DAPP_NAME, instanceId, METAMASK_POPUP_URL, DAPP_URL,
+                METAMASK_PASSWORD));
+        builder.addPlugin(new ClientSideCoverageCollectorPlugin(coverageDir));
 
         return new CrawljaxRunner(builder.build());
     }
 
     public static void main(String[] args) throws IOException {
-        new TodolistExperiment().start("scripts" + File.separator + "status.log", "localhost:9222");
+        new TodolistExperiment().start("script/coverage", "scripts" + File.separator + "status.log", "localhost:9222");
     }
 }

@@ -4,11 +4,13 @@ import * as fs from "fs";
 import parseDuration from "parse-duration";
 import * as child_process from "child_process";
 import {Logger, sleep} from "@darcher/helpers";
+import {log} from "util";
 
 class Worker {
     public static stdoutFile = path.join(__dirname, "stdout.log");
     public static stderrFile = path.join(__dirname, "stderr.log");
     public static statusFile = path.join(__dirname, "status.log");
+    public static coverageDir = path.join(__dirname, "coverage", "client");
 
     private process: child_process.ChildProcess | null;
     private stdoutStream: NodeJS.WritableStream;
@@ -21,6 +23,9 @@ class Worker {
         private readonly chromeDebuggerAddress: string,
         private readonly subject: string,
     ) {
+        if (fs.existsSync(Worker.coverageDir)) {
+            fs.rmdirSync(Worker.coverageDir, {recursive: true});
+        }
     }
 
     public async start() {
@@ -60,6 +65,7 @@ class Worker {
                 cwd: path.join(__dirname, ".."),
                 stdio: ["inherit", "pipe", "pipe"],
                 env: Object.assign(process.env, {
+                    COVERAGE_DIR: Worker.coverageDir,
                     STATUS_LOG_PATH: Worker.statusFile,
                     CHROME_DEBUGGER_ADDRESS: this.chromeDebuggerAddress,
                     SUBJECT: this.subject,
@@ -116,6 +122,7 @@ export async function startCrawljax(logger: Logger, chromeDebuggerAddress: strin
         Worker.stdoutFile = path.join(logDir, "crawljax.stdout.log");
         Worker.stderrFile = path.join(logDir, "crawljax.stderr.log");
         Worker.statusFile = path.join(logDir, "crawljax.status.log");
+        Worker.coverageDir = path.join(logDir, "coverage", "client");
     }
     // eslint-disable-next-line no-async-promise-executor
     return new Promise<void>(async resolve => {

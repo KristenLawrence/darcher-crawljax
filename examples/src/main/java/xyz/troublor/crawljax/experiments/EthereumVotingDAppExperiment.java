@@ -1,35 +1,23 @@
 package xyz.troublor.crawljax.experiments;
 
 import com.crawljax.browser.EmbeddedBrowser;
-import com.crawljax.condition.browserwaiter.ExpectedCondition;
-import com.crawljax.core.CrawlSession;
 import com.crawljax.core.CrawljaxRunner;
-import com.crawljax.core.ExitNotifier;
 import com.crawljax.core.configuration.*;
-import com.crawljax.core.plugin.PostCrawlingPlugin;
 import com.crawljax.core.state.Identification;
 import com.crawljax.forms.FormInput;
 import com.crawljax.forms.InputValue;
-import jnr.ffi.annotations.In;
 import org.kristen.crawljax.plugins.grpc.GRPCClientPlugin;
 import org.openqa.selenium.*;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
-import org.web3j.crypto.Credentials;
-import org.web3j.crypto.Wallet;
-import org.web3j.crypto.WalletUtils;
-import org.web3j.protocol.Web3j;
-import org.web3j.protocol.http.HttpService;
 
 import java.io.File;
 import java.io.IOException;
+import java.nio.file.Path;
 import java.time.Duration;
 import java.util.List;
 import java.util.Random;
 import java.util.concurrent.TimeUnit;
-import java.util.concurrent.atomic.AtomicInteger;
-
-import static com.crawljax.core.state.Eventable.EventType.click;
 
 public class EthereumVotingDAppExperiment extends Experiment {
 
@@ -46,7 +34,7 @@ public class EthereumVotingDAppExperiment extends Experiment {
     /**
      * Run this method to start the crawl.
      */
-    protected CrawljaxRunner initialize(String chromeDebuggerAddress) {
+    protected CrawljaxRunner initialize(Path coverageDir, String chromeDebuggerAddress) {
         CrawljaxConfiguration.CrawljaxConfigurationBuilder builder = CrawljaxConfiguration.builderFor(DAPP_URL);
 
 //        builder.crawlRules().setFormFillMode(CrawlRules.FormFillMode.RANDOM);
@@ -202,6 +190,6 @@ public class EthereumVotingDAppExperiment extends Experiment {
     }
 
     public static void main(String[] args) throws IOException {
-        new EthereumVotingDAppExperiment().start("scripts" + File.separator + "status.log", "localhost:9222");
+        new EthereumVotingDAppExperiment().start("script/coverage", "scripts" + File.separator + "status.log", "localhost:9222");
     }
 }

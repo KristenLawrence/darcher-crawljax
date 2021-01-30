@@ -98,6 +98,8 @@
 					<mainClass>xyz.troublor.crawljax.experiments.ExperimentLauncher</mainClass>
 					<arguments>
 						<!--suppress UnresolvedMavenProperty -->
+						<argument>${env.COVERAGE_DIR}</argument>
+						<!--suppress UnresolvedMavenProperty -->
 						<argument>${env.STATUS_LOG_PATH}</argument>
 						<!--suppress UnresolvedMavenProperty -->
 						<argument>${env.CHROME_DEBUGGER_ADDRESS}</argument>

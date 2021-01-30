@@ -17,6 +17,7 @@ import org.w3c.dom.Node;
 
 import java.io.File;
 import java.io.IOException;
+import java.nio.file.Path;
 import java.time.Duration;
 import java.util.List;
 import java.util.Random;
@@ -43,7 +44,7 @@ public class GivethForeignExperiment extends Experiment {
      *
      * @throws IOException when the output folder cannot be created or emptied.
      */
-    public CrawljaxRunner initialize(String chromeDebuggerAddress) {
+    public CrawljaxRunner initialize(Path coverageDir, String chromeDebuggerAddress) {
         CrawljaxConfiguration.CrawljaxConfigurationBuilder builder = CrawljaxConfiguration.builderFor(DAPP_URL);
 
 //        builder.crawlRules().setFormFillMode(CrawlRules.FormFillMode.RANDOM);
@@ -289,6 +290,6 @@ public class GivethForeignExperiment extends Experiment {
     }
 
     public static void main(String[] args) throws IOException {
-        new GivethForeignExperiment().start("scripts" + File.separator + "status.log", "localhost:9222");
+        new GivethForeignExperiment().start("script/coverage", "scripts" + File.separator + "status.log", "localhost:9222");
     }
 }

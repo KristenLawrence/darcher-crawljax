@@ -43,7 +43,8 @@ public class Plugins {
 					OnRevisitStatePlugin.class, OnUrlLoadPlugin.class,
 					PostCrawlingPlugin.class, PreStateCrawlingPlugin.class,
 					PreCrawlingPlugin.class, OnUrlFirstLoadPlugin.class,
-					OnFireEventSucceededPlugin.class);
+					OnFireEventSucceededPlugin.class,
+					PreResetPlugin.class);
 
 	private final ImmutableListMultimap<Class<? extends Plugin>, Plugin> plugins;
 
@@ -398,7 +399,21 @@ public class Plugins {
 				}
 			}
 		}
+	}
 
+	public void runPreResetPlugins(CrawlerContext context) {
+		LOGGER.debug("Running PreResetPlugins...");
+		counters.get(PreResetPlugin.class).inc();
+		for (Plugin plugin : plugins.get(PreResetPlugin.class)) {
+			if (plugin instanceof PreResetPlugin) {
+				try {
+					LOGGER.debug("Calling plugin {}", plugin);
+					((PreResetPlugin) plugin).preReset(context);
+				} catch (RuntimeException e) {
+					reportFailingPlugin(plugin, e);
+				}
+			}
+		}
 	}
 
 }

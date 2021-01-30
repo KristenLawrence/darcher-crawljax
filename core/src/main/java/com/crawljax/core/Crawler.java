@@ -108,6 +108,7 @@ public class Crawler {
 	 * Reset the crawler to its initial state.
 	 */
 	public void reset() {
+		plugins.runPreResetPlugins(context);
 		CrawlSession session = context.getSession();
 		if (crawlpath != null) {
 			session.addCrawlPath(crawlpath);

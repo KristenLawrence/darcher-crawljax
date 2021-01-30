@@ -10,6 +10,7 @@ import org.kristen.crawljax.plugins.grpc.GRPCClientPlugin;
 
 import java.io.File;
 import java.io.IOException;
+import java.nio.file.Path;
 import java.util.concurrent.TimeUnit;
 
 public class GivethHomeExperiment extends Experiment {
@@ -30,7 +31,7 @@ public class GivethHomeExperiment extends Experiment {
     /**
      * Run this method to start the crawl.
      */
-    public CrawljaxRunner initialize(String chromeDebuggerAddress) {
+    public CrawljaxRunner initialize(Path coverageDir, String chromeDebuggerAddress) {
         CrawljaxConfiguration.CrawljaxConfigurationBuilder builder = CrawljaxConfiguration.builderFor(DAPP_URL);
 
 //        builder.crawlRules().setFormFillMode(CrawlRules.FormFillMode.RANDOM);
@@ -104,6 +105,6 @@ public class GivethHomeExperiment extends Experiment {
     }
 
     public static void main(String[] args) throws IOException {
-        new GivethHomeExperiment().start("scripts" + File.separator + "status.log", "localhost:9222");
+        new GivethHomeExperiment().start("script/coverage", "scripts" + File.separator + "status.log", "localhost:9222");
     }
 }

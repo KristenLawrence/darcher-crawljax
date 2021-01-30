@@ -12,12 +12,12 @@ import org.openqa.selenium.support.ui.WebDriverWait;
 
 import java.io.File;
 import java.io.IOException;
+import java.nio.file.Path;
 import java.text.SimpleDateFormat;
 import java.time.Duration;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
-import java.util.Random;
 import java.util.concurrent.TimeUnit;
 
 public class AugurExperiment extends Experiment {
@@ -37,7 +37,7 @@ public class AugurExperiment extends Experiment {
     /**
      * Run this method to start the crawl.
      **/
-    public CrawljaxRunner initialize(String chromeDebuggerAddress) {
+    public CrawljaxRunner initialize(Path coverageDir, String chromeDebuggerAddress) {
         CrawljaxConfiguration.CrawljaxConfigurationBuilder builder = CrawljaxConfiguration.builderFor(DAPP_URL);
 
 //        builder.crawlRules().setFormFillMode(CrawlRules.FormFillMode.RANDOM);
@@ -329,6 +329,6 @@ public class AugurExperiment extends Experiment {
     }
 
     public static void main(String[] args) throws IOException {
-        new AugurExperiment().start("scripts" + File.separator + "status.log", "localhost:9222");
+        new AugurExperiment().start("script/coverage", "scripts" + File.separator + "status.log", "localhost:9222");
     }
 }
