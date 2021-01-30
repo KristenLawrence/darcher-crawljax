@@ -133,6 +133,6 @@ public class HeiswapExperiment extends Experiment {
     }
 
     public static void main(String[] args) throws IOException {
-        new HeiswapExperiment().start("script/coverage", "scripts" + File.separator + "status.log", "localhost:9222");
+        new HeiswapExperiment().start("scripts/coverage", "scripts" + File.separator + "status.log", "localhost:9222");
     }
 }

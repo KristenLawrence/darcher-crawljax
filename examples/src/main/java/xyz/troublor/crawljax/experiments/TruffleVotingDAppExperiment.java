@@ -85,6 +85,6 @@ public class TruffleVotingDAppExperiment extends Experiment {
     }
 
     public static void main(String[] args) throws IOException {
-        new TruffleVotingDAppExperiment().start("script/coverage", "scripts" + File.separator + "status.log", "localhost:9222");
+        new TruffleVotingDAppExperiment().start("scripts/coverage", "scripts" + File.separator + "status.log", "localhost:9222");
     }
 }

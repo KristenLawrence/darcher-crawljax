@@ -290,6 +290,6 @@ public class GivethForeignExperiment extends Experiment {
     }
 
     public static void main(String[] args) throws IOException {
-        new GivethForeignExperiment().start("script/coverage", "scripts" + File.separator + "status.log", "localhost:9222");
+        new GivethForeignExperiment().start("scripts/coverage", "scripts" + File.separator + "status.log", "localhost:9222");
     }
 }

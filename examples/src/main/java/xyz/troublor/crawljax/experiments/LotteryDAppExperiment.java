@@ -101,6 +101,6 @@ public class LotteryDAppExperiment extends Experiment {
     }
 
     public static void main(String[] args) throws IOException {
-        new LotteryDAppExperiment().start("script/coverage", "scripts" + File.separator + "status.log", "localhost:9222");
+        new LotteryDAppExperiment().start("scripts/coverage", "scripts" + File.separator + "status.log", "localhost:9222");
     }
 }

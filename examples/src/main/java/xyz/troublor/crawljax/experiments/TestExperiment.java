@@ -65,6 +65,6 @@ public class TestExperiment extends Experiment {
     }
 
     public static void main(String[] args) throws IOException {
-        new TestExperiment().start("script/coverage", "scripts" + File.separator + "status.log", "localhost:9222");
+        new TestExperiment().start("scripts/coverage", "scripts" + File.separator + "status.log", "localhost:9222");
     }
 }

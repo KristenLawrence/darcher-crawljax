@@ -106,6 +106,6 @@ public class MultisenderExperiment extends Experiment {
     }
 
     public static void main(String[] args) throws IOException {
-        new MultisenderExperiment().start("script/coverage", "scripts" + File.separator + "status.log", "localhost:9222");
+        new MultisenderExperiment().start("scripts/coverage", "scripts" + File.separator + "status.log", "localhost:9222");
     }
 }

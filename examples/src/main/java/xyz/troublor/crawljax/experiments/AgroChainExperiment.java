@@ -66,6 +66,6 @@ public class AgroChainExperiment extends Experiment {
     }
 
     public static void main(String[] args) throws IOException {
-        new AgroChainExperiment().start("script/coverage", "scripts" + File.separator + "status.log", "localhost:9222");
+        new AgroChainExperiment().start("scripts/coverage", "scripts" + File.separator + "status.log", "localhost:9222");
     }
 }

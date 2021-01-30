@@ -75,6 +75,6 @@ public class NoteDAppExperiment extends Experiment {
     }
 
     public static void main(String[] args) throws IOException {
-        new NoteDAppExperiment().start("script/coverage", "scripts" + File.separator + "status.log", "localhost:9222");
+        new NoteDAppExperiment().start("scripts/coverage", "scripts" + File.separator + "status.log", "localhost:9222");
     }
 }

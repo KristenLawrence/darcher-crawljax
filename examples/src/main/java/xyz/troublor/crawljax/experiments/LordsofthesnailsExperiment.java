@@ -93,6 +93,6 @@ public class LordsofthesnailsExperiment extends Experiment {
     }
 
     public static void main(String[] args) throws IOException {
-        new LordsofthesnailsExperiment().start("script/coverage", "scripts" + File.separator + "status.log", "localhost:9222");
+        new LordsofthesnailsExperiment().start("scripts/coverage", "scripts" + File.separator + "status.log", "localhost:9222");
     }
 }

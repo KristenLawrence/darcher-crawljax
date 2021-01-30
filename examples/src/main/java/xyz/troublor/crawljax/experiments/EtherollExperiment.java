@@ -96,6 +96,6 @@ public class EtherollExperiment extends Experiment {
     }
 
     public static void main(String[] args) throws IOException {
-        new EtherollExperiment().start("script/coverage", "scripts" + File.separator + "status.log", "localhost:9222");
+        new EtherollExperiment().start("scripts/coverage", "scripts" + File.separator + "status.log", "localhost:9222");
     }
 }

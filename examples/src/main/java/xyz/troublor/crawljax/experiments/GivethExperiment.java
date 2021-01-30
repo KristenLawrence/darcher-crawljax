@@ -417,6 +417,6 @@ public class GivethExperiment extends Experiment {
     }
 
     public static void main(String[] args) throws IOException {
-        new GivethExperiment().start("script/coverage", "scripts" + File.separator + "status.log", "localhost:9222");
+        new GivethExperiment().start("scripts/coverage", "scripts" + File.separator + "status.log", "localhost:9222");
     }
 }
