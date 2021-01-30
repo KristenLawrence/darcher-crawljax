@@ -18,12 +18,13 @@ import java.time.Duration;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
+import java.util.Random;
 import java.util.concurrent.TimeUnit;
 
 public class AugurExperiment extends Experiment {
-    private static final long WAIT_TIME_AFTER_EVENT = 1000;
+    private static final long WAIT_TIME_AFTER_EVENT = 500;
     private static final long WAIT_TIME_AFTER_RELOAD = 500;
-    private static final String DAPP_URL = "http://localhost:8080/";
+    private static final String DAPP_URL = "http://localhost:8080/#!/market?id=0x0782E4e784b5993A3ba08293d46f51182f2e6083&outcomeId=0";
     private static final String DAPP_NAME = "Augur";
     private static int instanceId = 1;
     private static final String METAMASK_POPUP_URL = "chrome-extension://kdaoeelmbdcinklhldlcmmgmndjcmjpp/home.html";
@@ -69,13 +70,18 @@ public class AugurExperiment extends Experiment {
         InputSpecification inputSpec = new InputSpecification();
 
         /* Go into markets */
-        builder.crawlRules().click("A").underXPath("//H3[@class='market-common-styles_MarketTemplateTitle']");
-        builder.crawlRules().click("A").underXPath("//H3[@class='common-styles_OutcomeGroup']");
+//        builder.crawlRules().click("A").underXPath("//H3[@class='market-common-styles_MarketTemplateTitle']");
+//        builder.crawlRules().click("A").underXPath("//H3[@class='common-styles_OutcomeGroup']");
+        builder.crawlRules().click("A").underXPath("//ARTICLE[@data-testid='markets']");
 
         /* creating markets (create customized market is clicked)*/
         inputSpec.inputField(FormInput.InputType.CUSTOMIZE,
                 new Identification(Identification.How.xpath, "//BUTTON[@class='SingleDatePickerInput_calendarIcon SingleDatePickerInput_calendarIcon_1']"))
                 .setInputFiller((driver, webElement, nodeElement) -> {
+                    // change market type randomly
+                    List<WebElement> typesBtn = driver.findElements(By.cssSelector(".form-styles_RadioCard"));
+                    WebDriverTools.click(driver, typesBtn.get(new Random().nextInt(typesBtn.size())));
+
                     Date now = new Date();
                     Calendar cal = Calendar.getInstance();
                     cal.setTime(now);
@@ -83,14 +89,16 @@ public class AugurExperiment extends Experiment {
                     int monthMaxDays = cal.getActualMaximum(Calendar.DAY_OF_MONTH);
 
                     // click date picker
-                    ((JavascriptExecutor) driver).executeScript("arguments[0].click()", webElement);
+                    WebDriverTools.click(driver, webElement);
                     WebElement picker = new WebDriverWait(driver, Duration.ofMillis(100))
                             .until(d -> d.findElement(
                                     By.xpath("//DIV[@class='SingleDatePicker_picker SingleDatePicker_picker_1 SingleDatePicker_picker__directionLeft SingleDatePicker_picker__directionLeft_2']")));
                     // find tomorrow button
                     if (today > monthMaxDays - 15) {
                         // next month
-                        picker.findElement(By.className("DayPickerNavigation_rightButton__horizontal")).click();
+                        WebElement nextMonthBtn = picker.findElement(By.cssSelector(
+                                ".DayPickerNavigation_rightButton__horizontal"));
+                        WebDriverTools.click(driver, nextMonthBtn);
                         try {
                             Thread.sleep(500);
                         } catch (InterruptedException e) {
@@ -145,6 +153,25 @@ public class AugurExperiment extends Experiment {
                     WebElement academicAwards = new WebDriverWait(driver, Duration.ofMillis(100))
                             .until(d -> d.findElement(By.xpath("//UL[@class='form-styles_CategoryMultiSelect']/LI[3]//BUTTON[@value='Academy Awards']")));
                     ((JavascriptExecutor) driver).executeScript("arguments[0].click()", academicAwards);
+
+                    // for Multiple-Choice Types of market
+                    try {
+                        List<WebElement> outcomeInputs =
+                                driver.findElements(By.xpath("//INPUT[@placeholder='Enter outcome']"));
+                        String[] outcomes = new String[]{"Yes", "No"};
+                        for (int i = 0; i < outcomeInputs.size(); i++) {
+                            outcomeInputs.get(i).sendKeys(outcomes[i % 2]);
+                        }
+                    } catch (NoSuchElementException ignored) {
+                    }
+
+                    // for scalar markets
+                    try {
+                        WebElement denominationInput =
+                                driver.findElement(By.xpath("//INPUT[@placeholder='Denomination']"));
+                        denominationInput.sendKeys("1");
+                    } catch (NoSuchElementException ignored) {
+                    }
                 });
         builder.crawlRules().click("BUTTON").withText("Create Market");
         builder.crawlRules().click("BUTTON").withText("Create a custom market");
@@ -164,8 +191,16 @@ public class AugurExperiment extends Experiment {
         /* Don't preview market */
         builder.crawlRules().dontClick("BUTTON").withAttribute("title", "Preview your market");
 
-        /* Don't click Add Funds */
-        builder.crawlRules().dontClick("BUTTON").withAttribute("title", "Deposit");
+        /* Click Add Funds and click Convert */
+        builder.crawlRules().click("BUTTON").withAttribute("title", "Deposit");
+        builder.crawlRules().click("DIV").underXPath("//DIV[@role='button' and contains(., 'Convert')]");
+
+        /* Convert REP to DAI Form */
+        Form convertForm = new Form();
+        convertForm.inputField(FormInput.InputType.TEXT,
+                new Identification(Identification.How.xpath, "//INPUT[@placeholder='0.0000']"))
+                .inputValues("1");
+        inputSpec.setValuesInForm(convertForm).beforeClickElement("BUTTON").withAttribute("title", "Trade");
 
         /* Don't click Learn More */
         builder.crawlRules().dontClick("BUTTON").withText("Learn more");
@@ -193,9 +228,11 @@ public class AugurExperiment extends Experiment {
         builder.crawlRules().dontClick("BUTTON").withAttribute("title", "Cancel");
         builder.crawlRules().dontClick("BUTTON").withText("cancel");
         builder.crawlRules().dontClick("BUTTON").withText("Cancel");
+        builder.crawlRules().dontClick("BUTTON").withText("");
 
-        /* Don't click Get REP button, it is not available in dev mode */
-        builder.crawlRules().dontClick("BUTTON").withAttribute("title", "Get REP");
+        /* Click Get REP/DAI button */
+        builder.crawlRules().click("BUTTON").withAttribute("title", "Get REP");
+        builder.crawlRules().click("BUTTON").withAttribute("title", "Get DAI");
 
         /* Don't click Disputing Guide button */
         builder.crawlRules().dontClick("BUTTON").withAttribute("class", "common-styles_ReportingModalButton");
@@ -212,7 +249,7 @@ public class AugurExperiment extends Experiment {
         Form buyTokensForm = new Form();
         buyTokensForm.inputField(FormInput.InputType.TEXT,
                 new Identification(Identification.How.xpath, "//INPUT[@placeholder='0.0000']"))
-                .inputValues("10");
+                .inputValues("1");
         inputSpec.setValuesInForm(buyTokensForm).beforeClickElement("BUTTON").withText("buy");
         builder.crawlRules().click("BUTTON").withAttribute("title", "Get Participation Tokens");
 
@@ -290,6 +327,7 @@ public class AugurExperiment extends Experiment {
 //        builder.addPlugin(new CrawlOverview());
 //        builder.addPlugin(new MetaMaskSupportPlugin(METAMASK_POPUP_URL, METAMASK_PASSWORD));
         builder.addPlugin(new GRPCClientPlugin(DAPP_NAME, instanceId, METAMASK_POPUP_URL, DAPP_URL, METAMASK_PASSWORD));
+        builder.addPlugin(new ClientSideCoverageCollectorPlugin(coverageDir));
 
         // some Augur-specific plugins
         builder.addPlugin((OnUrlLoadPlugin) context -> {
