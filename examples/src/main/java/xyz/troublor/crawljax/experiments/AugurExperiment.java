@@ -3,28 +3,32 @@ package xyz.troublor.crawljax.experiments;
 import com.crawljax.browser.EmbeddedBrowser;
 import com.crawljax.core.CrawljaxRunner;
 import com.crawljax.core.configuration.*;
+import com.crawljax.core.plugin.OnUrlFirstLoadPlugin;
 import com.crawljax.core.plugin.OnUrlLoadPlugin;
+import com.crawljax.core.plugin.PreCrawlingPlugin;
 import com.crawljax.core.state.Identification;
 import com.crawljax.forms.FormInput;
+import org.checkerframework.checker.units.qual.A;
 import org.kristen.crawljax.plugins.grpc.GRPCClientPlugin;
 import org.openqa.selenium.*;
+import org.openqa.selenium.NoSuchElementException;
+import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
+import javax.jws.WebResult;
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Path;
 import java.text.SimpleDateFormat;
 import java.time.Duration;
-import java.util.Calendar;
-import java.util.Date;
-import java.util.List;
-import java.util.Random;
+import java.util.*;
 import java.util.concurrent.TimeUnit;
+import java.util.concurrent.atomic.AtomicBoolean;
 
 public class AugurExperiment extends Experiment {
     private static final long WAIT_TIME_AFTER_EVENT = 500;
     private static final long WAIT_TIME_AFTER_RELOAD = 500;
-    private static final String DAPP_URL = "http://localhost:8080/#!/market?id=0x0782E4e784b5993A3ba08293d46f51182f2e6083&outcomeId=0";
+    private static final String DAPP_URL = "http://localhost:8080/";
     private static final String DAPP_NAME = "Augur";
     private static int instanceId = 1;
     private static final String METAMASK_POPUP_URL = "chrome-extension://kdaoeelmbdcinklhldlcmmgmndjcmjpp/home.html";
@@ -244,6 +248,9 @@ public class AugurExperiment extends Experiment {
         builder.crawlRules().click("A").withText("Reporting");
         builder.crawlRules().click("BUTTON").underXPath("//DIV[@class='notification-styles_Message']");
 
+        /* Migrate V1 REP to V2 form */
+        builder.crawlRules().click("BUTTON").withAttribute("title", "Migrate V1 to V2 REP");
+        builder.crawlRules().click("BUTTON").withAttribute("title", "Migrate");
 
         /* But Tokens form */
         Form buyTokensForm = new Form();
@@ -273,7 +280,8 @@ public class AugurExperiment extends Experiment {
         builder.crawlRules().dontClick("BUTTON").underXPath("//DIV[@class='market-header-styles_MarketDetails']");
 
         /* Don't click buttons in open order lists */
-        builder.crawlRules().dontClick("BUTTON").underXPath("//DIV[@class='market-view-styles_OrdersPane']");
+        builder.crawlRules().dontClick("BUTTON")
+                .underXPath("//DIV[@class='market-view-styles_OrdersPane']//DIV[@class='module-tabs-style_Headers']");
 
         /* Click existing orders */
         builder.crawlRules().click("DIV").underXPath("//SECTION[@class='order-book-styles_OrderBook']/DIV/DIV");
@@ -326,7 +334,9 @@ public class AugurExperiment extends Experiment {
         // CrawlOverview
 //        builder.addPlugin(new CrawlOverview());
 //        builder.addPlugin(new MetaMaskSupportPlugin(METAMASK_POPUP_URL, METAMASK_PASSWORD));
-        builder.addPlugin(new GRPCClientPlugin(DAPP_NAME, instanceId, METAMASK_POPUP_URL, DAPP_URL, METAMASK_PASSWORD));
+        GRPCClientPlugin grpcClientPlugin = new GRPCClientPlugin(DAPP_NAME, instanceId, METAMASK_POPUP_URL, DAPP_URL,
+                METAMASK_PASSWORD);
+        builder.addPlugin(grpcClientPlugin);
         builder.addPlugin(new ClientSideCoverageCollectorPlugin(coverageDir));
 
         // some Augur-specific plugins
@@ -352,11 +362,66 @@ public class AugurExperiment extends Experiment {
                 }
             });
 
+            // do some initial faucet
+            WebElement accountSummaryTab = driver.findElement(By.xpath("//A[.='Account Summary']"));
+            WebDriverTools.click(driver, accountSummaryTab);
+
+            WebElement totalAccountValue = new WebDriverWait(driver, Duration.ofSeconds(1))
+                    .until(ExpectedConditions.presenceOfElementLocated(
+                            By.xpath("//*[@id=\"tabs_undefined\"]/div[2]/div/div/div[2]/section/div[1]")));
+            String value = totalAccountValue.getText().substring(1);
+            if (Double.parseDouble(value) <= 100) {
+                // faucet
+                WebElement repFaucetBtn = new WebDriverWait(driver, Duration.ofSeconds(1))
+                        .until(ExpectedConditions.elementToBeClickable(By.xpath("//BUTTON[@title='REP Faucet']")));
+                WebDriverTools.click(driver, repFaucetBtn);
+                WebElement confirmBtn = new WebDriverWait(driver, Duration.ofSeconds(1))
+                        .until(ExpectedConditions.elementToBeClickable(By.xpath("//BUTTON[@title='Get REP']")));
+                WebDriverTools.click(driver, confirmBtn);
+                try {
+                    Thread.sleep(500);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+                grpcClientPlugin.checkMetamaskMessage(context, new ArrayList<>());
+
+                accountSummaryTab = driver.findElement(By.xpath("//A[.='Account Summary']"));
+                WebDriverTools.click(driver, accountSummaryTab);
+                WebElement daiFaucetBtn = new WebDriverWait(driver, Duration.ofSeconds(1))
+                        .until(ExpectedConditions.elementToBeClickable(By.xpath("//BUTTON[@title='DAI Faucet']")));
+                WebDriverTools.click(driver, daiFaucetBtn);
+                confirmBtn = new WebDriverWait(driver, Duration.ofSeconds(1))
+                        .until(ExpectedConditions.elementToBeClickable(By.xpath("//BUTTON[@title='Get DAI']")));
+                WebDriverTools.click(driver, confirmBtn);
+                try {
+                    Thread.sleep(500);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+                grpcClientPlugin.checkMetamaskMessage(context, new ArrayList<>());
+
+                accountSummaryTab = driver.findElement(By.xpath("//A[.='Account Summary']"));
+                WebDriverTools.click(driver, accountSummaryTab);
+                WebElement legacyRepFaucetBtn = new WebDriverWait(driver, Duration.ofSeconds(1))
+                        .until(ExpectedConditions.elementToBeClickable(By.xpath("//BUTTON[@title='Legacy REP Faucet']")));
+                WebDriverTools.click(driver, legacyRepFaucetBtn);
+                try {
+                    Thread.sleep(500);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+                grpcClientPlugin.checkMetamaskMessage(context, new ArrayList<>());
+            }
+
+            WebElement marketTab = driver.findElement(By.xpath("//A[.='Markets']"));
+            WebDriverTools.click(driver, marketTab);
+
             try {
-                Thread.sleep(5000);
+                Thread.sleep(2500);
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
+
 
             System.out.println("done");
         });

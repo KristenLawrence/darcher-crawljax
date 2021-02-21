@@ -12,6 +12,8 @@ import com.crawljax.core.state.Eventable;
 import com.crawljax.core.state.Identification;
 import com.crawljax.core.state.*;
 
+import com.google.inject.ProvisionException;
+import io.grpc.Status;
 import io.grpc.StatusRuntimeException;
 import io.grpc.stub.StreamObserver;
 import io.grpc.ManagedChannel;
@@ -422,24 +424,31 @@ public class GRPCClientPlugin implements
                 // Get reproduction
 //            System.out.println("########################################################################");
                 events = "";
+                states = "";
 //        for (StackTraceElement s: context.getCrawlPath().asStackTrace()) {
 //            System.out.println(s);
 //        }
-                for (List<Eventable> l : context.getSession().getCrawlPaths()) {
-                    for (Eventable e : l) {
-                        events += e.toString() + "\n";
+                try {
+                    for (List<Eventable> l : context.getSession().getCrawlPaths()) {
+                        for (Eventable e : l) {
+                            events += e.toString() + "\n";
 //                    System.out.println(e);
+                        }
                     }
-                }
 //            System.out.println("########################################################################");
 
 //            System.out.println("************************************************************************");
-                states = "";
-                for (StateVertex s : context.getSession().getStateFlowGraph().getAllStates()) {
-                    states += s.toString() + "\n";
+                    for (StateVertex s : context.getSession().getStateFlowGraph().getAllStates()) {
+                        states += s.toString() + "\n";
 //                System.out.println(s.getName() + "         " + s.getUrl());
-                }
+                    }
 //            System.out.println("************************************************************************");
+
+                } catch (ProvisionException e) {
+                    if (!(e.getCause() instanceof CrawlSessionNotSetupYetException)) {
+                        throw e;
+                    }
+                }
 
                 logger.info("Send out a transaction, send txMsg to the server, dappName={}, instanceId={}, txHash={}, fromAddress={}, toAddress={}", dappName, instanceId, txHash, fromAddress, toAddress);
                 DappTestService.TxMsg txMsg = DappTestService.TxMsg.newBuilder()
@@ -475,9 +484,16 @@ public class GRPCClientPlugin implements
                 // return to previous tab in case REFRESH_PATH requests from DArcher
                 driver.switchTo().window(originalTab);
 
-                blockingStub.waitForTxProcess(txMsg);
-                logger.debug("Finish sending txMsg and processing tx, dappName={}, instanceId={}, txHash={}, fromAddress={}, toAddress={}", dappName, instanceId, txHash, fromAddress, toAddress);
-                System.out.println();
+                try {
+                    blockingStub.waitForTxProcess(txMsg);
+                    logger.debug("Finish sending txMsg and processing tx, dappName={}, instanceId={}, txHash={}, fromAddress={}, toAddress={}", dappName, instanceId, txHash, fromAddress, toAddress);
+                    System.out.println();
+                } catch (StatusRuntimeException e) {
+                    if (e.getStatus().getCode() != Status.Code.UNAVAILABLE) {
+                        throw e;
+                    }
+                }
+
 
                 // switch to metamask tab
                 driver.switchTo().window(metamaskTab);
@@ -553,7 +569,7 @@ public class GRPCClientPlugin implements
         this.checkMetamaskMessage(context, path);
     }
 
-    private void checkMetamaskMessage(CrawlerContext context, List<Eventable> path) {
+    public void checkMetamaskMessage(CrawlerContext context, List<Eventable> path) {
         // check unapproved tx queue
         Message unapprovedTxMessage = null;
         try {

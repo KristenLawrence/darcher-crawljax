@@ -1,4 +1,4 @@
-import prompts from "prompts";
+import * as prompts from "prompts";
 import * as path from "path";
 import * as fs from "fs";
 import parseDuration from "parse-duration";
@@ -23,9 +23,9 @@ class Worker {
         private readonly chromeDebuggerAddress: string,
         private readonly subject: string,
     ) {
-        if (fs.existsSync(Worker.coverageDir)) {
-            fs.rmdirSync(Worker.coverageDir, {recursive: true});
-        }
+        // if (fs.existsSync(Worker.coverageDir)) {
+        //     fs.rmdirSync(Worker.coverageDir, {recursive: true});
+        // }
     }
 
     public async start() {
@@ -73,7 +73,7 @@ class Worker {
             });
         this.process.on("exit", () => {
             // if the process exit by itself, we set this.process = null
-            this.process = null;
+            // this.process = null;
         });
         this.process.on("error", err => {
             this.logger.warn(err.message);
