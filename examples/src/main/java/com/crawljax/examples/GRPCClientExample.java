@@ -8,7 +8,6 @@ import com.crawljax.core.configuration.*;
 import com.crawljax.core.state.Identification;
 import com.crawljax.forms.FormInput;
 import com.crawljax.plugins.crawloverview.CrawlOverview;
-import xyz.troublor.crawljax.plugins.metamask.MetaMaskSupportPlugin;
 import org.kristen.crawljax.plugins.grpc.GRPCClientPlugin;
 
 import java.io.IOException;
