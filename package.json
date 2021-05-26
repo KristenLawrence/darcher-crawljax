@@ -6,7 +6,7 @@
   },
   "main": "scripts/index.js",
   "scripts": {
-    "build": "tsc",
+    "build": "tsc && mvn install -DskipTests",
     "start:experiment": "node scripts/start-crawljax.js"
   },
   "author": "DArcher Framework",
