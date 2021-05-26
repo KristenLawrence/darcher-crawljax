@@ -2,14 +2,14 @@
   "name": "@darcher/crawljax",
   "version": "1.0.0",
   "repository": {
-    "url": "https://github.com/KristenLawrence/darcher-crawljax"
+    "url": "https://github.com/darcher-framework/darcher-crawljax"
   },
   "main": "scripts/index.js",
   "scripts": {
-    "build": "tsc",
+    "build": "tsc && mvn install -DskipTests",
     "start:experiment": "node scripts/start-crawljax.js"
   },
-  "author": "KristenLawrence",
+  "author": "DArcher Framework",
   "license": "ISC",
   "dependencies": {
     "parse-duration": "^0.4.4",
